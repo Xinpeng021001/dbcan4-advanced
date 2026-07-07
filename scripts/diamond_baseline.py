@@ -21,7 +21,8 @@ from collections import defaultdict
 FAM_RE = re.compile(r'^(GH|GT|PL|CE|AA|CBM)\d+(_\d+)?$')
 
 def fams_from_token(tok):
-    return [f for f in tok.split("|") if FAM_RE.match(f)]
+    # subject headers vary: "ID|FAM|FAM" (full CAZy) or "ID|FAM,FAM" (fungal reference)
+    return [f for f in re.split(r'[|,]', tok) if FAM_RE.match(f)]
 
 def load_truth(labels_tsv):
     truth, novelty = {}, {}

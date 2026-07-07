@@ -1,0 +1,58 @@
+{
+  "dbCAN HMMER (current DB)": {
+    "subfamily": {
+      "overall": 0.8216,
+      "novel_seq": 0.7937,
+      "novel_family": 0.9752
+    },
+    "parent_family": {
+      "overall": 0.8326,
+      "novel_seq": 0.8057,
+      "novel_family": 0.9807
+    },
+    "truenovel_base_parent": 0.8571,
+    "subnovel_parent": 0.9844
+  },
+  "dbCAN-sub (current DB)": {
+    "subfamily": {
+      "overall": 0.5438,
+      "novel_seq": 0.6378,
+      "novel_family": 0.0262
+    },
+    "parent_family": {
+      "overall": 0.8986,
+      "novel_seq": 0.8832,
+      "novel_family": 0.9835
+    },
+    "truenovel_base_parent": 0.9048,
+    "subnovel_parent": 0.9858
+  },
+  "dbCAN DIAMOND (current DB)": {
+    "subfamily": {
+      "overall": 0.982,
+      "novel_seq": 0.9802,
+      "novel_family": 0.9917
+    },
+    "parent_family": {
+      "overall": 0.982,
+      "novel_seq": 0.9802,
+      "novel_family": 0.9917
+    },
+    "truenovel_base_parent": 0.8095,
+    "subnovel_parent": 0.9972
+  },
+  "dbCAN Recommend (current DB)": {
+    "subfamily": {
+      "overall": 0.8798,
+      "novel_seq": 0.8628,
+      "novel_family": 0.9738
+    },
+    "parent_family": {
+      "overall": 0.894,
+      "novel_seq": 0.8778,
+      "novel_family": 0.9835
+    },
+    "truenovel_base_parent": 0.9048,
+    "subnovel_parent": 0.9858
+  }
+}

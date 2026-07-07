@@ -1,0 +1,11 @@
+method	group	sub_overall	sub_novel_seq	sub_novel_family	parent_overall	parent_novel_seq	parent_novel_family
+dbCAN HMMER (current DB)	canonical dbCAN	0.8216	0.7937	0.9752	0.8326	0.8057	0.9807
+dbCAN-sub (current DB)	canonical dbCAN	0.5438	0.6378	0.0262	0.8986	0.8832	0.9835
+dbCAN DIAMOND (current DB)	canonical dbCAN	0.982	0.9802	0.9917	0.982	0.9802	0.9917
+dbCAN Recommend (current DB)	canonical dbCAN	0.8798	0.8628	0.9738	0.894	0.8778	0.9835
+DIAMOND (fungal 2024 ref)	temporal-fair (2024 only)	0.8142	0.962	0.0	0.9647	0.9655	0.9601
+ESM-C kNN (off-the-shelf)	advanced: pLM retrieval	0.7262	0.858	0.0	0.8639	0.8622	0.8733
+ESM-C centroid (off-shelf)	advanced: pLM retrieval	0.3857	0.4557	0.0	0.4628	0.4798	0.3691
+Contrastive kNN (trained)	advanced: pLM trained	0.7603	0.8982	0.0	0.9086	0.901	0.9504
+Contrastive centroid (trained)	advanced: pLM trained	0.7554	0.8925	0.0	0.9048	0.8965	0.9504
+Classifier (trained)	advanced: pLM trained	0.7539	0.8908	0.0	0.9016	0.8945	0.9408

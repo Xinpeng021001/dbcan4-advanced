@@ -1,0 +1,134 @@
+{
+  "DIAMOND (fungal 2024 ref)": {
+    "subfamily": {
+      "overall": 0.8142,
+      "novel_seq": 0.962,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.9647,
+      "novel_seq": 0.9655,
+      "novel_family": 0.9601
+    }
+  },
+  "ESM-C kNN (off-the-shelf)": {
+    "subfamily": {
+      "overall": 0.7262,
+      "novel_seq": 0.858,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.8639,
+      "novel_seq": 0.8622,
+      "novel_family": 0.8733
+    }
+  },
+  "ESM-C centroid (off-shelf)": {
+    "subfamily": {
+      "overall": 0.3857,
+      "novel_seq": 0.4557,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.4628,
+      "novel_seq": 0.4798,
+      "novel_family": 0.3691
+    }
+  },
+  "Contrastive kNN (trained)": {
+    "subfamily": {
+      "overall": 0.7603,
+      "novel_seq": 0.8982,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.9086,
+      "novel_seq": 0.901,
+      "novel_family": 0.9504
+    }
+  },
+  "Contrastive centroid (trained)": {
+    "subfamily": {
+      "overall": 0.7554,
+      "novel_seq": 0.8925,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.9048,
+      "novel_seq": 0.8965,
+      "novel_family": 0.9504
+    }
+  },
+  "Classifier (trained)": {
+    "subfamily": {
+      "overall": 0.7539,
+      "novel_seq": 0.8908,
+      "novel_family": 0.0
+    },
+    "parent_family": {
+      "overall": 0.9016,
+      "novel_seq": 0.8945,
+      "novel_family": 0.9408
+    }
+  },
+  "dbCAN HMMER (current DB)": {
+    "subfamily": {
+      "overall": 0.8216,
+      "novel_seq": 0.7937,
+      "novel_family": 0.9752
+    },
+    "parent_family": {
+      "overall": 0.8326,
+      "novel_seq": 0.8057,
+      "novel_family": 0.9807
+    }
+  },
+  "dbCAN-sub (current DB)": {
+    "subfamily": {
+      "overall": 0.5438,
+      "novel_seq": 0.6378,
+      "novel_family": 0.0262
+    },
+    "parent_family": {
+      "overall": 0.8986,
+      "novel_seq": 0.8832,
+      "novel_family": 0.9835
+    }
+  },
+  "dbCAN DIAMOND (current DB)": {
+    "subfamily": {
+      "overall": 0.982,
+      "novel_seq": 0.9802,
+      "novel_family": 0.9917
+    },
+    "parent_family": {
+      "overall": 0.982,
+      "novel_seq": 0.9802,
+      "novel_family": 0.9917
+    }
+  },
+  "dbCAN Recommend (current DB)": {
+    "subfamily": {
+      "overall": 0.8798,
+      "novel_seq": 0.8628,
+      "novel_family": 0.9738
+    },
+    "parent_family": {
+      "overall": 0.894,
+      "novel_seq": 0.8778,
+      "novel_family": 0.9835
+    }
+  },
+  "HMMER (2024-only, temporal)": {
+    "subfamily": {
+      "overall": null,
+      "novel_seq": null,
+      "novel_family": null
+    },
+    "parent_family": {
+      "overall": 0.887,
+      "novel_seq": 0.8758,
+      "novel_family": 0.949
+    }
+  }
+}

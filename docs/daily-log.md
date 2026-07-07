@@ -109,3 +109,34 @@ One-week prototype sprint. One dated entry per working day: progress, blockers, 
   **CAZy-supervised contrastive head** should fix: pull same-family together, push different-family
   apart, so (a) known-family recall clears DIAMOND and (b) novel families land in low-density regions
   that a margin/energy score can flag. Figure: docs/figures/esmc_retrieval_findings.png.
+
+---
+
+## Day 2 (cont.) — trained heads (Step 7) + dbCAN HMMER baseline featured
+
+**Trained heads on frozen ESM-C** (scripts/train_heads.py): SupCon projection head + softmax
+classifier, val classifier acc 0.966 in ~30 s (1 GPU). Known-family (novel-seq) exact subfamily:
+contrastive kNN **89.8%** (up from off-the-shelf 85.8%), classifier 89.1% — still below DIAMOND 96.2%.
+
+**dbCAN HMMER featured** (user priority). Canonical baseline = `run_dbcan CAZyme_annotation` →
+overview.tsv (dbCAN_hmm / dbCAN_sub / DIAMOND). Exact dbCAN dev cutoffs (from parameter.py):
+DIAMOND E-value 1e-102; dbCAN HMM 1e-15 / cov 0.35; dbCAN-sub 1e-15 / cov 0.35. All cutoffs now in
+REPRODUCE.md. dbCAN HMMER (current DB) subfamily recall: overall 0.822, novel-seq 0.794,
+novel-family 0.975 — the 0.975 is DB-vintage (current DB already has all 20 new-2025 families).
+
+**Two-granularity + truly-novel split** (the honest evaluation):
+- 14/20 "novel families" are new *subfamilies* of parents already in 2024; only **6 are truly-novel
+  base families** (CBM104, CBM3, CBM8, GT109, GT119, PL29; n=21 eval seqs).
+- Parent-family recall on novel subfamilies: DIAMOND 98.9%, contrastive kNN 97.9%, HMMER-2024 94.9%.
+- **Truly-novel base families: 0.000 for ALL methods** (DIAMOND, HMMER-2024, off-the-shelf & trained
+  ESM-C) — every method makes a confident wrong call, none abstain. This is THE blind spot and the
+  motivation for the structure tier (Step 8) + a working novelty detector.
+
+**Supplementary temporal HMMER** (scripts/hmm_baseline_2024.py): 223 base-family HMMs from 2024 only
+(mafft --auto + hmmbuild, hmmscan -E 1e-3). Confirms HMMER has the same truly-novel blind spot.
+
+**Corrections**: AUROC now tie-aware (avg-rank) in both retrieval + train scripts; vote-purity AUROC
+0.506 (was mis-reported 0.60); head_metrics.json v2 carries corrected values. Fair DIAMOND rerun uses
+the identical fungal 2024 reference (96.2% novel-seq, within 0.3% of all-kingdom run).
+
+Figures: docs/figures/benchmark_dbcan_vs_plm.png (featured), trained_heads_comparison.png.

@@ -1,0 +1,11 @@
+{
+  "parent_family": {
+    "overall": 0.887,
+    "novel_seq": 0.8758,
+    "novel_family": 0.949
+  },
+  "truenovel_base_parent": 0.0,
+  "n_families_built": 223,
+  "queries_with_hit": 4678,
+  "cutoff": "hmmscan -E 1e-3, best full-seq e-value per query; MSA=mafft --auto, hmmbuild --amino"
+}

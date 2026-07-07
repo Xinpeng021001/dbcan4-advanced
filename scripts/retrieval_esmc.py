@@ -127,13 +127,22 @@ def main():
     knn_purity=np.array(knn_purity); knn_margin=np.array(knn_margin)
     cen_pred=np.array(cen_pred); cen_conf=np.array(cen_conf); cen_margin=np.array(cen_margin)
 
-    # novelty-detection AUROC: known (novel_seq) should score HIGH, novel_family LOW
+    # novelty-detection AUROC: known (novel_seq) should score HIGH, novel_family LOW.
+    # tie-aware (average ranks) — critical for discretized scores like vote-purity (k+1 values).
+    def _avg_ranks(x):
+        x = np.asarray(x, float); order = np.argsort(x, kind="mergesort"); xs = x[order]
+        ranks = np.empty(len(x)); i = 0
+        while i < len(x):
+            j = i
+            while j+1 < len(x) and xs[j+1] == xs[i]: j += 1
+            ranks[order[i:j+1]] = (i + j) / 2.0 + 1.0
+            i = j + 1
+        return ranks
     def auroc(score, pos):
-        pos_s=score[pos]; neg_s=score[~pos]
-        if len(pos_s)==0 or len(neg_s)==0: return None
-        alls=np.concatenate([pos_s,neg_s]); o=np.argsort(alls)
-        ranks=np.empty(len(o)); ranks[o]=np.arange(1,len(o)+1)
-        return float((ranks[:len(pos_s)].sum()-len(pos_s)*(len(pos_s)+1)/2)/(len(pos_s)*len(neg_s)))
+        pos = np.asarray(pos, bool); npos = int(pos.sum()); nneg = int((~pos).sum())
+        if npos == 0 or nneg == 0: return None
+        r = _avg_ranks(score)
+        return float((r[pos].sum() - npos*(npos+1)/2) / (npos*nneg))
     nov_arr=np.array([novelty[p] for p in eid])
     m=(nov_arr=="novel_seq")|(nov_arr=="novel_family"); pos=(nov_arr[m]=="novel_seq")
     novelty_auroc={

@@ -1,0 +1,36 @@
+{
+  "step6": {
+    "knn_top1_cosine": {
+      "auroc_nf_pos": 0.5212,
+      "best_orientation": 0.5212,
+      "n_distinct": 329
+    },
+    "knn_vote_purity": {
+      "auroc_nf_pos": 0.5061,
+      "best_orientation": 0.5061,
+      "n_distinct": 15
+    },
+    "centroid_margin": {
+      "auroc_nf_pos": 0.3452,
+      "best_orientation": 0.6548,
+      "n_distinct": 368
+    }
+  },
+  "step7": {
+    "classifier_maxsoftmax": {
+      "auroc_nf_pos": 0.4546,
+      "best_orientation": 0.5454,
+      "n_distinct": 968
+    },
+    "contrastive_centroid_margin": {
+      "auroc_nf_pos": 0.6296,
+      "best_orientation": 0.6296,
+      "n_distinct": 3152
+    },
+    "contrastive_knn_purity": {
+      "auroc_nf_pos": 0.5245,
+      "best_orientation": 0.5245,
+      "n_distinct": 14
+    }
+  }
+}
