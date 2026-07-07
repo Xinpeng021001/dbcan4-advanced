@@ -1,0 +1,28 @@
+{
+  "subset_definitions": {
+    "novel_subfamily_of_known_parent_n": 705,
+    "truly_novel_base_family_n": 21,
+    "truly_novel_base_families": [
+      "CBM104",
+      "CBM3",
+      "CBM8",
+      "GT109",
+      "GT119",
+      "PL29"
+    ]
+  },
+  "parent_recall_novel_subfamily_705": {
+    "DIAMOND (fungal 2024 ref)": 0.9887,
+    "HMMER (2024-only, temporal)": 0.9773,
+    "ESM-C kNN (off-the-shelf)": 0.8993,
+    "Contrastive kNN (trained)": 0.9787,
+    "Classifier (trained)": 0.9688
+  },
+  "parent_recall_truly_novel_base_21": {
+    "DIAMOND (fungal 2024 ref)": 0.0,
+    "HMMER (2024-only, temporal)": 0.0,
+    "ESM-C kNN (off-the-shelf)": 0.0,
+    "Contrastive kNN (trained)": 0.0,
+    "Classifier (trained)": 0.0
+  }
+}

@@ -127,7 +127,10 @@ novel-family 0.975 — the 0.975 is DB-vintage (current DB already has all 20 ne
 **Two-granularity + truly-novel split** (the honest evaluation):
 - 14/20 "novel families" are new *subfamilies* of parents already in 2024; only **6 are truly-novel
   base families** (CBM104, CBM3, CBM8, GT109, GT119, PL29; n=21 eval seqs).
-- Parent-family recall on novel subfamilies: DIAMOND 98.9%, contrastive kNN 97.9%, HMMER-2024 94.9%.
+- Parent-family recall on the 705 novel-subfamily-of-known-parent seqs (identical denominator):
+  DIAMOND 98.9%, contrastive kNN 97.9%, HMMER-2024 97.7%, classifier 96.9%, off-the-shelf ESM-C kNN 89.9%.
+  (For the FULL 726-seq novel_family bucket incl. the 21 truly-novel, these become 0.960 / 0.950 /
+  0.949 in unified_scores.json — diluted by the 21 impossible cases; see novel_family_decomposition.json.)
 - **Truly-novel base families: 0.000 for ALL methods** (DIAMOND, HMMER-2024, off-the-shelf & trained
   ESM-C) — every method makes a confident wrong call, none abstain. This is THE blind spot and the
   motivation for the structure tier (Step 8) + a working novelty detector.
