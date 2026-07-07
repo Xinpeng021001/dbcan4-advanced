@@ -73,8 +73,8 @@ One-week prototype sprint. One dated entry per working day: progress, blockers, 
      - novel-sequence (known family): **96.5% exact family**
      - novel-family (new in 2025): **0.1% exact family** — the sequence-similarity blind spot.
   2. **Production dbCAN, current DB** (dev, hmm+dbCAN_sub+DIAMOND): novel-family 97% exact — but
-     only because the **current DB already contains all 20 new-2025 families** (verified in
-     dbCAN.hmm). This is a "what today's dbCAN finds" reference, **not** a temporal test.
+     only because the **current DB already contains all 20 new-2025 families** (all 20 confirmed
+     present as NAME entries in dbCAN.hmm). This is a "what today's dbCAN finds" reference, **not** a temporal test.
 
 **Takeaway**
 - The fair 2024->2025 comparison is baseline #1. Its collapse on novel families (0.1%) is exactly
