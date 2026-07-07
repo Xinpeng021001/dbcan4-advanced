@@ -1,0 +1,4 @@
+bucket	n	DIAMOND_2024_exact	dbCAN_current_hmm_exact	dbCAN_current_diamond_exact	dbCAN_current_recommend_exact
+overall	4726	0.8168	0.8216	0.982	0.8798
+novel_seq	4000	0.9647	0.7937	0.9802	0.8628
+novel_family	726	0.0014	0.9752	0.9917	0.9738

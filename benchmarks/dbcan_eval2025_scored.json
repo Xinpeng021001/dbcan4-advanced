@@ -1,0 +1,88 @@
+{
+  "n_eval": 4726,
+  "n_annotated": 4680,
+  "overall": {
+    "n": 4726,
+    "hmm": {
+      "any": 0.8999,
+      "exact": 0.8216,
+      "overlap": 0.8671
+    },
+    "sub": {
+      "any": 0.953,
+      "exact": 0.5438,
+      "overlap": 0.5901
+    },
+    "diamond": {
+      "any": 0.982,
+      "exact": 0.982,
+      "overlap": 0.982
+    },
+    "recommend": {
+      "any": 0.9575,
+      "exact": 0.8798,
+      "overlap": 0.9168
+    },
+    "consensus>=2": {
+      "any": 0.0,
+      "exact": 0.0,
+      "overlap": 0.0
+    }
+  },
+  "novel_seq": {
+    "n": 4000,
+    "hmm": {
+      "any": 0.884,
+      "exact": 0.7937,
+      "overlap": 0.8455
+    },
+    "sub": {
+      "any": 0.9467,
+      "exact": 0.6378,
+      "overlap": 0.689
+    },
+    "diamond": {
+      "any": 0.9802,
+      "exact": 0.9802,
+      "overlap": 0.9802
+    },
+    "recommend": {
+      "any": 0.952,
+      "exact": 0.8628,
+      "overlap": 0.9042
+    },
+    "consensus>=2": {
+      "any": 0.0,
+      "exact": 0.0,
+      "overlap": 0.0
+    }
+  },
+  "novel_family": {
+    "n": 726,
+    "hmm": {
+      "any": 0.9876,
+      "exact": 0.9752,
+      "overlap": 0.9862
+    },
+    "sub": {
+      "any": 0.9876,
+      "exact": 0.0262,
+      "overlap": 0.0455
+    },
+    "diamond": {
+      "any": 0.9917,
+      "exact": 0.9917,
+      "overlap": 0.9917
+    },
+    "recommend": {
+      "any": 0.9876,
+      "exact": 0.9738,
+      "overlap": 0.9862
+    },
+    "consensus>=2": {
+      "any": 0.0,
+      "exact": 0.0,
+      "overlap": 0.0
+    }
+  }
+}

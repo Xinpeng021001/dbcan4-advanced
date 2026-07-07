@@ -58,3 +58,28 @@ One-week prototype sprint. One dated entry per working day: progress, blockers, 
 **Next (Day 3)**
 - Run dbCAN baseline (HMMER + DIAMOND) on eval_2025 → the "missed by sequence-similarity" subset.
 - Compute ESM-C embeddings for reference + eval; kNN / centroid retrieval baselines.
+
+---
+
+## Day 2 (cont.) — baselines (Step 5)
+
+**Done**
+- Installed the **dev dbCAN** (5.0.7.dev50+g6250e4e79, from leu's run_dbcan_new env) into the
+  project venv on met, over released 5.2.9. Downloaded the dbCAN database (7.4 GB) into
+  `/array1/xinpeng/dbcan_db` (dbCAN.hmm, CAZy.dmnd, dbCAN-sub.hmm, +TF/TCDB/STP; STP.hmm needed a
+  direct-URL fetch after a 403).
+- **Two baselines on the 4,726-seq eval set:**
+  1. **Temporally-clean sequence similarity** — DIAMOND vs the **2024** CAZy DB (best-hit family):
+     - novel-sequence (known family): **96.5% exact family**
+     - novel-family (new in 2025): **0.1% exact family** — the sequence-similarity blind spot.
+  2. **Production dbCAN, current DB** (dev, hmm+dbCAN_sub+DIAMOND): novel-family 97% exact — but
+     only because the **current DB already contains all 20 new-2025 families** (verified in
+     dbCAN.hmm). This is a "what today's dbCAN finds" reference, **not** a temporal test.
+
+**Takeaway**
+- The fair 2024->2025 comparison is baseline #1. Its collapse on novel families (0.1%) is exactly
+  the gap ESM-C retrieval + structure similarity must close. Figure: `docs/figures/baseline_novelty_recall.png`.
+
+**Next**
+- ESM-C embeddings for reference (2024) + eval; kNN and nearest-centroid retrieval; measure
+  novel-family recall vs the 0.1% sequence-similarity floor.

@@ -1,0 +1,119 @@
+{
+  "n_eval": 4726,
+  "overall": {
+    "evalue<=1e-15": {
+      "n": 4726,
+      "any_hit": 4708,
+      "any_hit_frac": 0.9962,
+      "exact_family": 3845,
+      "exact_frac": 0.8136,
+      "overlap_family": 3936,
+      "overlap_frac": 0.8328
+    },
+    "evalue<=1e-10": {
+      "n": 4726,
+      "any_hit": 4717,
+      "any_hit_frac": 0.9981,
+      "exact_family": 3853,
+      "exact_frac": 0.8153,
+      "overlap_family": 3944,
+      "overlap_frac": 0.8345
+    },
+    "evalue<=1e-05": {
+      "n": 4726,
+      "any_hit": 4724,
+      "any_hit_frac": 0.9996,
+      "exact_family": 3860,
+      "exact_frac": 0.8168,
+      "overlap_family": 3951,
+      "overlap_frac": 0.836
+    },
+    "evalue<=0.001": {
+      "n": 4726,
+      "any_hit": 4724,
+      "any_hit_frac": 0.9996,
+      "exact_family": 3860,
+      "exact_frac": 0.8168,
+      "overlap_family": 3951,
+      "overlap_frac": 0.836
+    }
+  },
+  "by_novelty": {
+    "novel_seq": {
+      "evalue<=1e-15": {
+        "n": 4000,
+        "any_hit": 3982,
+        "any_hit_frac": 0.9955,
+        "exact_family": 3844,
+        "exact_frac": 0.961,
+        "overlap_family": 3909,
+        "overlap_frac": 0.9772
+      },
+      "evalue<=1e-10": {
+        "n": 4000,
+        "any_hit": 3991,
+        "any_hit_frac": 0.9978,
+        "exact_family": 3852,
+        "exact_frac": 0.963,
+        "overlap_family": 3917,
+        "overlap_frac": 0.9792
+      },
+      "evalue<=1e-05": {
+        "n": 4000,
+        "any_hit": 3998,
+        "any_hit_frac": 0.9995,
+        "exact_family": 3859,
+        "exact_frac": 0.9647,
+        "overlap_family": 3924,
+        "overlap_frac": 0.981
+      },
+      "evalue<=0.001": {
+        "n": 4000,
+        "any_hit": 3998,
+        "any_hit_frac": 0.9995,
+        "exact_family": 3859,
+        "exact_frac": 0.9647,
+        "overlap_family": 3924,
+        "overlap_frac": 0.981
+      }
+    },
+    "novel_family": {
+      "evalue<=1e-15": {
+        "n": 726,
+        "any_hit": 726,
+        "any_hit_frac": 1.0,
+        "exact_family": 1,
+        "exact_frac": 0.0014,
+        "overlap_family": 27,
+        "overlap_frac": 0.0372
+      },
+      "evalue<=1e-10": {
+        "n": 726,
+        "any_hit": 726,
+        "any_hit_frac": 1.0,
+        "exact_family": 1,
+        "exact_frac": 0.0014,
+        "overlap_family": 27,
+        "overlap_frac": 0.0372
+      },
+      "evalue<=1e-05": {
+        "n": 726,
+        "any_hit": 726,
+        "any_hit_frac": 1.0,
+        "exact_family": 1,
+        "exact_frac": 0.0014,
+        "overlap_family": 27,
+        "overlap_frac": 0.0372
+      },
+      "evalue<=0.001": {
+        "n": 726,
+        "any_hit": 726,
+        "any_hit_frac": 1.0,
+        "exact_family": 1,
+        "exact_frac": 0.0014,
+        "overlap_family": 27,
+        "overlap_frac": 0.0372
+      }
+    }
+  }
+}
