@@ -83,3 +83,29 @@ One-week prototype sprint. One dated entry per working day: progress, blockers, 
 **Next**
 - ESM-C embeddings for reference (2024) + eval; kNN and nearest-centroid retrieval; measure
   novel-family recall vs the 0.1% sequence-similarity floor.
+
+---
+
+## Day 2 (cont.) — ESM-C retrieval baselines (Step 6)
+
+**Done**
+- Embedded reference_2024 (337,759 seqs) + eval_2025 (4,726) with **ESM-C 600M**, mean-pooled
+  1152-dim, sharded across all 8 GPUs (scripts/embed_esmc.py). Embeddings cached on met at
+  `/array1/xinpeng/dbcan4-advanced/emb/`.
+- Two retrieval schemes (scripts/retrieval_esmc.py): **kNN** (k=15 majority vote) and
+  **nearest-centroid** (CLEAN-style prototype, one L2-normalized mean per family over 403 families).
+
+**Results (honest, and design-shaping)**
+- Known families (novel-seq, n=4,000): ESM-C **kNN 85.8% exact**, centroid 45.6% — both *below*
+  DIAMOND-2024 (96.5%). Off-the-shelf ESM-C retrieval does **not** beat sequence similarity here.
+- Novel families (n=726): **0% exact** for both — the family isn't in the 2024 reference, so
+  retrieval cannot assign it (same ceiling as DIAMOND).
+- Novelty detection (flag novel_family vs novel_seq): raw top-1 cosine AUROC ~0.52 (~chance);
+  best single signal centroid-margin AUROC 0.66. Mean-pooled ESM-C cosine is globally saturated
+  (~0.99 both buckets), so absolute similarity is a poor novelty cue.
+
+**Takeaway → Step 7**
+- Off-the-shelf ESM-C embeddings are not tuned to separate CAZy families. This is exactly what a
+  **CAZy-supervised contrastive head** should fix: pull same-family together, push different-family
+  apart, so (a) known-family recall clears DIAMOND and (b) novel families land in low-density regions
+  that a margin/energy score can flag. Figure: docs/figures/esmc_retrieval_findings.png.
