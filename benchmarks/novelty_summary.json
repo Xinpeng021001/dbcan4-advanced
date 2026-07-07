@@ -1,0 +1,36 @@
+{
+  "novelty_definition": "exact-sequence-md5 vs 2024; carried_over = seq present in 2024",
+  "n_2024_labeled": 337759,
+  "n_2024_unique_seqs": 407338,
+  "n_2025_labeled": 382156,
+  "n_families_2024": 411,
+  "n_families_2025": 423,
+  "n_new_families_2025": 20,
+  "new_families_all": [
+    "CBM104",
+    "CBM3",
+    "CBM8",
+    "GH13_37",
+    "GH2_1",
+    "GH2_10",
+    "GH2_11",
+    "GH2_13",
+    "GH2_16",
+    "GH2_18",
+    "GH2_19",
+    "GH2_2",
+    "GH2_21",
+    "GH2_3",
+    "GH2_5",
+    "GH43_28",
+    "GH5_40",
+    "GT109",
+    "GT119",
+    "PL29"
+  ],
+  "buckets": {
+    "carried_over": 329724,
+    "novel_seq": 51704,
+    "novel_family": 728
+  }
+}

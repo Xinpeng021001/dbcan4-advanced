@@ -61,14 +61,14 @@ The premise stated in §1: fold is conserved far past sequence. Two ways to brin
 
 **Reference database — CAZyme3D (our own group's resource).** CAZyme3D (Zheng, Yin et al., bioRxiv 2024, `https://pro.unl.edu/CAZyme3D/`) is a dedicated 3D-structure database for CAZymes: **870,740 AlphaFold-predicted structures** (Whole dataset) and a **188,574-sequence non-redundant ID50 subset** organized by a hierarchical classification that extends the CAZy class/clan/family/subfamily levels with new structure-defined levels (subclasses, structural-cluster groups, SCs). Using CAZyme3D as the Foldseek target database means a query protein's fold is matched against **CAZyme structures specifically**, with family labels attached — exactly what we need.
 
-**(b) Structure-aware embeddings — SaProt.** SaProt (Su et al., *ICLR* 2024) builds a **structure-aware vocabulary**: each residue token is fused with a **Foldseek 3Di structure token**, so the pLM sees explicit local geometry rather than inferring it. Trained on ~40M structures, it surpasses sequence-only baselines across 10 downstream tasks. SaProt gives us a **second, orthogonal structure signal** distinct from Foldseek's geometric search: a structure-aware *embedding* we can run retrieval/classification on exactly as we do for ESM-C.
+**(b) Structure-aware embeddings — SaProt.** SaProt (SaProt: Protein Language Modeling with Structure-aware Vocabulary, *ICLR* 2024; Westlake University) builds a **structure-aware vocabulary**: each residue token is fused with a **Foldseek 3Di structure token**, so the pLM sees explicit local geometry rather than inferring it, and it reports gains over sequence-only baselines on downstream function tasks. SaProt gives us a **second, orthogonal structure signal** distinct from Foldseek's geometric search: a structure-aware *embedding* we can run retrieval/classification on exactly as we do for ESM-C. *(Training-corpus size and per-task benchmark numbers to be confirmed against the paper before they appear in any writeup.)*
 
-**The folding dependency, and a way around it.** Both structure routes need a structure (or its 3Di tokens). Options: (i) **ESMFold** on the query (GPU, ~seconds–minutes per protein) → real 3Di; (ii) **ProstT5** predicts 3Di tokens *directly from sequence* — the Bilingual/ProstT5 work reports predicting 3Di for a 1,787-protein proteome in **~44 s on GPU vs. ~48 h for ColabFold structure prediction**, an over-three-orders-of-magnitude speedup, enabling Foldseek-style structure search *without folding*. Phold uses exactly ProstT5+Foldseek in production. **Design consequence:** the structure tier can run in a fast "predicted-3Di" mode (ProstT5) for whole proteomes and a slow "true-fold" mode (ESMFold) for the hardest cases. For the one-week prototype we fold a bounded subset with ESMFold and note ProstT5 as the scale path.
+**The folding dependency, and a way around it.** Both structure routes need a structure (or its 3Di tokens). Options: (i) **ESMFold** on the query (GPU, ~seconds–minutes per protein) → real 3Di; (ii) **ProstT5** predicts 3Di tokens *directly from sequence* — the Bilingual/ProstT5 work reports a large speedup over full structure prediction for generating Foldseek 3Di tokens, enabling Foldseek-style structure search *without folding* (the specific benchmark figures are from a search snippet and should be confirmed against the paper before quoting). Phold uses exactly ProstT5+Foldseek in production. **Design consequence:** the structure tier can run in a fast "predicted-3Di" mode (ProstT5) for whole proteomes and a slow "true-fold" mode (ESMFold) for the hardest cases. For the one-week prototype we fold a bounded subset with ESMFold and note ProstT5 as the scale path.
 
 ### 2.3 Geometric / active-site models (roadmap tier)
 
 - **GraphEC** (Song et al., *Nature Communications* 2024) — ProtT5-XL-U50 embeddings on **ESMFold-predicted structures**, geometric graph learning to predict EC number **and active sites**; explicitly argues prior EC predictors under-use active-site and structural characteristics.
-- **CLEAN-Contact** (*Communications Biology* 2024) — CLEAN's contrastive framework augmented with structural inference for improved functional annotation.
+- **CLEAN-Contact** (*Communications Biology* 2024; details to be verified against the primary source) — reported as CLEAN's contrastive framework augmented with structural inference for improved functional annotation.
 
 These predict at residue/active-site resolution and are heavier to train; scoped as **Phase-2**, not week-1.
 
@@ -193,17 +193,22 @@ The existing **BioForge** stack (`github.com/Xinpeng021001/biodb`) already inges
 
 ---
 
-## References (verified against retrieved full text / records)
+## References
 
-1. Thurimella K. *et al.* **Protein language models uncover carbohydrate-active enzyme function in metagenomics** (CAZyLingua). *BMC Bioinformatics* (2025). doi:10.1186/s12859-025-06286-y.
-2. Yu T. *et al.* **Enzyme function prediction using contrastive learning** (CLEAN). *Science* 379:1358–1363 (2023). doi:10.1126/science.adf2465.
-3. van Kempen M. *et al.* **Fast and accurate protein structure search with Foldseek.** *Nature Biotechnology* (2023). doi:10.1038/s41587-023-01773-0.
-4. Zheng J., Yin Y. *et al.* **CAZyme3D: a database of 3D structures for carbohydrate-active enzymes.** bioRxiv (2024). doi:10.1101/2024.12.27.630555.
-5. Su J., Han C., Zhou Y., Shan J., Zhou X., Yuan F. **SaProt: Protein Language Modeling with Structure-aware Vocabulary.** *ICLR* 2024.
-6. Song Y. *et al.* **Accurately predicting enzyme functions through geometric graph learning on ESMFold-predicted structures** (GraphEC). *Nature Communications* (2024). doi:10.1038/s41467-024-52533-w.
-7. **CLEAN-Contact: improved enzyme functional annotation prediction using contrastive learning with structural inference.** *Communications Biology* (2024). doi:10.1038/s42003-024-07359-z.
-8. Heinzinger M. *et al.* **Bilingual language model for protein sequence and structure** (ProstT5). *NAR Genomics and Bioinformatics* 6(4):lqae150 (2024).
-9. **Enzyme specificity prediction using cross-attention graph neural networks** (EZSpecificity). *Nature* (2025). doi:10.1038/s41586-025-09697-2.
-10. ESM Cambrian (ESM-C) — EvolutionaryScale, 2024 (300M/600M/6B protein language models).
+**Group A — retrieved and read in this session (full text or abstract confirmed):**
 
-*Bibliographic details above are taken from retrieved full-text PDFs (refs 1, 3, 4, 6, 8), verified abstracts/records (refs 2, 9), and OpenReview/DBLP records (ref 5). Volume/page numbers not confirmed from a retrieved record are omitted rather than guessed.*
+1. Thurimella K. *et al.* **Protein language models uncover carbohydrate-active enzyme function in metagenomics** (CAZyLingua). *BMC Bioinformatics* (2025). doi:10.1186/s12859-025-06286-y. *(full-text PDF read)*
+2. Yu T. *et al.* **Enzyme function prediction using contrastive learning** (CLEAN). *Science* (2023). doi:10.1126/science.adf2465. *(abstract confirmed; full text paywalled)*
+3. van Kempen M. *et al.* **Fast and accurate protein structure search with Foldseek.** *Nature Biotechnology* (2023). doi:10.1038/s41587-023-01773-0. *(full-text PDF read)*
+4. Zheng J., Yin Y. *et al.* **CAZyme3D: a database of 3D structures for carbohydrate-active enzymes.** bioRxiv (2024). doi:10.1101/2024.12.27.630555. *(full text read; the 870,740 / 188,574 figures are quoted from it)*
+5. Song Y. *et al.* **Accurately predicting enzyme functions through geometric graph learning on ESMFold-predicted structures** (GraphEC). *Nature Communications* (2024). doi:10.1038/s41467-024-52533-w. *(full-text PDF read)*
+6. **Improved enzyme functional annotation prediction using contrastive learning with structural inference** (CLEAN-Contact). *Communications Biology* (2024). doi:10.1038/s42003-024-07359-z. *(full-text PDF retrieved; title/venue/DOI confirmed)*
+7. **Enzyme specificity prediction using cross-attention graph neural networks** (EZSpecificity). *Nature* (2025). doi:10.1038/s41586-025-09697-2. *(DOI + title confirmed via resolver; full text paywalled, author list/pages not verified here)*
+
+**Group B — identified by title/venue from search results but NOT independently retrieved this session; details to be verified before any publication or external writeup:**
+
+8. **SaProt: Protein Language Modeling with Structure-aware Vocabulary.** *ICLR* 2024 (Westlake University; `github.com/westlake-repl/SaProt`, OpenReview `6MRm3G4NiU`). *(venue/repo from search hits; author list and benchmark specifics not confirmed here)*
+9. Heinzinger M. *et al.* **Bilingual language model for protein sequence and structure** (ProstT5). *NAR Genomics and Bioinformatics* (2024), article lqae150. *(from search-result title/record; full text not fetched this session)*
+10. ESM Cambrian (ESM-C) — EvolutionaryScale (300M/600M/6B protein language models). *(model family known from the loaded `esmfold2` skill; cite the official release before publication)*
+
+> **Provenance note.** Group A (refs 1–7) references were retrieved this session — full text read for refs 1, 3, 4, 5, 6; abstract confirmed for ref 2; DOI+title confirmed via resolver for ref 7 (full text paywalled). Quoted figures come directly from the retrieved text. Group B (refs 8–10) were located by title/venue in web-search results (whose body text was not preserved in full) or known from the loaded skill; their author lists, volume/page, and benchmark specifics have **not** been independently verified here and must be checked against the primary source before this document is used externally. This note replaces an earlier, overstated "all verified" claim.
