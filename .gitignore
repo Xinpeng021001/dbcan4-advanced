@@ -1,0 +1,43 @@
+# Large data & model weights — never committed
+*.faa
+*.fasta
+*.fa
+*.pdb
+*.cif
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.dmnd
+*.hmm
+*.index
+*.faiss
+data/
+weights/
+models/
+structures/
+embeddings/
+*.tsv.gz
+
+# but DO keep small manifests / metric tables committed:
+!benchmarks/*.tsv
+!docs/**/*.tsv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# OS / editor
+.DS_Store
+.ipynb_checkpoints/
+*.swp
