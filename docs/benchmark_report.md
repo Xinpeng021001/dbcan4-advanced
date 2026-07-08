@@ -92,7 +92,8 @@ reliability weights; below a confidence threshold τ=0.35 the prediction
 
 ![Master benchmark](figures/master_benchmark_figure.png)
 
-**Exact-subfamily / parent-family recall on the temporal holdout:**
+**Family recall on the temporal holdout** (overlap: a prediction counts if it
+shares ≥1 family with the truth label; subfamily and parent granularity):
 
 | Method | Known (sub) | Known (parent) | New-to-fungi (parent) | Genuinely novel (parent) |
 |---|---|---|---|---|
@@ -109,13 +110,15 @@ reliability weights; below a confidence threshold τ=0.35 the prediction
 ¹ Foldseek scored over all 4,726 queries; only 698 have structures. On its
 structure-bearing subset (n=347 known-family): **0.718 subfamily / 0.752 parent**.
 
-### 4.1 Known families: pLM approaches sequence, trained heads help, fusion wins
+### 4.1 Known families: pLM approaches sequence, trained heads help, fusion ties the best
 
-Off-the-shelf ESM-C kNN (93.1% exact subfamily) **trails** DIAMOND (98.1%) — a
+Off-the-shelf ESM-C kNN (93.1% subfamily overlap) **trails** DIAMOND (98.1%) — a
 useful negative result: a general pLM does not beat sequence similarity out of the
 box. CAZy-supervised training closes most of the gap (contrastive kNN 97.3%). The
-**fusion** consensus edges past every single method (98.1% subfamily, 98.4%
-parent), picking up cases where each method individually errs.
+**fusion** consensus is best at the subfamily level (98.10%, narrowly ahead of
+DIAMOND's 98.05%); at the parent level DIAMOND is marginally higher (98.45% vs
+fusion 98.38%). The methods are effectively **tied** on known families — fusion's
+value is not a higher known-family number but its behaviour on novelty (§4.4).
 
 ### 4.2 The novelty cliff: every method collapses on genuinely-novel families
 

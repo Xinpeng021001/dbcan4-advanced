@@ -1,4 +1,4 @@
-method	known_exact_subfamily	known_parent	new_to_fungi_family_parent	genuinely_novel_parent
+method	known_subfamily_overlap	known_parent_overlap	new_to_fungi_family_parent	genuinely_novel_parent
 dbCAN HMMER (current DB)	0.8455	0.8575	0.9876	0.8333
 dbCAN Recommend (current DB)	0.9042	0.9173	0.9876	0.8333
 DIAMOND (fungal 2024, temporal)	0.9805	0.9845	0.9945	0.3333

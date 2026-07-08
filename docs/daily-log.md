@@ -241,3 +241,15 @@ fusion_abstention_analysis.json; docs/figures/fusion_findings.png.
 **Recommendations for dbCAN4:** keep sequence tier-1; add trained pLM head tier-2; add structure
 tier-3 gated on a complete reference (CAZyme3D + ProstT5); ship fusion confidence + abstention as
 the headline feature; substrate-specificity (EZSpecificity-style) as Phase 2.
+
+---
+
+## Day 2 (cont.) — correction: fusion-vs-DIAMOND parent tie + overlap-recall labels
+
+Review caught two presentation errors in the Step-11 deliverables (fixed):
+- master_benchmark_v2.tsv columns were named "exact_subfamily" but hold OVERLAP recall
+  (prediction shares >=1 family with truth). Renamed to *_overlap and clarified in the report table.
+- benchmark_report.md 4.1 claimed fusion "edges past every single method (98.1% sub, 98.4% parent)".
+  True at subfamily (98.10 vs DIAMOND 98.05) but NOT parent — DIAMOND 98.45 > fusion 98.38.
+  Corrected: methods are effectively TIED on known families; fusion's differentiator is novelty
+  abstention (4.4), not a higher known-family number.

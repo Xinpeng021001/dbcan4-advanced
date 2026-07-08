@@ -70,6 +70,9 @@ Fungal 2024→2025 temporal holdout, exact-subfamily / parent-family recall:
 | Foldseek (structure)* | 0.72 | 0.75 | 0.00 |
 | **FUSION (consensus)** | **0.98** | **0.98** | **0.33** |
 
+Known-family recall is effectively tied across DIAMOND, the trained pLM head, and fusion
+(all ~0.98); fusion's differentiator is novelty handling, not a higher known-family number.
+
 \*on its 347-structure subset. Fusion abstention flags genuinely-novel CAZymes at
 66.7% vs 0.3% for new-to-fungi families — the actionable "advanced" signal.
 
