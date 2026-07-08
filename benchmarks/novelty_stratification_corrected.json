@@ -1,0 +1,74 @@
+{
+  "issue": "'truly-novel base family' was defined against the FUNGAL 2024 subset only; a family absent from fungal 2024 can still exist in all-kingdom CAZy 2024 (bacteria/plants/etc.). Such proteins are NEW-TO-FUNGI, not new CAZyme families.",
+  "test": "Re-scored the 726 novel_family sequences against the FULL all-kingdom 2024 CAZy (DIAMOND).",
+  "novel_family_n": 726,
+  "parent_recovered_by_allkingdom_2024": 696,
+  "parent_recovered_frac": 0.9587,
+  "exact_subfamily_recovered_by_allkingdom_2024": 1,
+  "genuinely_novel_to_CAZy2024_n": 6,
+  "genuinely_novel_detail": [
+    {
+      "pid": "250591",
+      "true": [
+        "CBM104"
+      ],
+      "allk_pred": [
+        "AA9"
+      ]
+    },
+    {
+      "pid": "244957",
+      "true": [
+        "CBM104"
+      ],
+      "allk_pred": [
+        "AA9"
+      ]
+    },
+    {
+      "pid": "182946",
+      "true": [
+        "GT109"
+      ],
+      "allk_pred": [
+        "GT0"
+      ]
+    },
+    {
+      "pid": "602751",
+      "true": [
+        "GH2_10"
+      ],
+      "allk_pred": [
+        "GH114"
+      ]
+    },
+    {
+      "pid": "70292",
+      "true": [
+        "CBM104"
+      ],
+      "allk_pred": [
+        "AA9"
+      ]
+    },
+    {
+      "pid": "632760",
+      "true": [
+        "GH2_10"
+      ],
+      "allk_pred": [
+        "GH114"
+      ]
+    }
+  ],
+  "family_existence_in_allkingdom_2024": {
+    "CBM104": 0,
+    "CBM3": 2884,
+    "CBM8": 136,
+    "GT109": 75,
+    "GT119": 65201,
+    "PL29": 288
+  },
+  "revised_interpretation": "Only CBM104 is absent from all-kingdom 2024 CAZy. The other 5 of the original 6 'truly-novel base families' (CBM3, CBM8, GT109, GT119, PL29) existed in 2024 CAZy in non-fungal kingdoms. The correct 'genuinely novel to CAZy 2024' set is ~6 sequences, dominated by CBM104."
+}

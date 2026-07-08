@@ -143,3 +143,27 @@ novel-family 0.975 — the 0.975 is DB-vintage (current DB already has all 20 ne
 the identical fungal 2024 reference (96.2% novel-seq, within 0.3% of all-kingdom run).
 
 Figures: docs/figures/benchmark_dbcan_vs_plm.png (featured), trained_heads_comparison.png.
+
+---
+
+## Day 2 (cont.) — IMPORTANT novelty-definition correction
+
+User flagged that "0.0000 on truly-novel families might be errors — 2025 added new fungi data /
+newly-annotated CAZymes that are NOT necessarily novel families, just proteins not annotated before."
+
+**They were right.** My "truly-novel base family" was defined against the FUNGAL 2024 subset only.
+Re-checked the 6 supposed truly-novel families against the FULL all-kingdom 2024 CAZy:
+- CBM104: 0 headers (genuinely absent from 2024 CAZy)
+- CBM3: 2,884 | CBM8: 136 | GT109: 75 | GT119: 65,201 | PL29: 288  -> all EXISTED in 2024 CAZy
+  (in bacteria/plants/other kingdoms), just absent or sparse in fungi.
+
+Re-scored all 726 novel_family seqs against all-kingdom 2024 CAZy (DIAMOND):
+- **95.9% (696/726)** have parent family recoverable from all-kingdom 2024 -> NEW-TO-FUNGI, not new families
+- only **6 seqs** have no parent hit even in all-kingdom 2024 -> genuinely-novel-to-CAZy candidates
+  (3x CBM104->AA9, 2x GH2_10->GH114, 1x GT109->GT0; all confident WRONG calls)
+
+**Implication:** this fungal 2024->2025 holdout is mostly a cross-kingdom-transfer test, NOT a
+strong novel-family-discovery test (only ~6 genuinely novel seqs). The honest framing: sequence
+methods recover new-to-fungi families well via cross-kingdom homology; the structure tier's real
+target is the handful of genuinely-novel + the confident-wrong-call cases.
+See benchmarks/novelty_stratification_corrected.json.
