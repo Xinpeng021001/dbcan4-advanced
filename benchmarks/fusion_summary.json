@@ -1,0 +1,233 @@
+{
+  "tau": 0.35,
+  "n_methods_per_query": {},
+  "fusion_no_abstain": {
+    "sub": {
+      "overall": {
+        "n": 4726,
+        "recall": 0.8354
+      },
+      "novel_seq": {
+        "n": 4000,
+        "recall": 0.981
+      },
+      "novel_family": {
+        "n": 726,
+        "recall": 0.0331
+      }
+    },
+    "parent": {
+      "overall": {
+        "n": 4726,
+        "recall": 0.9854
+      },
+      "novel_seq": {
+        "n": 4000,
+        "recall": 0.9838
+      },
+      "novel_family": {
+        "n": 726,
+        "recall": 0.9945
+      }
+    }
+  },
+  "fusion_with_abstain": {
+    "sub": {
+      "overall": {
+        "n": 4726,
+        "recall": 0.8269
+      },
+      "novel_seq": {
+        "n": 4000,
+        "recall": 0.971
+      },
+      "novel_family": {
+        "n": 726,
+        "recall": 0.0331
+      }
+    },
+    "parent": {
+      "overall": {
+        "n": 4726,
+        "recall": 0.9757
+      },
+      "novel_seq": {
+        "n": 4000,
+        "recall": 0.9728
+      },
+      "novel_family": {
+        "n": 726,
+        "recall": 0.9917
+      }
+    }
+  },
+  "per_method_alone": {
+    "DIAMOND": {
+      "sub": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.8259
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9695
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.0344
+        }
+      },
+      "parent": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.9757
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9728
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.9917
+        }
+      }
+    },
+    "HMMER2024": {
+      "sub": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.6066
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.7125
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.0234
+        }
+      },
+      "parent": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.9564
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9497
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.9931
+        }
+      }
+    },
+    "ContrastiveKNN": {
+      "sub": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.8297
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9732
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.0386
+        }
+      },
+      "parent": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.9784
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9755
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.9945
+        }
+      }
+    },
+    "Classifier": {
+      "sub": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.8229
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9655
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.0372
+        }
+      },
+      "parent": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.9708
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.9688
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.9821
+        }
+      }
+    },
+    "Foldseek": {
+      "sub": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.0588
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.0655
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.022
+        }
+      },
+      "parent": {
+        "overall": {
+          "n": 4726,
+          "recall": 0.0618
+        },
+        "novel_seq": {
+          "n": 4000,
+          "recall": 0.0688
+        },
+        "novel_family": {
+          "n": 726,
+          "recall": 0.0234
+        }
+      }
+    }
+  },
+  "abstention": {
+    "overall": {
+      "n": 4726,
+      "mean_fusion_conf": 0.8373,
+      "abstain_rate": 0.0123
+    },
+    "novel_seq": {
+      "n": 4000,
+      "mean_fusion_conf": 0.8351,
+      "abstain_rate": 0.013
+    },
+    "novel_family": {
+      "n": 726,
+      "mean_fusion_conf": 0.8492,
+      "abstain_rate": 0.0083
+    }
+  }
+}

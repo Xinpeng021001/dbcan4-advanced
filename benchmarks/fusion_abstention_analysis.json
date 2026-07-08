@@ -1,0 +1,21 @@
+{
+  "fusion_conf_by_group": {
+    "known_family": {
+      "n": 4000,
+      "mean": 0.8351,
+      "abstain_rate": 0.013
+    },
+    "new_to_fungi": {
+      "n": 720,
+      "mean": 0.852,
+      "abstain_rate": 0.0028
+    },
+    "genuinely_novel_to_cazy": {
+      "n": 6,
+      "mean": 0.5106,
+      "abstain_rate": 0.6667
+    }
+  },
+  "tau": 0.35,
+  "interpretation": "Fusion abstention flags genuinely-unplaceable families (CBM104, GT109) at higher rate than known or new-to-fungi. New-to-fungi correctly keep high confidence because their families ARE recoverable by cross-kingdom homology."
+}

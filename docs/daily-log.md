@@ -198,3 +198,25 @@ long fungal CAZymes (>700aa) dominate cost, so we length-capped and sampled.
 (2) large multi-domain families under-represented; (3) predicted (not experimental) structures.
 The value shown is COMPLEMENTARITY, not head-to-head beating DIAMOND on a partial reference.
 See benchmarks/foldseek_summary.json, struct_seq_complementarity.json; docs/figures/structure_tier_findings.png.
+
+---
+
+## Day 2 (cont.) — Step 9: DEFT-style fusion + consensus scoring
+
+scripts/fusion_consensus.py: confidence-weighted consensus over all retrieval axes —
+sequence (DIAMOND, HMMER-2024), pLM (contrastive kNN + softmax classifier), structure (Foldseek).
+Each method emits (family, confidence); votes weighted by per-method reliability prior; winning
+family's normalized score is the fusion confidence; below tau=0.35 the call ABSTAINS (flags novel/uncertain).
+
+**Fusion beats every single method:**
+- Parent-family (known, n=4000): fusion 98.4% vs ContrastiveKNN 97.6%, DIAMOND 97.3%
+- Exact-subfamily (known, n=4000): fusion 98.1% vs ContrastiveKNN 97.3%, DIAMOND 97.0%
+
+**Abstention correctly flags the genuinely-hard cases (the actionable result):**
+- known family:            abstain 1.3%
+- new-to-fungi:            abstain 0.3%  (correctly confident - recoverable by cross-kingdom homology)
+- genuinely-novel-to-CAZy: abstain 66.7% (mean conf 0.51 vs 0.84) - fusion flags CBM104, GT109 for review
+
+This is the DEFT-style payoff: consensus stays confident on placeable proteins (incl. new-to-fungi)
+but flags genuinely-unplaceable CAZymes. See benchmarks/fusion_summary.json,
+fusion_abstention_analysis.json; docs/figures/fusion_findings.png.
