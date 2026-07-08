@@ -1,0 +1,10 @@
+{
+  "n_common_knownfam_with_struct": 347,
+  "both": 256,
+  "only_diamond": 70,
+  "only_foldseek": 5,
+  "neither": 16,
+  "diamond_alone": 0.9395,
+  "foldseek_alone": 0.7522,
+  "union_ceiling": 0.9539
+}

@@ -1,0 +1,31 @@
+{
+  "n_eval_with_hit": 697,
+  "subfamily": {
+    "overall": {
+      "n": 697,
+      "exact": 0.3572
+    },
+    "novel_seq": {
+      "n": 347,
+      "exact": 0.7176
+    },
+    "novel_family": {
+      "n": 350,
+      "exact": 0.0
+    }
+  },
+  "parent_family": {
+    "overall": {
+      "n": 697,
+      "exact": 0.3759
+    },
+    "novel_seq": {
+      "n": 347,
+      "exact": 0.7522
+    },
+    "novel_family": {
+      "n": 350,
+      "exact": 0.0029
+    }
+  }
+}

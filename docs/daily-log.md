@@ -167,3 +167,34 @@ strong novel-family-discovery test (only ~6 genuinely novel seqs). The honest fr
 methods recover new-to-fungi families well via cross-kingdom homology; the structure tier's real
 target is the handful of genuinely-novel + the confident-wrong-call cases.
 See benchmarks/novelty_stratification_corrected.json.
+
+---
+
+## Day 2 (cont.) — Step 8: structure tier (ESMFold + Foldseek)
+
+Self-contained temporal design (user choice): fold our own 2024 reference + eval set on met's
+8 GPUs with ESMFold (facebook/esmfold_v1 via transformers), build a Foldseek DB, TM-align search.
+
+**Pipeline built:**
+- scripts/fold_esmfold.py    — shardable ESMFold folder (8-GPU), sanitizes non-standard residues (*->X)
+- scripts/select_fold_sets.py — picks eval + per-family reference reps to fold
+- scripts/foldseek_search.py  — foldseek easy-search (--alignment-type 1 TM-align), best hit -> family
+
+**Folded:** 699 eval structures + 917 reference structures (817 initial <=600aa + 100 supplementary
+for large families GH2/GH3/GH31/GH36 etc. that the 600aa cap had removed). ESMFold is O(L^2);
+long fungal CAZymes (>700aa) dominate cost, so we length-capped and sampled.
+
+**Results (Foldseek vs 917-structure 2024 reference):**
+- Known families (novel_seq, n=347): **71.8% exact subfamily, 75.2% parent** — structure similarity
+  DOES recover CAZy families from *predicted* structures. Below DIAMOND's 96% because our reference
+  is a length-capped SAMPLE, not the full CAZyDB (a complete structural ref = CAZyme3D would close this).
+- Novel families (n=350): 0% — same ceiling as all methods (family absent from reference).
+
+**Complementarity (the fusion justification), on 347 known-fam eval proteins with structures:**
+- DIAMOND alone 93.9% | Foldseek alone 75.2% | **Union (fusion ceiling) 95.4%**
+- Structure rescues **5 proteins DIAMOND misses** — different errors -> motivates Step 9 fusion.
+
+**Honest limitations documented:** (1) sampled/length-capped reference underperforms full CAZyDB;
+(2) large multi-domain families under-represented; (3) predicted (not experimental) structures.
+The value shown is COMPLEMENTARITY, not head-to-head beating DIAMOND on a partial reference.
+See benchmarks/foldseek_summary.json, struct_seq_complementarity.json; docs/figures/structure_tier_findings.png.
