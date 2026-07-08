@@ -92,6 +92,12 @@ reliability weights; below a confidence threshold τ=0.35 the prediction
 
 ![Master benchmark](figures/master_benchmark_figure.png)
 
+*Figure. Panel A restricts all seven methods to the identical 347-protein
+structure-bearing known-family subset (the only proteins Foldseek can score), so
+every bar is the same overlap metric on the same proteins. The table below reports
+each method on its full applicable set (n=4,000 known-family), which is why the
+sequence/pLM numbers there run slightly higher than in panel A.*
+
 **Family recall on the temporal holdout** (overlap: a prediction counts if it
 shares ≥1 family with the truth label; subfamily and parent granularity):
 

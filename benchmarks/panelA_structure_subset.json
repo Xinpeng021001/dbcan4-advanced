@@ -1,0 +1,12 @@
+{
+  "subset_n": 347,
+  "subfamily_overlap_recall_structure_subset": {
+    "DIAMOND (seq, 2024)": 0.9597,
+    "HMMER (seq, 2024)": 0.683,
+    "ESM-C kNN (pLM)": 0.9049,
+    "Contrastive kNN (pLM)": 0.951,
+    "Classifier (pLM)": 0.9395,
+    "Foldseek (struct)": 0.8271,
+    "FUSION": 0.9712
+  }
+}
