@@ -1,0 +1,100 @@
+{
+  "n_eval": 4726,
+  "n_annotated": 4575,
+  "buckets": {
+    "overall": {
+      "n": 4726,
+      "hmm": {
+        "any": 0.8961,
+        "exact": 0.6725,
+        "overlap": 0.7224,
+        "parent_exact": 0.8256,
+        "parent_overlap": 0.8737
+      },
+      "sub": {
+        "any": 0.9331,
+        "exact": 0.5138,
+        "overlap": 0.5656,
+        "parent_exact": 0.8673,
+        "parent_overlap": 0.9082
+      },
+      "diamond": {
+        "any": 0.9306,
+        "exact": 0.759,
+        "overlap": 0.7734,
+        "parent_exact": 0.9063,
+        "parent_overlap": 0.9202
+      },
+      "recommend": {
+        "any": 0.9293,
+        "exact": 0.7021,
+        "overlap": 0.7463,
+        "parent_exact": 0.8606,
+        "parent_overlap": 0.901
+      }
+    },
+    "novel_family": {
+      "n": 726,
+      "hmm": {
+        "any": 0.9628,
+        "exact": 0.0028,
+        "overlap": 0.0427,
+        "parent_exact": 0.9353,
+        "parent_overlap": 0.9628
+      },
+      "sub": {
+        "any": 0.9835,
+        "exact": 0.0,
+        "overlap": 0.0413,
+        "parent_exact": 0.9559,
+        "parent_overlap": 0.9835
+      },
+      "diamond": {
+        "any": 0.9876,
+        "exact": 0.0014,
+        "overlap": 0.0358,
+        "parent_exact": 0.9532,
+        "parent_overlap": 0.9848
+      },
+      "recommend": {
+        "any": 0.9835,
+        "exact": 0.0028,
+        "overlap": 0.0427,
+        "parent_exact": 0.9559,
+        "parent_overlap": 0.9835
+      }
+    },
+    "novel_seq": {
+      "n": 4000,
+      "hmm": {
+        "any": 0.884,
+        "exact": 0.794,
+        "overlap": 0.8458,
+        "parent_exact": 0.8057,
+        "parent_overlap": 0.8575
+      },
+      "sub": {
+        "any": 0.924,
+        "exact": 0.607,
+        "overlap": 0.6607,
+        "parent_exact": 0.8512,
+        "parent_overlap": 0.8945
+      },
+      "diamond": {
+        "any": 0.9203,
+        "exact": 0.8965,
+        "overlap": 0.9073,
+        "parent_exact": 0.8978,
+        "parent_overlap": 0.9085
+      },
+      "recommend": {
+        "any": 0.9195,
+        "exact": 0.829,
+        "overlap": 0.874,
+        "parent_exact": 0.8433,
+        "parent_overlap": 0.886
+      }
+    }
+  },
+  "db": "2024_temporal_clean"
+}

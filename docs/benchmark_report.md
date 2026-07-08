@@ -62,9 +62,11 @@ sequences). The report treats these two questions separately.
 
 | Tier | Method | Reference / training | Confidence signal |
 |---|---|---|---|
-| Sequence | **dbCAN HMMER** (current DB) | `dbCAN.hmm` profiles (2025-era) | HMM E-value |
-| Sequence | **dbCAN Recommend** (current DB) | run_dbcan consensus | tool agreement |
-| Sequence | **DIAMOND** (temporal) | fungal 2024 reference | % identity |
+| Sequence | **dbCAN HMMER** (run_dbcan) | `dbCAN.hmm` — 2024 (fair) & 2025 (current) DB | HMM E-value |
+| Sequence | **dbCAN-sub** (run_dbcan) | `dbCAN-sub.hmm` — 2024 & 2025 DB | HMM E-value |
+| Sequence | **dbCAN Recommend** (run_dbcan) | run_dbcan consensus — 2024 & 2025 DB | tool agreement |
+| Sequence | **DIAMOND** (run_dbcan) | CAZy `.dmnd` — 2024 (fair) & 2025 (current) DB | bit score |
+| Sequence | **DIAMOND** (custom, temporal) | fungal 2024 reference | % identity |
 | Sequence | **HMMER** (temporal) | 223 family HMMs built from 2024 | HMM E-value |
 | pLM | **ESM-C kNN** (off-the-shelf) | ESM-C 600M embeddings, 2024 | vote purity |
 | pLM | **Contrastive kNN** (trained) | SupCon head on ESM-C, 2024 | vote purity |
@@ -87,6 +89,20 @@ concept against a folded 2024 reference (917 structures).
 **Fusion.** Confidence-weighted consensus across all axes with per-method
 reliability weights; below a confidence threshold τ=0.35 the prediction
 **abstains** (flags a putative novel/uncertain CAZyme).
+
+**run_dbcan tiers — fair vs current database (§4.5).** The dbCAN
+HMMER / dbCAN-sub / DIAMOND / Recommend tiers are produced by a single
+`run_dbcan CAZyme_annotation --methods diamond,hmm,dbCANsub` invocation, so they
+inherit dbCAN's production cutoffs and its domain overlap / multi-domain
+resolution rules directly — we do **not** re-implement HMMER separately (dbCAN's
+E-value + coverage + overlap rules are the point of using it). Each tier is run
+against **two** databases to isolate the database-vintage confound: the
+**temporally-clean 2024 DB** (`dbcan_db_2024`: CAZy `.dmnd` built from the July-2024
+CAZy release, `dbCAN.hmm` newest build Aug 2024, `dbCAN-sub.hmm` a 2022 build —
+all verified by HMMER build-date stamps and by absence of the 12 genuinely-new-in-2025
+family profiles, **not** by hosting-path date) and the **current 2025 download**
+(`dbcan_db`: `dbCAN.hmm` Aug 2025, `dbCAN-sub.hmm` Oct–Nov 2025, `.dmnd` from the
+2025 CAZy release). DIAMOND uses dbCAN's default CAZy E-value of **1e-102**.
 
 ## 4. Results
 
@@ -131,9 +147,10 @@ value is not a higher known-family number but its behaviour on novelty (§4.4).
 On the 6 genuinely-novel-to-CAZy sequences, **parent-family recall is ≤0.33 for
 every sequence, pLM, and structure method** (and 0 for Foldseek). This is the
 irreducible limit of any retrieval method: a family absent from the reference
-cannot be named. The current-DB dbCAN tiers score 0.833 here only because their
-2025-era database already contains these families — a DB-vintage effect, not a
-temporal result.
+cannot be named. The current-DB dbCAN tiers appear to score 0.833 here only
+because their 2025-era database already contains these families — a DB-vintage
+effect, not a temporal result. **§4.5 quantifies that effect directly** with a
+controlled fair-vs-current database rerun.
 
 ### 4.3 Structure tier: complementary errors justify fusion
 
@@ -163,6 +180,59 @@ correctly, since those are recoverable by cross-kingdom homology — but **flags
 of the 6 genuinely-unplaceable CAZymes** (CBM104, GT109) for review. This is the
 DEFT-style payoff: a production annotator that surfaces candidate novel CAZymes
 rather than silently mislabeling them.
+
+### 4.5 Database vintage is the confound: a fair 2024-DB rerun
+
+The dbCAN sequence tiers above were originally run against the **current**
+run_dbcan database download, which includes HMMs and CAZy sequences added in
+**2025** — the same year as the evaluation set. For a 2024→2025 temporal holdout
+this is a leak: the annotator's reference already contains the answer. To measure
+it, we rebuilt the database at the 2024 cutoff (`dbcan_db_2024`) and reran the
+**identical** `run_dbcan` command and scorer against both.
+
+![Database vintage effect](figures/fair_benchmark_2024db.png)
+
+**Subfamily-exact recall, fair (2024) vs current (2025) database:**
+
+| Tier | Known / new-seq (n=4,000) | Novel-to-fungi (n=726) |
+|---|---|---|
+| | 2024 → 2025 | 2024 → 2025 |
+| DIAMOND | 0.896 → **0.982** | 0.001 → **0.992** |
+| dbCAN HMMER | 0.794 → 0.794 | 0.003 → **0.975** |
+| dbCAN-sub | 0.607 → 0.638 | 0.000 → 0.026 |
+| dbCAN Recommend | 0.829 → 0.863 | 0.003 → **0.974** |
+
+Three findings:
+
+1. **HMMER on known families is unchanged (0.794 → 0.794), exactly as expected.**
+   Existing family profile HMMs are not rebuilt between releases — only new
+   families are added — so a query matching a pre-2024 family gets byte-identical
+   HMMER output from either database. This confirms the intuition that the old
+   HMMs are safe to reuse; **only the novel-family column moves.**
+
+2. **DIAMOND is contaminated in *both* novelty tiers, not just novel families.**
+   Even on known-family / new-sequence proteins, DIAMOND jumps 0.896 → 0.982,
+   because the evaluation sequences *themselves* were deposited in the 2025 CAZy
+   release the current `.dmnd` is built from — so DIAMOND finds near-self hits
+   (≥99% identity). This is the user's original concern, confirmed: **the new
+   proteins in the 2025 DIAMOND database inflate the score**, and DIAMOND is the
+   most affected method.
+
+3. **The novel-family column is the smoking gun.** Subfamily-exact recall on
+   novel-to-fungi families goes from **≈0.00 on the fair 2024 DB to 0.97–0.99 on
+   the current DB** for every tier — the current database simply contains the
+   family the fair one lacks. Yet at the **parent** level even the fair 2024 DB
+   recovers ~95% of these families (DIAMOND 0.953, HMMER 0.935, Recommend 0.956),
+   because their parent families exist in 2024 CAZy in other kingdoms. This is the
+   §2.1 story restated with fair databases: **cross-kingdom transfer, not genuine
+   novelty.**
+
+**Consequence for the benchmark.** The temporally-honest sequence-baseline numbers
+are the **2024-DB** column. The pLM and structure tiers (§4.1) were already fair —
+they train and retrieve only on 2024 data — so no rerun was needed; likewise
+Foldseek. The full fair-vs-current table for all four tiers at both subfamily and
+parent granularity is in [`benchmarks/master_benchmark_v3.tsv`](../benchmarks/master_benchmark_v3.tsv)
+and [`benchmarks/dbcan_db_2024_vs_2025_comparison.tsv`](../benchmarks/dbcan_db_2024_vs_2025_comparison.tsv).
 
 ## 5. Recommendations for dbCAN4
 
@@ -196,7 +266,19 @@ rather than silently mislabeling them.
 ## 7. Reproducibility
 
 Exact commands, parameters, and cutoffs for every step are in
-[`REPRODUCE.md`](../REPRODUCE.md) (DIAMOND E-value 1e-102, dbCAN HMM/sub E-value
-1e-15 / coverage 0.35, standalone temporal DIAMOND 1e-3, Foldseek TM-align mode,
-ESM-C 600M, ESMFold facebook/esmfold_v1). All scripts are in `scripts/`; all
-per-method predictions and summaries are in `benchmarks/`.
+[`REPRODUCE.md`](../REPRODUCE.md). run_dbcan tiers use dbCAN production defaults
+(DIAMOND CAZy E-value **1e-102**; dbCAN-sub HMM E-value 1e-2, coverage 0). The
+custom temporal baselines use their own operating points (standalone DIAMOND
+E-value 1e-15 on a fungal-only reference; standalone HMMER E-value 1e-3). Foldseek
+TM-align mode (`--alignment-type 1`), ESM-C 600M, ESMFold `facebook/esmfold_v1`.
+
+**Fair-database rerun (§4.5).** The temporally-clean database is
+`/array1/xinpeng/dbcan_db_2024` on `met`. Its vintage was verified from **HMMER
+`hmmbuild` DATE stamps inside the `.hmm` files** and by confirming the 12
+genuinely-new-in-2025 family profiles are absent — *not* from the download path
+(the `dbCAN-sub.hmm` was served from a 2025-dated URL but its profile content is a
+2022 build). Note: dev run_dbcan writes the subfamily DB as `dbCAN_sub.hmm`
+(underscore) but its annotator reads `dbCAN-sub.hmm` (hyphen); a fresh database
+dir needs a `ln -s dbCAN_sub.hmm dbCAN-sub.hmm` symlink or the dbCAN-sub step
+silently produces empty output. All scripts are in `scripts/`; all per-method
+predictions and summaries are in `benchmarks/`.

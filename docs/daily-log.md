@@ -253,3 +253,62 @@ Review caught two presentation errors in the Step-11 deliverables (fixed):
   True at subfamily (98.10 vs DIAMOND 98.05) but NOT parent — DIAMOND 98.45 > fusion 98.38.
   Corrected: methods are effectively TIED on known families; fusion's differentiator is novelty
   abstention (4.4), not a higher known-family number.
+
+---
+
+## Day 4 — 2026-07-08: fair-database rerun (fixing the DIAMOND vintage confound)
+
+**Motivation (from user).** `run_dbcan download` pulls the *current* database,
+which includes HMMs and CAZy sequences added in 2025 — the same year as the eval
+set. For a 2024→2025 temporal holdout that leaks the answer into the annotator's
+reference, "especially DIAMOND." User built a temporally-clean 2024 DB at
+`/array1/xinpeng/dbcan_db_2024` (old dbCAN HMM, old DIAMOND, old dbCAN-sub HMM)
+and asked to rerun run_dbcan against it.
+
+**Done**
+- Reran `run_dbcan CAZyme_annotation --methods diamond,hmm,dbCANsub` on all 4,726
+  eval_2025 proteins vs the 2024 DB (job on met, exit 0, 4,575 annotated).
+- Scored the 2024-DB run and re-scored the 2025-DB run with **one identical
+  parser** (norm_fams: strip coords + subfamily `_eNNN`, split multi-domain on
+  `+`/`|`, family regex). Extended both to parent-level metrics.
+- Re-scored **every** method (ESM-C kNN, contrastive kNN, classifier, Foldseek,
+  fusion, custom DIAMOND) with the same scorer so the master table is internally
+  consistent. Prior numbers all reproduced.
+- New artifacts: benchmarks/master_benchmark_v3.{tsv,json},
+  dbcan_db_2024_vs_2025_comparison.tsv, dbcan2024_eval2025_scored.json,
+  dbcan2025_eval2025_rescored.json, allmethods_rescored.json;
+  docs/figures/fair_benchmark_2024db.png; benchmark_report.md §4.5.
+
+**Headline findings (subfamily-exact recall, 2024 → 2025 DB):**
+- **HMMER known-family byte-identical: 0.794 → 0.794.** Old family HMMs are not
+  rebuilt between releases, so a query matching a pre-2024 family gets the same
+  answer either way. Confirms the user's intuition — only novel families move.
+- **DIAMOND contaminated in BOTH tiers**: known/new-seq 0.896 → 0.982 *and*
+  novel-family 0.001 → 0.992. The eval sequences are themselves in the 2025 CAZy
+  release the current .dmnd is built from → near-self hits. User's concern
+  confirmed; DIAMOND is the most affected method.
+- **Novel-family is the smoking gun**: ≈0.00 (fair) → 0.97–0.99 (current) for all
+  tiers at subfamily level. But parent-level even the fair DB recovers ~95% →
+  cross-kingdom transfer, not genuine novelty (restates the §2.1 correction).
+- pLM + structure + fusion tiers were already fair (train/retrieve on 2024 only);
+  no rerun needed. Foldseek likewise clean.
+
+**Verification / provenance (auditor-prompted).**
+- 2024-DB vintage verified by HMMER `hmmbuild` DATE stamps inside the .hmm files
+  (dbCAN.hmm newest Aug 2024; dbCAN-sub.hmm all May 2022) + absence of the 12
+  genuinely-new-in-2025 family profiles — NOT by download-path date. The
+  dbCAN-sub.hmm was served from a 2025-dated URL (`db_v5-1_3-11-2025`) but its
+  content is a 2022 build; profile count alone is not proof of vintage.
+
+**Blocker hit + fixed.**
+- dbCAN-sub silently produced empty output on the 2024 DB. Root cause: dev
+  run_dbcan writes the subfamily DB as `dbCAN_sub.hmm` (underscore) but its
+  annotator config reads `dbCAN-sub.hmm` (hyphen); the wrapper masked the real
+  `FileNotFoundError` as "empty output generated for downstream compatibility."
+  Fix: `ln -s dbCAN_sub.hmm dbCAN-sub.hmm` in the DB dir. (Worth reporting
+  upstream as a naming-consistency bug in the dev build.)
+
+**Next**
+- Optional: hold out entire families across all kingdoms for a stronger
+  novel-family-discovery benchmark (current holdout is mostly cross-kingdom).
+- Optional: wire the 2024-DB fair numbers into the Nextflow benchmark contract.

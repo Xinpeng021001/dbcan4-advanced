@@ -1,0 +1,43 @@
+method	temporal_clean	bucket	n	sub_exact	sub_overlap	parent_exact	parent_overlap
+dbCAN HMMER [2024 DB]	yes	Overall	4726	0.6725	0.7224	0.8256	0.8737
+dbCAN HMMER [2024 DB]	yes	Known fam / new seq	4000	0.794	0.8458	0.8057	0.8575
+dbCAN HMMER [2024 DB]	yes	Novel-to-fungi fam	726	0.0028	0.0427	0.9353	0.9628
+dbCAN-sub [2024 DB]	yes	Overall	4726	0.5138	0.5656	0.8673	0.9082
+dbCAN-sub [2024 DB]	yes	Known fam / new seq	4000	0.607	0.6607	0.8512	0.8945
+dbCAN-sub [2024 DB]	yes	Novel-to-fungi fam	726	0.0	0.0413	0.9559	0.9835
+DIAMOND [2024 DB]	yes	Overall	4726	0.759	0.7734	0.9063	0.9202
+DIAMOND [2024 DB]	yes	Known fam / new seq	4000	0.8965	0.9073	0.8978	0.9085
+DIAMOND [2024 DB]	yes	Novel-to-fungi fam	726	0.0014	0.0358	0.9532	0.9848
+dbCAN Recommend [2024 DB]	yes	Overall	4726	0.7021	0.7463	0.8606	0.901
+dbCAN Recommend [2024 DB]	yes	Known fam / new seq	4000	0.829	0.874	0.8433	0.886
+dbCAN Recommend [2024 DB]	yes	Novel-to-fungi fam	726	0.0028	0.0427	0.9559	0.9835
+dbCAN HMMER [2025 DB]	NO (DB has 2025)	Overall	4726	0.8216	0.8671	0.8326	0.8775
+dbCAN HMMER [2025 DB]	NO (DB has 2025)	Known fam / new seq	4000	0.7937	0.8455	0.8057	0.8575
+dbCAN HMMER [2025 DB]	NO (DB has 2025)	Novel-to-fungi fam	726	0.9752	0.9862	0.9807	0.9876
+dbCAN-sub [2025 DB]	NO (DB has 2025)	Overall	4726	0.5438	0.5901	0.8986	0.9331
+dbCAN-sub [2025 DB]	NO (DB has 2025)	Known fam / new seq	4000	0.6378	0.689	0.8832	0.9233
+dbCAN-sub [2025 DB]	NO (DB has 2025)	Novel-to-fungi fam	726	0.0262	0.0455	0.9835	0.9876
+DIAMOND [2025 DB]	NO (DB has 2025)	Overall	4726	0.982	0.982	0.982	0.982
+DIAMOND [2025 DB]	NO (DB has 2025)	Known fam / new seq	4000	0.9802	0.9802	0.9802	0.9802
+DIAMOND [2025 DB]	NO (DB has 2025)	Novel-to-fungi fam	726	0.9917	0.9917	0.9917	0.9917
+dbCAN Recommend [2025 DB]	NO (DB has 2025)	Overall	4726	0.8798	0.9168	0.894	0.9281
+dbCAN Recommend [2025 DB]	NO (DB has 2025)	Known fam / new seq	4000	0.8628	0.9042	0.8778	0.9173
+dbCAN Recommend [2025 DB]	NO (DB has 2025)	Novel-to-fungi fam	726	0.9738	0.9862	0.9835	0.9876
+ESM-C kNN (off-the-shelf)	yes	Overall	4726	0.7262	0.7941	0.8639	0.9321
+ESM-C kNN (off-the-shelf)	yes	Known fam / new seq	4000	0.858	0.9313	0.8622	0.9353
+ESM-C kNN (off-the-shelf)	yes	Novel-to-fungi fam	726	0.0	0.0386	0.8733	0.9146
+Contrastive kNN (trained)	yes	Overall	4726	0.7603	0.8297	0.9086	0.9784
+Contrastive kNN (trained)	yes	Known fam / new seq	4000	0.8982	0.9732	0.901	0.9755
+Contrastive kNN (trained)	yes	Novel-to-fungi fam	726	0.0	0.0386	0.9504	0.9945
+Classifier (trained)	yes	Overall	4726	0.7539	0.8229	0.9016	0.9708
+Classifier (trained)	yes	Known fam / new seq	4000	0.8908	0.9655	0.8945	0.9688
+Classifier (trained)	yes	Novel-to-fungi fam	726	0.0	0.0372	0.9408	0.9821
+Foldseek (structure)	yes	Overall	4726	0.0527	0.0641	0.0554	0.0686
+Foldseek (structure)	yes	Known fam / new seq	4000	0.0622	0.0717	0.0653	0.0767
+Foldseek (structure)	yes	Novel-to-fungi fam	726	0.0	0.022	0.0014	0.0234
+FUSION (consensus)	yes	Overall	4726	0.7668	0.8354	0.9156	0.9854
+FUSION (consensus)	yes	Known fam / new seq	4000	0.906	0.981	0.9093	0.9838
+FUSION (consensus)	yes	Novel-to-fungi fam	726	0.0	0.0331	0.9504	0.9945
+DIAMOND standalone (2024, custom)	yes	Overall	4726	0.8168	0.836	0.9661	0.9856
+DIAMOND standalone (2024, custom)	yes	Known fam / new seq	4000	0.9647	0.981	0.9675	0.9845
+DIAMOND standalone (2024, custom)	yes	Novel-to-fungi fam	726	0.0014	0.0372	0.9587	0.9917
