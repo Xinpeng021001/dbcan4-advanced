@@ -1,0 +1,10 @@
+method	known_exact_subfamily	known_parent	new_to_fungi_family_parent	genuinely_novel_parent
+dbCAN HMMER (current DB)	0.8455	0.8575	0.9876	0.8333
+dbCAN Recommend (current DB)	0.9042	0.9173	0.9876	0.8333
+DIAMOND (fungal 2024, temporal)	0.9805	0.9845	0.9945	0.3333
+HMMER (2024-only, temporal)	0.7125	0.9497	0.9931	0.3333
+ESM-C kNN (off-the-shelf)	0.9313	0.9353	0.9146	0.3333
+Contrastive kNN (trained)	0.9732	0.9755	0.9945	0.3333
+Classifier (trained)	0.9655	0.9688	0.9821	0.3333
+Foldseek (structure)	0.0717	0.0767	0.0234	0.0
+FUSION (consensus)	0.981	0.9838	0.9945	0.3333

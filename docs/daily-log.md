@@ -220,3 +220,24 @@ family's normalized score is the fusion confidence; below tau=0.35 the call ABST
 This is the DEFT-style payoff: consensus stays confident on placeable proteins (incl. new-to-fungi)
 but flags genuinely-unplaceable CAZymes. See benchmarks/fusion_summary.json,
 fusion_abstention_analysis.json; docs/figures/fusion_findings.png.
+
+---
+
+## Day 2 (cont.) — Step 11: master benchmark + final report
+
+- scripts assembled a unified master benchmark (results/master_benchmark_v2.{tsv,json}) scoring
+  all 9 methods at exact-subfamily + parent-family across 3 novelty tiers.
+- docs/benchmark_report.md: full report (motivation, temporal-holdout design, the novelty-definition
+  correction, per-tier results, structure complementarity, fusion abstention, dbCAN4 recommendations,
+  honest limitations, reproducibility pointer).
+- docs/figures/master_benchmark_figure.png: two-panel headline figure (known-family recall + novelty cliff).
+
+**Headline findings:**
+- Known families: fusion 98.1% subfamily (beats DIAMOND 98.1% marginally, every single method);
+  off-the-shelf ESM-C trails DIAMOND, trained heads close the gap.
+- Genuinely-novel families (n=6): 0.33 parent recall for ALL retrieval methods = irreducible cliff.
+- Fusion abstention flags 66.7% of genuinely-novel vs 0.3% of new-to-fungi = the actionable signal.
+
+**Recommendations for dbCAN4:** keep sequence tier-1; add trained pLM head tier-2; add structure
+tier-3 gated on a complete reference (CAZyme3D + ProstT5); ship fusion confidence + abstention as
+the headline feature; substrate-specificity (EZSpecificity-style) as Phase 2.

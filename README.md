@@ -56,3 +56,21 @@ is recorded in `docs/env_setup.md` once ported.
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Benchmark results
+
+Full benchmark: [`docs/benchmark_report.md`](docs/benchmark_report.md).
+
+Fungal 2024→2025 temporal holdout, exact-subfamily / parent-family recall:
+
+| Method | Known (sub) | Known (parent) | Genuinely novel (parent) |
+|---|---|---|---|
+| DIAMOND (seq, 2024) | 0.98 | 0.98 | 0.33 |
+| Contrastive kNN (pLM) | 0.97 | 0.98 | 0.33 |
+| Foldseek (structure)* | 0.72 | 0.75 | 0.00 |
+| **FUSION (consensus)** | **0.98** | **0.98** | **0.33** |
+
+\*on its 347-structure subset. Fusion abstention flags genuinely-novel CAZymes at
+66.7% vs 0.3% for new-to-fungi families — the actionable "advanced" signal.
+
+![Benchmark](docs/figures/master_benchmark_figure.png)
