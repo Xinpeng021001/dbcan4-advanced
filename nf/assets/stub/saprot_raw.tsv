@@ -1,0 +1,7 @@
+protein_id	family	cosine	nn_id
+demo_p01	GH43_26	0.8470	SAP2000
+demo_p03	GH31_1	0.8073	SAP2002
+demo_p05	GH72	0.9348	SAP2004
+demo_p07	PL1_2	0.7302	SAP2006
+demo_p08	AA3_2	0.9089	SAP2007
+demo_p10	GH38	0.7837	SAP2009

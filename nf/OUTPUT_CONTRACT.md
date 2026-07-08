@@ -1,0 +1,150 @@
+# dbCAN4-advanced — Standard Output Contract (v1.0)
+
+The advanced fungal-protein annotation pipeline (`nf/main.nf`) publishes a
+**standardized, versioned output layout**. Downstream consumers — first of all
+the BioForge ingester (`bioforge-ingest-advanced`) — read *only* this contract,
+never a tool's raw output. That decoupling is the whole point: add or swap an
+annotation method by changing one Nextflow process + one manifest entry, and the
+database/web layer keeps working unchanged.
+
+This contract deliberately **extends the nf-core/funcscan layout** that BioForge
+already ingests, rather than replacing it. A funcscan run gives genes, baseline
+dbCAN CAZyme calls, CGCs, InterPro/GO, sequences; this pipeline adds an
+`cazyme_advanced/` tree with pLM/structure CAZyme calls and per-protein features.
+
+---
+
+## 1. Directory layout
+
+```
+<outdir>/
+  cazyme_advanced/
+    manifest.json                     # ← the contract entry point (see §3)
+    predictions/
+      <sample>/
+        ESM-C-kNN.tsv                 # one normalized file per method (§2.1)
+        ESM-C-centroid.tsv
+        ESM-C-contrastive.tsv
+        Foldseek-CAZyme3D.tsv
+        SaProt.tsv
+        fusion.tsv
+    features/
+      <sample>/
+        signalp6.tsv                  # §2.2
+        deeptmhmm.tsv                 # §2.3
+        structures.tsv                # §2.4 (index)
+        structures/
+          <protein_id>.pdb            # served 3D structures
+  pipeline_info/
+    dbcan4_advanced_software_versions.yml
+```
+
+`<sample>` is the same `sample_key` BioForge already uses (from the funcscan
+samplesheet / Prokka dir). `protein_id` in every TSV **must** match the gene
+`ID`/`locus_tag` in that sample's Prokka GFF and `_cleaned.faa`, so the ingester
+can join advanced calls onto the genes funcscan already loaded.
+
+---
+
+## 2. File schemas (TSV, tab-separated, `-` = null/abstain)
+
+### 2.1 CAZyme prediction — `predictions/<sample>/<TOOL>.tsv`
+
+Every method emits the **same normalized schema** (one row per protein per
+call), regardless of how the underlying tool reports its result:
+
+| column         | type   | meaning                                                       |
+|----------------|--------|---------------------------------------------------------------|
+| `protein_id`   | str    | joins to the gene key in the sample GFF / faa                 |
+| `family`       | str    | predicted CAZy family/subfamily (e.g. `GH5`, `GH13_31`); `-` = abstain |
+| `confidence`   | float  | calibrated score in [0,1]; `-` if the method gives none       |
+| `ec`           | str    | EC number if the method assigns one, else `-`                 |
+| `all_families` | str    | comma-separated alternatives / multi-domain families, else `-`|
+| `extra`        | json   | method-specific detail (see below), one-line JSON object      |
+
+`extra` carries the evidence a reviewer wants but the schema shouldn't hard-code:
+- kNN: `{"k":15,"purity":1.0,"margin":0.42,"neighbors":["GH5","GH5",...]}`
+- centroid/contrastive: `{"margin":0.13,"runner_up":"GH9"}`
+- Foldseek-CAZyme3D: `{"target":"AF-...","tmscore":0.91,"lddt":0.88,"prob":0.99}`
+- SaProt: `{"nn_id":"...","cosine":0.83}`
+- fusion: `{"votes":{"ESM-C-kNN":"GH5",...},"agreement":3,"signals":["sequence","structure"]}`
+
+The **`tool` key, its display name, method family (`baseline`/`advanced`),
+method kind (`sequence-plm`/`structure`/`fusion`) and colour are NOT in the TSV**
+— they live in the manifest (§3) and in `bioforge.methods.REGISTRY`, the single
+source of truth shared by pipeline and web app.
+
+### 2.2 Signal peptide — `features/<sample>/signalp6.tsv`  (SignalP 6.0)
+
+| `protein_id` | `prediction` | `sp_prob` | `cs_position` | `extra` |
+|---|---|---|---|---|
+| str | `SP`/`NO_SP`/`LIPO`/`TAT` | float [0,1] | int (cleavage site aa) or `-` | json: per-class probs, cleavage motif |
+
+### 2.3 Membrane topology — `features/<sample>/deeptmhmm.tsv`  (DeepTMHMM)
+
+| `protein_id` | `prediction` | `n_tm` | `topology` | `extra` |
+|---|---|---|---|---|
+| str | `TM`/`SP+TM`/`SP`/`Globular` | int | topology string (e.g. `i12-34o...`) | json: region spans |
+
+### 2.4 Structure index — `features/<sample>/structures.tsv`
+
+| `protein_id` | `source` | `plddt` | `length` | `path` | `extra` |
+|---|---|---|---|---|---|
+| str | `ESMFold`/`AlphaFold`/`PDB` | float mean pLDDT | int aa | rel. path to `structures/<id>.pdb` | json: model, db accession |
+
+---
+
+## 3. `manifest.json` — the contract descriptor
+
+The ingester reads this **first** and follows it; it never globs blindly. It
+declares which files exist, which registry `tool` each maps to, and (optionally)
+column overrides so even a *non-normalized* legacy/raw TSV can be ingested
+without new code.
+
+```jsonc
+{
+  "contract_version": "1.0",
+  "pipeline": "dbcan4-advanced",
+  "pipeline_version": "0.1.0",
+  "created": "2026-07-08T00:00:00Z",
+  "release_label": "advanced-2026-07-08",       // becomes the BioForge Release label
+  "release_notes": "ESM-C + structure advanced CAZyme calls",
+  "tool_versions": { "esm": "3.2.1", "foldseek": "9.427df8a", "signalp": "6.0", ... },
+  "samples": [
+    {
+      "sample_key": "demo_fungal",
+      "cazyme_predictions": [
+        { "tool": "ESM-C-kNN", "path": "predictions/demo_fungal/ESM-C-kNN.tsv" },
+        { "tool": "fusion",    "path": "predictions/demo_fungal/fusion.tsv" },
+        // Optional raw-TSV mode — map arbitrary columns to the standard fields:
+        { "tool": "ESM-C-centroid",
+          "path": "raw/esmc_retrieval_pred.tsv",
+          "id_col": "query_id", "family_col": "cent_pred", "confidence_col": "cent_conf" }
+      ],
+      "protein_features": [
+        { "feature_type": "signal_peptide", "tool": "SignalP6",  "path": "features/demo_fungal/signalp6.tsv" },
+        { "feature_type": "tm_topology",    "tool": "DeepTMHMM",  "path": "features/demo_fungal/deeptmhmm.tsv" },
+        { "feature_type": "structure",      "tool": "ESMFold",    "path": "features/demo_fungal/structures.tsv" }
+      ]
+    }
+  ]
+}
+```
+
+A `tool` value **must** exist in `bioforge.methods.REGISTRY` (else the ingester
+errors loudly, exactly like the baseline dbCAN parser does on an unknown column).
+When `family_col`/`confidence_col` are omitted the ingester assumes the
+normalized §2.1 schema (`family`,`confidence`).
+
+---
+
+## 4. Provenance & versioning
+
+- Each `manifest.json` → one BioForge **Release** (`release_label`), loaded
+  additively alongside the baseline release. Advanced-vs-baseline is then a
+  *query across releases*, never a mutation.
+- The ingester records per-file sha256 + `tool_versions` as `Provenance` rows,
+  so re-ingesting an identical manifest is an idempotent no-op (same mechanism
+  as the baseline loader).
+- `contract_version` is bumped on any breaking schema change; the ingester
+  checks it.

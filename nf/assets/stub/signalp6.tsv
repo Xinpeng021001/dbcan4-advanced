@@ -1,0 +1,11 @@
+protein_id	prediction	sp_prob	cs_position	extra
+demo_p01	NO_SP	0.0679	-	"{""cytoplasm"": 0.9064}"
+demo_p02	SP	0.9173	23	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0428}"
+demo_p03	SP	0.8775	19	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0256}"
+demo_p04	NO_SP	0.0945	-	"{""cytoplasm"": 0.9507}"
+demo_p05	SP	0.9165	17	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0071}"
+demo_p06	SP	0.9706	24	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0347}"
+demo_p07	NO_SP	0.0063	-	"{""cytoplasm"": 0.9866}"
+demo_p08	SP	0.9474	23	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0308}"
+demo_p09	SP	0.9428	18	"{""cleavage_motif"": ""AXA-|-"", ""other"": 0.0416}"
+demo_p10	NO_SP	0.0095	-	"{""cytoplasm"": 0.8068}"

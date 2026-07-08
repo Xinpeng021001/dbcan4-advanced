@@ -1,0 +1,11 @@
+query_id	novelty	true_families	knn_pred	knn_conf	knn_purity	knn_margin	cent_pred	cent_conf	cent_margin
+demo_p01	novel_seq	GH43_26	GH43_26	0.9997	1.0000	1.0000	GH43_26	0.9832	0.0020
+demo_p02	novel_seq	GT4	GT4	0.9999	1.0000	1.0000	GT33	0.9786	0.0125
+demo_p03	novel_seq	GH31_1	GH31_1	0.9997	1.0000	1.0000	GH31_1	0.9794	0.0101
+demo_p04	novel_seq	CBM91,GH43_14	GT1	0.9821	0.2000	0.0000	GT1	0.9764	0.0014
+demo_p05	novel_seq	CE4	CE4	0.9995	1.0000	1.0000	GH72	0.9634	0.0016
+demo_p06	novel_seq	AA12	AA12	0.9909	1.0000	1.0000	AA12	0.9885	0.0119
+demo_p07	novel_seq	PL1_2	PL1_2	0.9963	1.0000	1.0000	PL1_2	0.9720	0.0105
+demo_p08	novel_seq	AA3_2	AA3_2	0.9946	1.0000	1.0000	AA3_2	0.9781	0.0083
+demo_p09	novel_seq	GH88	GH88	0.9814	1.0000	1.0000	GH127	0.9703	0.0040
+demo_p10	novel_seq	GH38	GH38	0.9989	1.0000	1.0000	GH38	0.9946	0.0050

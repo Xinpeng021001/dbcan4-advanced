@@ -1,0 +1,7 @@
+protein_id	source	plddt	length	path	extra
+demo_p01	ESMFold	87.1	363	structures/demo_p01.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
+demo_p03	ESMFold	79.7	495	structures/demo_p03.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
+demo_p05	ESMFold	74.3	339	structures/demo_p05.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
+demo_p07	ESMFold	84.1	407	structures/demo_p07.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
+demo_p08	ESMFold	70.1	301	structures/demo_p08.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
+demo_p10	ESMFold	80.1	351	structures/demo_p10.pdb	"{""model"": ""esmfold_v1"", ""note"": ""STUB structure""}"
