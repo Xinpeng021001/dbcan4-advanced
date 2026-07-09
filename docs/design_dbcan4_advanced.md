@@ -193,6 +193,79 @@ The existing **BioForge** stack (`github.com/Xinpeng021001/biodb`) already inges
 
 ---
 
+## 8. Gray-zone adjudication and the structure tier — resolved (2026-07-09)
+
+Two questions raised earlier in the project's benchmark review are resolved here: (a) how to
+build a defensible non-CAZyme negative set given that dbCAN.hmm/DIAMOND/dbCAN_sub each find
+more candidate CAZymes than CAZy itself has labeled, and (b) how to get the structure tier
+(§2.2, §3.2) actually running, since CAZyme3D was previously "not available on met" and the
+structure tier was a self-contained POC.
+
+### 8.1 The gray zone is a genuine mixture, not a labeling artifact
+
+Streaming all 2,226 Mycocosm genomes in `/array1/xinpeng/all_genome` (dbCAN-annotated:
+`overview.tsv`, `diamond.out`, `dbCAN_hmm_results.tsv`, `dbCANsub_hmm_results.tsv`,
+`non_CAZyme.faa`) and recomputing the tool-hit count directly from the raw per-tool tables
+(each already filtered to that tool's own significance cutoff) rather than trusting the
+pre-filtered `overview.tsv`/`non_CAZyme.faa` split yields three tiers over 28,192,456 total
+protein rows:
+
+| Tier | Rule | Count | % |
+|---|---|---:|---:|
+| `high_confidence_cazyme` | ≥2 tools agree | 946,270 | 3.36% |
+| `gray_zone` | exactly 1 tool hits a CAZy family | 2,844,297 | 10.09% |
+| `high_confidence_non_cazyme` | 0 tool hits | 24,401,889 | 86.55% |
+
+A single-tool hit is real homology evidence that simply misses dbCAN's own ≥2-tool consensus
+bar — treating it as automatically non-CAZyme (as the current `non_CAZyme.faa` output does) or
+automatically CAZyme would both be wrong. Structure-similarity scoring against CAZyme3D_id50
+(§8.2) on a 2,483-protein stratified sample shows `structure_evidence_score` cleanly separates
+known CAZymes (mean 0.653) from known non-CAZymes (mean 0.463), with the gray zone falling
+exactly in between (mean 0.566) — confirming it is a real mixture population. Adjudicating the
+sampled gray zone with this signal: **33.4%** structure-supports-CAZyme (candidate recall gain
+— real CAZymes dbCAN's consensus rule currently misses), **38.3%** structure-supports-non-CAZyme
+(likely sequence-level false positives), **28.3%** remain ambiguous even with an orthogonal
+signal (a legitimate abstention population, not a modeling failure). Full detail, caveats, and
+the adjudicated TSV are in `synthesis_report.md` / `gray_zone_adjudicated_structure_validated.tsv`.
+**This is the negative/decoy set called for in the benchmark review's gap 1** (no
+precision/negative set) and **gap 2** (no CAZyme/non-CAZyme gate) — the
+`high_confidence_non_cazyme` tier (24.4M proteins) is the negative population for training a
+gate; the gray zone is the population to hold out for calibrating abstention (§5.6/gap 1).
+
+### 8.2 Structure tier: unblocked
+
+CAZyme3D_id50 (178,356 AlphaFold structures, the group's own resource, §2.2) is now
+downloaded and extracted on met at `/array1/xinpeng/cazyme3d/extracted/cazyme_id50/`. It maps
+to Mycocosm proteins by **homology, not accession** (accessions are disjoint UniProt/RefSeq
+IDs vs. Mycocosm's JGI gene IDs) — an mmseqs2 search at ≥30% identity/50% coverage finds a
+CAZyme3D_id50 homolog for 93.3% of a Mycocosm CAZyme sample, confirming it is usable as the
+Foldseek/embedding reference database as designed in §2.2/§3.2.
+
+**ProstT5** (Rostlab/ProstT5) is installed and validated on met: sequence→3Di prediction with
+no folding step, run across all 8 GPUs on the full 2,483-protein validation sample
+(~15–35s/protein). This is the "scale path" §2.2 anticipated in place of folding every protein.
+
+**SaProt** (westlake-repl/SaProt_650M_AF2) is installed and validated: AA+3Di structure-aware
+embeddings via the vendored `foldseek_util.get_struc_seq` helper, producing the orthogonal
+structural signal alongside Foldseek/mmseqs2 3Di-string search.
+
+**Bulk predicted-structure sources evaluated and deprioritized:** ESM Metagenomic Atlas 2
+(85.9% sequence-hit coverage on a CAZyme sample but median only 51.2% identity — mostly
+distant homology, consistent with its bacterial/archaeal/environmental MGnify origin) and
+AF3db (only reachable via UniProt accessions Mycocosm proteins don't have; 75.9% coverage of
+the indirectly-queryable subset). Neither is worth further integration investment over the
+CAZyme3D_id50 + ProstT5 + SaProt + local-ESMFold-for-gaps stack, which is now the recommended
+and running structure-tier architecture for §3.2.
+
+### 8.3 Updated architecture note
+
+§3's two-tier diagram is unchanged in shape; the structure tier (Tier 2) is no longer a
+"self-contained POC" (per the benchmark review's gap 6) — CAZyme3D_id50, ProstT5, and SaProt
+are installed, validated, and running on met, gated on the gray-zone population identified in
+§8.1 as the natural "hard cases" input to Tier 2.
+
+---
+
 ## References
 
 **Group A — retrieved and read in this session (full text or abstract confirmed):**

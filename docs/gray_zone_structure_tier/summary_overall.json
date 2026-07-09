@@ -1,0 +1,15 @@
+{
+  "data_root": "/array1/xinpeng/all_genome",
+  "n_genomes_attempted": 2226,
+  "n_genomes_ok": 2226,
+  "n_genomes_failed": 0,
+  "n_protein_rows_total": 28192456,
+  "tier_totals": {
+    "high_confidence_non_cazyme": 24401889,
+    "gray_zone": 2844297,
+    "high_confidence_cazyme": 946270
+  },
+  "elapsed_seconds": 749.9968392848969,
+  "reservoir_per_stratum": 400,
+  "seed": 13
+}

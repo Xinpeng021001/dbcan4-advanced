@@ -404,3 +404,47 @@ embed_both_refs.sh (new); embed_esmc.py, train_heads.py (fixes).
 **Artifacts:** benchmarks/refscope_threelevel_all.tsv, refscope_effects.tsv,
 refscope_{build,cluster,embed_verify}_scale.json, retr_*/head_metrics_* summaries;
 docs/figures/refscope_effect.png; benchmark_report.md §4.7.
+
+## Day 5 (cont.) — Gray-zone adjudication + structure tier stood up
+
+Two parallel tracks, converged (design doc §8, `synthesis_report.md`):
+
+**Track A — gray-zone tiering.** Streamed all 2,226 Mycocosm genomes in
+`/array1/xinpeng/all_genome` (0 failures, ~750s), recomputing `n_tools` from the raw
+per-tool tables directly (each already filtered to its own significance cutoff) rather
+than trusting `overview.tsv`/`non_CAZyme.faa`. 28,192,456 protein rows total:
+946,270 (3.36%) high-confidence-CAZyme (≥2 tools), 2,844,297 (10.09%) gray-zone
+(exactly 1 tool), 24,401,889 (86.55%) high-confidence-non-CAZyme (0 tools). Top
+gray-zone families: GT2, AA3_2, GH3, GT1, GH47. Gray-zone fraction highest in
+Xylonomycetes/Eurotiomycetes/Sordariomycetes (~13-14%), lowest in
+Glomeromycotina/Microsporidia (~2%).
+
+**Track B — structure tier.** CAZyme3D_id50 (178,356 structures, already downloaded)
+extracted and mapped to Mycocosm proteins by homology (93.3% of a CAZyme sample has a
+≥30%-id homolog; accession-level match is ~0). ProstT5 and SaProt_650M_AF2 installed
+and validated on met (8× A5500), run at scale on a 2,483-protein stratified validation
+sample. ESM Atlas 2 (85.9% hit, median 51.2% id — distant) and AF3db (75.9% of
+UniProt-queryable subset) evaluated and deprioritized vs. CAZyme3D_id50+ProstT5+SaProt+
+local-ESMFold-for-gaps.
+
+**Convergence.** `structure_evidence_score` on the validation sample: high_confidence_cazyme
+mean 0.653, gray_zone 0.566, high_confidence_non_cazyme 0.463 — confirms the gray zone is
+a genuine mixture. Adjudicating the sampled gray zone: 33.4% structure-supports-CAZyme
+(recall-gain candidates), 38.3% structure-supports-non-CAZyme (likely false positives),
+28.3% ambiguous (legitimate abstention population). This directly answers the review's
+gap 1 (no precision/negative set) and gap 2 (no CAZyme/non-CAZyme gate): the 24.4M
+high-confidence-non-CAZyme tier is the negative population; the gray zone is the
+calibration set for abstention.
+
+**Caveat carried forward.** SaProt-embedding component of `structure_evidence_score` used
+a non-representative (head-slice) reference centroid; script fixed (reservoir sampling)
+but not rerun — adjudication counts are provisional pending rerun.
+
+**Scripts committed:** `build_tiered_dataset.py`, `cazyme3d_mapping.py`,
+`prostt5_validate.py`, `saprot_embed.py`, `foldseek_util.py` (vendored from SaProt repo),
+`esmatlas_coverage.py`, `structure_evidence_score.py`, `extract_validation_sample.py`,
+`fetch_sample_sequences.py`.
+**Artifacts:** `gray_zone_adjudicated_structure_validated.tsv`, full tiered population
+(28.2M rows, gzip parts), `summary_overall.json`, `summary_tier_by_class.tsv`,
+`summary_gray_zone_families.tsv`, `tier_summary.png`, `structure_evidence_score_by_tier.png`,
+`track_b_structure_tier_report.md`, `synthesis_report.md`.
