@@ -345,8 +345,8 @@ labels are held fixed** throughout; only the reference embeddings are swapped.
 | Fungal, clustered | 398,271 | **110,299** (3.6×) | 419 |
 | All-kingdom, clustered | 2,150,909 | **465,117** (4.6×) | 820 |
 
-All-kingdom is a strict family **superset** of fungal (399 families present only in
-all-kingdom; **0** present only in fungal). Both clustered references were embedded
+All-kingdom is a strict family **superset** of fungal (after clustering, 401 families
+present only in all-kingdom; **0** present only in fungal). Both clustered references were embedded
 with ESM-C 600M across 8 GPUs (~49 min wall-clock).
 
 **Result — on known families (novel-sequence, n=4,000), reference scope barely
@@ -380,9 +380,10 @@ Three findings:
 
 On novel-to-fungi families the subfamily overlap stays ≈0.02–0.04 in **all three**
 conditions: all-kingdom does not unlock genuinely-novel subfamilies. But their
-**parent** families are recovered at ≈0.99 overlap everywhere — consistent with §2.1,
-these are cross-kingdom transfers whose parent family already exists in the 2024
-reference, not new-to-CAZy discoveries.
+**parent** families are still well recovered — 0.89–0.92 for the off-the-shelf
+ESM-C kNN and 0.99 for the trained heads (contrastive kNN 0.994 in every condition,
+classifier 0.956–0.993) — consistent with §2.1, these are cross-kingdom transfers
+whose parent family already exists in the 2024 reference, not new-to-CAZy discoveries.
 
 **Consequence for dbCAN4:** use a **fungi-specific, 50%-clustered** ESM-C reference.
 It is 4× smaller than the all-kingdom reference, embeds and searches proportionally
