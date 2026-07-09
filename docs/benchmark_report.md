@@ -121,7 +121,7 @@ shares ≥1 family with the truth label; subfamily and parent granularity):
 |---|---|---|---|---|
 | dbCAN HMMER (current DB) | 0.846 | 0.858 | 0.988 | 0.833 |
 | dbCAN Recommend (current DB) | 0.904 | 0.917 | 0.988 | 0.833 |
-| DIAMOND (fungal 2024, temporal) | 0.981 | 0.985 | 0.995 | 0.333 |
+| DIAMOND (fungal 2024, temporal) | 0.981 | 0.985 | 0.992 | 0.333 |
 | HMMER (2024-only, temporal) | 0.713 | 0.950 | 0.993 | 0.333 |
 | ESM-C kNN (off-the-shelf) | 0.931 | 0.935 | 0.915 | 0.333 |
 | Contrastive kNN (trained) | 0.973 | 0.976 | 0.995 | 0.333 |
@@ -264,9 +264,19 @@ extra); *overlap* = ≥1 shared; *Jaccard* = intersection/union (partial credit)
 | ESM-C kNN (off-the-shelf pLM) | 0.978 | 0.932 | 0.794 |
 | DIAMOND (run_dbcan, 2024 DB) | 0.930 | 0.920 | 0.773 |
 | dbCAN Recommend (run_dbcan, 2024 DB) | 0.929 | 0.901 | 0.746 |
-| dbCAN-sub (run_dbcan, 2024 DB) | 0.918 | 0.865 | 0.706 |
 | dbCAN HMMER (run_dbcan, 2024 DB) | 0.896 | 0.874 | 0.722 |
+| dbCAN-sub (run_dbcan, 2024 DB) — raw ECAMI output | 0.933 | 0.908 | 0.566 |
+| dbCAN-sub (2024 DB) — ECAMI clusters mapped→CAZy | 0.918 | 0.865 | 0.706 |
 | Foldseek (structure, 4,726) | 0.141 | 0.069 | 0.064 |
+
+(dbCAN-sub appears twice: the **raw** row is what `run_dbcan` emits — ECAMI cluster
+codes, which our parser collapses to family, so its subfamily-overlap of 0.566 is
+carried entirely by the family-only truth proteins where family≡subfamily. The
+**mapped** row is after resolving each ECAMI cluster to its dominant CAZy subfamily
+via the composition column, which lifts subfamily to 0.706 but slightly lowers class
+and family because a few clusters map to a more specific — occasionally wrong — call.
+The subfamily paragraph below uses the mapped values, since raw dbCAN-sub cannot
+express a CAZy subfamily at all.)
 
 Findings:
 
