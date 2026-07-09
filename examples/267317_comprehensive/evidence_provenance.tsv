@@ -1,0 +1,30 @@
+category	field	value	tool	evidence	source
+Identity	protein_id	267317	dbCAN4 advanced pipeline	real_run	fungal proteome
+Identity	length_aa	1088	sequence	real_run	input FASTA
+Identity	product	multi-domain glycoside hydrolase (GH28-type + GH78 alpha-L-rhamnosidase domains)	multi-tool synthesis	derived	this annotation
+CAZyme family	baseline_HMMER_DIAMOND	GH28	baseline HMMER DIAMOND	real_run	sequence homology, dominated by the N-terminal Glyco_hydro_28 domain
+CAZyme family	advanced_ESM-C	GH78	advanced ESM-C	real_run	protein-language-model embedding retrieval (kNN + contrastive) — keys on the rha
+CAZyme family	pfam_hmmscan	both domains	pfam hmmscan	real_run	Glyco_hydro_28 PF00295 (res 62-412, iE 3.7e-36, 88% HMM coverage) AND Bac_rhamno
+CAZyme family	foldseek_cazyme3d	GH28-like	foldseek cazyme3d	real_run	top structural homologs are GH28 (TM 0.80-0.82, prob 1.00); GH78 refs present in
+CAZyme family	clean_seq2ec	EC 3.2.1.40 (α-L-rhamnosidase)	clean seq2ec	real_run	contrastive EC prediction, but LOW confidence (0.105) — a large fungal multi-dom
+Function	EC number (family)	3.2.1.40	dbCAN fam-substrate-mapping	reference_lookup	dbCAN_db/fam-substrate-mapping.tsv
+Function	EC number (CLEAN)	3.2.1.40 (conf 0.1053)	CLEAN (Science 2023)	real_run	seq->EC contrastive model
+Function	activity	alpha-L-rhamnosidase	dbCAN mapping	reference_lookup	dbCAN fam-substrate
+Function	reaction	Hydrolysis of terminal non-reducing alpha-L-rhamnose residue...	GO:0030596 definition	reference_lookup	QuickGO
+Function	substrate	alpha-L-rhamnosidase in polyphenol (naringin, rutin, hesperi	dbCAN mapping	reference_lookup	dbCAN fam-substrate
+Function	GO molecular function	GO:0030596 alpha-L-rhamnosidase activity	QuickGO (EC->GO)	reference_lookup	EBI QuickGO verified EC xref
+Domain (Pfam)	Glyco_hydro_28	PF00295 res 62-412 iE=4e-36	hmmscan/Pfam-A	real_run	HMMER 3.3.2 --cut_ga on met
+Domain (Pfam)	Bac_rhamnosid6H	PF17389 res 667-886 iE=8e-13	hmmscan/Pfam-A	real_run	HMMER 3.3.2 --cut_ga on met
+Structure	3D model	ESMFold PDB (1088 res)	ESMFold	real_run	met GPU (facebook/esmfold_v1)
+Structure	mean pLDDT	76.6	ESMFold	real_run	B-factor column
+Structure	Foldseek top hit	GH28 TM=0.824	Foldseek/CAZyme3D	real_run	met, 296 hits vs 917 refs
+Secretion	signal peptide	yes, res 1-18	DeepTMHMM	real_run	BioLib cloud via met
+Secretion	TM helices	0	DeepTMHMM	real_run	BioLib cloud via met
+Secretion	SignalP6	not installed	SignalP-6.0	not_installed	DTU license-gated
+Localization	call	Extracellular (secretory pathway)	derived (SP + GO-CC)	derived	signal peptide -> secretory
+Localization	DeepLoc	not installed	DeepLoc-2.0	not_installed	DTU license-gated
+Physicochem	MW	117294 Da	Biopython ProteinAnalysis	real_run	computed from sequence
+Physicochem	theoretical pI	5.18	Biopython	real_run	computed
+Physicochem	instability index	29.42 (stable)	Biopython	real_run	computed
+Physicochem	GRAVY	-0.1977	Biopython	real_run	computed
+Seq features	N-glyc sequons	23	regex N-X-[ST]	real_run	computed from sequence

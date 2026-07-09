@@ -1,4 +1,9 @@
-# dbCAN4-advanced — Standard Output Contract (v1.0)
+# dbCAN4-advanced — Standard Output Contract (v1.1)
+
+> **v1.1** adds five per-protein feature types produced by the comprehensive
+> annotation stack: `domains` (§2.5, Pfam/hmmscan), `structure_hits` (§2.6, Foldseek),
+> `localization` (§2.7), `physicochem` (§2.8), and `ec_prediction` (§2.9, CLEAN).
+> All map onto the existing generic `ProteinFeature` table — **no schema migration**.
 
 The advanced fungal-protein annotation pipeline (`nf/main.nf`) publishes a
 **standardized, versioned output layout**. Downstream consumers — first of all
@@ -33,6 +38,11 @@ dbCAN CAZyme calls, CGCs, InterPro/GO, sequences; this pipeline adds an
         signalp6.tsv                  # §2.2
         deeptmhmm.tsv                 # §2.3
         structures.tsv                # §2.4 (index)
+        domains.tsv                   # §2.5 (Pfam/hmmscan)
+        structure_hits.tsv            # §2.6 (Foldseek)
+        localization.tsv              # §2.7 (DeepLoc/derived)
+        physicochem.tsv               # §2.8 (Biopython)
+        ec_prediction.tsv             # §2.9 (CLEAN)
         structures/
           <protein_id>.pdb            # served 3D structures
   pipeline_info/
@@ -92,6 +102,60 @@ source of truth shared by pipeline and web app.
 |---|---|---|---|---|---|
 | str | `ESMFold`/`AlphaFold`/`PDB` | float mean pLDDT | int aa | rel. path to `structures/<id>.pdb` | json: model, db accession |
 
+### 2.5 Protein domains — `features/<sample>/domains.tsv`  (Pfam / hmmscan)
+
+One row **per domain occurrence** (a protein with N domains has N rows), ordered N→C.
+
+| `protein_id` | `acc` | `name` | `start` | `end` | `evalue` | `score` | `extra` |
+|---|---|---|---|---|---|---|---|
+| str | Pfam acc (e.g. `PF00295`) | domain name | int seq_start | int seq_end | float i-Evalue | float bitscore | json: hmm_coverage, clan, thresholding |
+
+→ ingested as `feature_type="domain"`, `tool="Pfam/hmmscan"`, `label=<name>`, `score=<bitscore>`, `start/end`, `attributes={acc,evalue,hmm_coverage,clan}`.
+
+### 2.6 Structural-homology hits — `features/<sample>/structure_hits.tsv`  (Foldseek)
+
+Top structural homologs of the predicted structure against a reference set (e.g. CAZyme3D).
+One row per hit (keep the top-K, ranked by bitscore).
+
+| `protein_id` | `target` | `target_family` | `tmscore` | `prob` | `lddt` | `evalue` | `extra` |
+|---|---|---|---|---|---|---|---|
+| str | reference id | CAZy family of target (`-` if unknown) | float [0,1] | float [0,1] | float [0,1] | float | json: bits, fident, alnlen, reference_db |
+
+→ ingested as `feature_type="structure_hit"`, `tool="Foldseek-CAZyme3D"`, `label=<target_family>`, `score=<tmscore>`, `attributes={target,prob,lddt,evalue,rank}`.
+
+### 2.7 Subcellular localization — `features/<sample>/localization.tsv`  (DeepLoc / derived)
+
+| `protein_id` | `localization` | `confidence` | `method` | `extra` |
+|---|---|---|---|---|
+| str | e.g. `Extracellular` | float or qualitative | `DeepLoc-2.0`/`derived-from-SP+GO-CC` | json: signals, go_cc_terms |
+
+→ `feature_type="localization"`, `tool=<method>`, `label=<localization>`, `score=<confidence if numeric>`, `attributes={method,basis,signals}`.
+
+### 2.8 Physicochemistry — `features/<sample>/physicochem.tsv`  (Biopython)
+
+One row per protein (summary features).
+
+| `protein_id` | `mw_da` | `pi` | `instability` | `gravy` | `aromaticity` | `extra` |
+|---|---|---|---|---|---|---|
+| str | float | float | float | float | float | json: aa_composition, n_glyc_sequons |
+
+→ `feature_type="physicochem"`, `tool="Biopython"`, `score=<mw_da>`, `attributes={pi,instability,gravy,aromaticity,aa_composition,n_glyc_sequons}`.
+
+### 2.9 EC-number prediction (sequence-based) — `features/<sample>/ec_prediction.tsv`  (CLEAN)
+
+Independent, sequence-based EC prediction (orthogonal to family-inherited EC).
+One row per predicted EC (keep the top ranks).
+
+| `protein_id` | `ec_number` | `confidence` | `rank` | `tool` | `extra` |
+|---|---|---|---|---|---|
+| str | e.g. `3.2.1.40` | float [0,1] | int | `CLEAN` | json: confidence_type, model, agreement_with_family |
+
+→ `feature_type="ec_prediction"`, `tool="CLEAN"`, `label=<ec_number>`, `score=<confidence>`, `attributes={rank,confidence_type,model}`.
+
+> **Note on `ec_number`**: the CAZyme call's own EC (family-inherited) continues to live on
+> `CazymeAnnotation.ec_number` (§2.1). §2.9 is the *independent predictor's* EC and is stored as a
+> `ProteinFeature` so both lines of evidence coexist and can be compared in the UI.
+
 ---
 
 ## 3. `manifest.json` — the contract descriptor
@@ -122,9 +186,14 @@ without new code.
           "id_col": "query_id", "family_col": "cent_pred", "confidence_col": "cent_conf" }
       ],
       "protein_features": [
-        { "feature_type": "signal_peptide", "tool": "SignalP6",  "path": "features/demo_fungal/signalp6.tsv" },
-        { "feature_type": "tm_topology",    "tool": "DeepTMHMM",  "path": "features/demo_fungal/deeptmhmm.tsv" },
-        { "feature_type": "structure",      "tool": "ESMFold",    "path": "features/demo_fungal/structures.tsv" }
+        { "feature_type": "signal_peptide", "tool": "SignalP6",         "path": "features/demo_fungal/signalp6.tsv" },
+        { "feature_type": "tm_topology",    "tool": "DeepTMHMM",         "path": "features/demo_fungal/deeptmhmm.tsv" },
+        { "feature_type": "structure",      "tool": "ESMFold",           "path": "features/demo_fungal/structures.tsv" },
+        { "feature_type": "domain",         "tool": "Pfam/hmmscan",      "path": "features/demo_fungal/domains.tsv" },
+        { "feature_type": "structure_hit",  "tool": "Foldseek-CAZyme3D", "path": "features/demo_fungal/structure_hits.tsv" },
+        { "feature_type": "localization",   "tool": "DeepLoc",           "path": "features/demo_fungal/localization.tsv" },
+        { "feature_type": "physicochem",    "tool": "Biopython",         "path": "features/demo_fungal/physicochem.tsv" },
+        { "feature_type": "ec_prediction",  "tool": "CLEAN",             "path": "features/demo_fungal/ec_prediction.tsv" }
       ]
     }
   ]

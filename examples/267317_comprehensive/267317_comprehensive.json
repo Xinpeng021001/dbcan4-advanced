@@ -1,0 +1,476 @@
+{
+  "protein_id": "267317",
+  "gene_id": "267317",
+  "product": "multi-domain glycoside hydrolase (GH28-type + GH78 alpha-L-rhamnosidase domains)",
+  "length_aa": 1088,
+  "source": "dbCAN4 advanced pipeline (fungal CAZyme); example CAZyme for comprehensive annotation",
+  "generated": "2026-07-09",
+  "cazyme_call": {
+    "summary": "Multi-domain CAZyme: evidence supports BOTH a GH28-type domain (N-terminal, structurally dominant) and a GH78 \u03b1-L-rhamnosidase domain (C-terminal, catalytic). Different tools emphasize different domains \u2014 the comprehensive annotation reveals the full architecture rather than a single family label.",
+    "evidence_by_tool": {
+      "baseline_HMMER_DIAMOND": {
+        "call": "GH28",
+        "basis": "sequence homology, dominated by the N-terminal Glyco_hydro_28 domain"
+      },
+      "advanced_ESM-C": {
+        "call": "GH78",
+        "basis": "protein-LM embedding retrieval: kNN GH78 (0.995) + contrastive GH78 (0.950) agree; centroid diverges to GH92 (0.977) \u2014 keys on the rhamnosidase signal"
+      },
+      "pfam_hmmscan": {
+        "call": "both domains",
+        "basis": "Glyco_hydro_28 PF00295 (res 62-412, iE 3.7e-36, 88% HMM coverage) AND Bac_rhamnosid6H PF17389 (res 667-886, iE 8.2e-13, GH78-diagnostic)"
+      },
+      "foldseek_cazyme3d": {
+        "call": "GH28-like",
+        "basis": "top structural homologs are GH28 (TM 0.80-0.82, prob 1.00); GH78 refs present in set (n=2) but not among 296 hits \u2014 full-length fold dominated by the N-terminal domain"
+      },
+      "clean_seq2ec": {
+        "call": "EC 3.2.1.40 (\u03b1-L-rhamnosidase)",
+        "basis": "contrastive EC prediction, but LOW confidence (0.105) \u2014 a large fungal multi-domain protein far from SwissProt"
+      }
+    },
+    "reference_coverage_note": "CAZyme3D 917-structure subset contains GH78 (n=2) and GH28 (n=7); the absence of GH78 among structural hits is therefore a genuine structural observation, not missing reference data.",
+    "interpretation": "Consistent with a multi-domain fungal enzyme in which a large GH28-family (glycoside hydrolase 28 / polygalacturonase-like) domain and a GH78 rhamnosidase domain co-occur. This is exactly the case where a single top-hit label is misleading and full domain-architecture + orthogonal evidence is required."
+  },
+  "function": {
+    "ec_number": "3.2.1.40",
+    "ec_source_family": "dbCAN fam-substrate-mapping.tsv (GH78 -> alpha-L-rhamnosidase)",
+    "ec_source_clean": {
+      "tool": "CLEAN (Yu et al. Science 2023, seq->EC)",
+      "predicted_ec": "3.2.1.40",
+      "confidence": 0.1053,
+      "confidence_type": "gmm_confidence",
+      "agreement_with_family": "EXACT (all 4 EC digits)"
+    },
+    "activity_name": "alpha-L-rhamnosidase",
+    "reaction": "Hydrolysis of terminal non-reducing alpha-L-rhamnose residues in alpha-L-rhamnosides.",
+    "substrate": "alpha-L-rhamnosidase in polyphenol (naringin, rutin, hesperidin), ulvan, pectin, arabinogalactan-protein",
+    "substrate_high_level": "alpha-rhamnoside",
+    "substrate_examples": [
+      "naringin",
+      "rutin",
+      "hesperidin",
+      "pectin",
+      "arabinogalactan-protein"
+    ],
+    "go_molecular_function": {
+      "id": "GO:0030596",
+      "name": "alpha-L-rhamnosidase activity",
+      "ec_xref": "3.2.1.40",
+      "source": "QuickGO (EC->GO, verified xref)"
+    },
+    "go_hierarchy": [
+      {
+        "id": "GO:0003824",
+        "name": "catalytic activity"
+      },
+      {
+        "id": "GO:0030596",
+        "name": "alpha-L-rhamnosidase activity"
+      },
+      {
+        "id": "GO:0004553",
+        "name": "hydrolase activity, hydrolyzing O-glycosyl compounds"
+      },
+      {
+        "id": "GO:0003674",
+        "name": "molecular_function"
+      },
+      {
+        "id": "GO:0016798",
+        "name": "hydrolase activity, acting on glycosyl bonds"
+      },
+      {
+        "id": "GO:0016787",
+        "name": "hydrolase activity"
+      }
+    ]
+  },
+  "domains_pfam": {
+    "tool": "hmmscan (HMMER 3.3.2)",
+    "database": "Pfam-A.hmm (EBI current_release), hmmpress-ed on met.unl.edu:/array1/xinpeng/pfam; 30134 profiles / 4754065 nodes",
+    "thresholding": "--cut_ga (Pfam curated per-family gathering thresholds)",
+    "architecture": "Glyco_hydro_28 - Bac_rhamnosid6H",
+    "domains": [
+      {
+        "pfam_acc": "PF00295.24",
+        "pfam_acc_base": "PF00295",
+        "name": "Glyco_hydro_28",
+        "query_name": "267317",
+        "query_len": 1088,
+        "seq_start": 62,
+        "seq_end": 412,
+        "ali_start": 93,
+        "ali_end": 403,
+        "hmm_start": 36,
+        "hmm_end": 319,
+        "hmm_len": 324,
+        "hmm_coverage": 0.8765,
+        "full_evalue": 2.3e-36,
+        "full_score": 126.2,
+        "c_evalue": 2.4e-40,
+        "i_evalue": 3.7e-36,
+        "bitscore": 125.6,
+        "bias": 4.1,
+        "acc_posterior": 0.82,
+        "domain_num": 1,
+        "domain_total": 1,
+        "description": "Glycosyl hydrolases family 28",
+        "clan": null
+      },
+      {
+        "pfam_acc": "PF17389.9",
+        "pfam_acc_base": "PF17389",
+        "name": "Bac_rhamnosid6H",
+        "query_name": "267317",
+        "query_len": 1088,
+        "seq_start": 667,
+        "seq_end": 886,
+        "ali_start": 672,
+        "ali_end": 871,
+        "hmm_start": 34,
+        "hmm_end": 238,
+        "hmm_len": 339,
+        "hmm_coverage": 0.6047,
+        "full_evalue": 9.5e-15,
+        "full_score": 55.4,
+        "c_evalue": 5.5e-17,
+        "i_evalue": 8.2e-13,
+        "bitscore": 49.1,
+        "bias": 0.2,
+        "acc_posterior": 0.87,
+        "domain_num": 1,
+        "domain_total": 1,
+        "description": "Bacterial alpha-L-rhamnosidase 6 hairpin glycosidase domain",
+        "clan": null
+      }
+    ],
+    "note": "Full architecture retained: N-terminal Glyco_hydro_28 (PF00295) drove the baseline GH28 error; the C-terminal Bac_rhamnosid6H (PF17389) is GH78-diagnostic and confirms the advanced call."
+  },
+  "interpro": {
+    "accessions": [
+      "IPR008902",
+      "IPR013737",
+      "IPR016007",
+      "IPR033400",
+      "IPR035396",
+      "IPR035398",
+      "IPR048653",
+      "IPR048932",
+      "IPR049164",
+      "IPR054970",
+      "IPR064351"
+    ],
+    "n": 11
+  },
+  "structure": {
+    "tool": "ESMFold (facebook/esmfold_v1)",
+    "run_host": "met.unl.edu",
+    "pdb_artifact": "267317.pdb",
+    "n_residues": 1088,
+    "plddt_mean": 76.6,
+    "plddt_scale": "0-100",
+    "fold": "compact globular (Rg/extended=0.030)",
+    "foldseek_top_hits": [
+      {
+        "target": "QKX54669.1",
+        "family": "GH28",
+        "tmscore": 0.824,
+        "prob": 1.0,
+        "lddt": 0.641,
+        "bits": 582,
+        "fident": 0.201,
+        "evalue": 2.949e-14
+      },
+      {
+        "target": "385166",
+        "family": "GH28",
+        "tmscore": 0.799,
+        "prob": 1.0,
+        "lddt": 0.648,
+        "bits": 525,
+        "fident": 0.173,
+        "evalue": 6.632e-13
+      },
+      {
+        "target": "130678",
+        "family": "GH28",
+        "tmscore": 0.819,
+        "prob": 1.0,
+        "lddt": 0.62,
+        "bits": 452,
+        "fident": 0.157,
+        "evalue": 4.273e-11
+      },
+      {
+        "target": "596197",
+        "family": "GH16_10",
+        "tmscore": 0.759,
+        "prob": 1.0,
+        "lddt": 0.556,
+        "bits": 437,
+        "fident": 0.164,
+        "evalue": 7.728e-12
+      },
+      {
+        "target": "536182",
+        "family": "GH105",
+        "tmscore": 0.653,
+        "prob": 1.0,
+        "lddt": 0.496,
+        "bits": 349,
+        "fident": 0.138,
+        "evalue": 1.073e-10
+      },
+      {
+        "target": "395317",
+        "family": "CBM71,GH142",
+        "tmscore": 0.657,
+        "prob": 1.0,
+        "lddt": 0.464,
+        "bits": 273,
+        "fident": 0.128,
+        "evalue": 1.895e-08
+      },
+      {
+        "target": "768392",
+        "family": "GH37",
+        "tmscore": 0.651,
+        "prob": 1.0,
+        "lddt": 0.434,
+        "bits": 252,
+        "fident": 0.137,
+        "evalue": 4.973e-08
+      },
+      {
+        "target": "762636",
+        "family": "CBM71,GH142",
+        "tmscore": 0.626,
+        "prob": 1.0,
+        "lddt": 0.45,
+        "bits": 249,
+        "fident": 0.104,
+        "evalue": 5.673e-08
+      },
+      {
+        "target": "1415441",
+        "family": "GH28",
+        "tmscore": 0.7,
+        "prob": 1.0,
+        "lddt": 0.513,
+        "bits": 225,
+        "fident": 0.142,
+        "evalue": 3.498e-06
+      },
+      {
+        "target": "19285",
+        "family": "CBM48,GH13_10",
+        "tmscore": 0.661,
+        "prob": 1.0,
+        "lddt": 0.426,
+        "bits": 220,
+        "fident": 0.128,
+        "evalue": 6.61e-07
+      }
+    ],
+    "foldseek_summary": {
+      "n_hits": 296,
+      "reference": "CAZyme3D (917 structures)",
+      "tool": "Foldseek easy-search",
+      "top_family_top25": {
+        "GH28": 4,
+        "GH125": 3,
+        "CBM71,GH142": 2,
+        "GH110": 2,
+        "?": 2,
+        "GH52": 2
+      }
+    }
+  },
+  "topology_secretion": {
+    "deeptmhmm": {
+      "tool": "DeepTMHMM (DTU/DeepTMHMM)",
+      "runner": "pybiolib 1.4.262 -> BioLib cloud",
+      "run_host": "met.unl.edu (job 74627850-a069-49ea-8c0d-c68e9608cf4a)",
+      "status": "real_run",
+      "prediction": "SP",
+      "n_tm_helices": 0,
+      "has_signal_peptide": true,
+      "signal_peptide_span": [
+        1,
+        18
+      ]
+    },
+    "signalp6": {
+      "status": "not_installed",
+      "note": "DTU license-gated; scaffold skill runs it if a licensed copy is on PATH"
+    },
+    "interpretation": "Signal peptide (residues 1-18), 0 TM helices -> classically secreted enzyme (consistent with a secreted fungal GH78)."
+  },
+  "localization": {
+    "method": "derived from signal-peptide + GO-CC (NOT DeepLoc)",
+    "localization_call": "Extracellular (secretory pathway)",
+    "confidence": "medium",
+    "basis": "N-terminal signal peptide (no GO-CC available)",
+    "signal_peptide": true,
+    "go_cellular_component_terms": [],
+    "evidence": [
+      "N-terminal signal peptide predicted (h-region IVIILAALA, mean KD 3.411) -> secretory pathway"
+    ],
+    "cazy_family_context": "GH78"
+  },
+  "physicochemistry": {
+    "length": 1088,
+    "nonstandard_residues_removed": [],
+    "molecular_weight": 117294.16,
+    "theoretical_pI": 5.18,
+    "aromaticity": 0.1057,
+    "instability_index": 29.42,
+    "instability_class": "stable",
+    "gravy": -0.1977,
+    "aa_composition_pct": {
+      "A": 9.01,
+      "C": 1.19,
+      "D": 5.7,
+      "E": 3.49,
+      "F": 3.58,
+      "G": 10.2,
+      "H": 1.47,
+      "I": 4.87,
+      "K": 2.11,
+      "L": 8.64,
+      "M": 0.92,
+      "N": 5.88,
+      "P": 5.33,
+      "Q": 2.39,
+      "R": 4.87,
+      "S": 9.19,
+      "T": 8.36,
+      "V": 5.79,
+      "W": 2.67,
+      "Y": 4.32
+    }
+  },
+  "sequence_features": {
+    "signal_region": {
+      "nterminal_1_20": "MYLLRIVIILAALARVSAGG",
+      "n_region_pos_charges_1_5": 1,
+      "h_region_best_window": {
+        "start": 6,
+        "mean_kd": 3.411,
+        "peptide": "IVIILAALA"
+      },
+      "hydrophobicity_threshold": 1.6,
+      "predicted_signal_peptide": true,
+      "method": "Kyte-Doolittle N-terminal hydropathy heuristic (not SignalP/DeepLoc)"
+    },
+    "n_glycosylation_sequons": {
+      "count": 23,
+      "sites": [
+        {
+          "position": 34,
+          "sequon": "NET"
+        },
+        {
+          "position": 69,
+          "sequon": "NIS"
+        },
+        {
+          "position": 95,
+          "sequon": "NNS"
+        },
+        {
+          "position": 104,
+          "sequon": "NQS"
+        },
+        {
+          "position": 142,
+          "sequon": "NTS"
+        },
+        {
+          "position": 192,
+          "sequon": "NNT"
+        },
+        {
+          "position": 218,
+          "sequon": "NLT"
+        },
+        {
+          "position": 233,
+          "sequon": "NST"
+        },
+        {
+          "position": 340,
+          "sequon": "NCT"
+        },
+        {
+          "position": 390,
+          "sequon": "NGT"
+        },
+        {
+          "position": 443,
+          "sequon": "NTS"
+        },
+        {
+          "position": 524,
+          "sequon": "NTT"
+        },
+        {
+          "position": 591,
+          "sequon": "NAT"
+        },
+        {
+          "position": 598,
+          "sequon": "NIT"
+        },
+        {
+          "position": 658,
+          "sequon": "NNS"
+        },
+        {
+          "position": 712,
+          "sequon": "NQT"
+        },
+        {
+          "position": 780,
+          "sequon": "NAT"
+        },
+        {
+          "position": 852,
+          "sequon": "NST"
+        },
+        {
+          "position": 878,
+          "sequon": "NSS"
+        },
+        {
+          "position": 884,
+          "sequon": "NSS"
+        },
+        {
+          "position": 902,
+          "sequon": "NWT"
+        },
+        {
+          "position": 916,
+          "sequon": "NIS"
+        },
+        {
+          "position": 954,
+          "sequon": "NGT"
+        }
+      ]
+    }
+  },
+  "tool_provenance": {
+    "ESMFold": "real_run (met GPU)",
+    "hmmscan/Pfam-A": "real_run (met)",
+    "DeepTMHMM": "real_run (BioLib cloud via met)",
+    "CLEAN": "real_run (met, isolated venv)",
+    "protein-function (InterPro/dbCAN/Biopython)": "real_run",
+    "SignalP6": "not_installed (scaffold)",
+    "DeepLoc": "not_installed (scaffold; localization derived from signal peptide)",
+    "Foldseek-CAZyme3D": "real_run (met; 296 hits vs 917 CAZyme3D refs)"
+  },
+  "product_note": "Family label is domain-dependent; see cazyme_call.evidence_by_tool. Structurally-dominant N-terminal GH28-type domain + C-terminal GH78 rhamnosidase domain."
+}
