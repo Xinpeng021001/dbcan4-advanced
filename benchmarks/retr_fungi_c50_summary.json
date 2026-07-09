@@ -1,0 +1,510 @@
+{
+  "k": 15,
+  "n_ref": 110299,
+  "n_families_ref": 410,
+  "novelty_detection_auroc": {
+    "knn_top1_cosine": 0.4468591597796143,
+    "knn_vote_purity": 0.518887741046832,
+    "knn_margin": 0.5240731749311295,
+    "centroid_cosine": 0.35864376721763086,
+    "centroid_margin": 0.592213326446281
+  },
+  "schemes": {
+    "knn": {
+      "overall": {
+        "thr=0.0": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.3": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.4": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.5": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.6": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.7": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.8": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        },
+        "thr=0.9": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.7171,
+          "overlap_of_confident": 0.781,
+          "exact_of_all": 0.7171,
+          "overlap_of_all": 0.781
+        }
+      },
+      "novel_family": {
+        "thr=0.0": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.3": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.4": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.5": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.6": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.7": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.8": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        },
+        "thr=0.9": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.022,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.022
+        }
+      },
+      "novel_seq": {
+        "thr=0.0": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.3": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.4": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.5": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.6": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.7": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.8": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        },
+        "thr=0.9": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.8472,
+          "overlap_of_confident": 0.9187,
+          "exact_of_all": 0.8472,
+          "overlap_of_all": 0.9187
+        }
+      }
+    },
+    "centroid": {
+      "overall": {
+        "thr=0.0": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.3": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.4": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.5": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.6": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.7": {
+          "n": 4726,
+          "confident": 4726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.2677,
+          "overlap_of_confident": 0.2863,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.8": {
+          "n": 4726,
+          "confident": 4724,
+          "abstain": 2,
+          "abstain_frac": 0.0004,
+          "exact_of_confident": 0.2678,
+          "overlap_of_confident": 0.2864,
+          "exact_of_all": 0.2677,
+          "overlap_of_all": 0.2863
+        },
+        "thr=0.9": {
+          "n": 4726,
+          "confident": 4635,
+          "abstain": 91,
+          "abstain_frac": 0.0193,
+          "exact_of_confident": 0.2712,
+          "overlap_of_confident": 0.2893,
+          "exact_of_all": 0.266,
+          "overlap_of_all": 0.2837
+        }
+      },
+      "novel_family": {
+        "thr=0.0": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.3": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.4": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.5": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.6": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.7": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.8": {
+          "n": 726,
+          "confident": 726,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        },
+        "thr=0.9": {
+          "n": 726,
+          "confident": 725,
+          "abstain": 1,
+          "abstain_frac": 0.0014,
+          "exact_of_confident": 0.0,
+          "overlap_of_confident": 0.0028,
+          "exact_of_all": 0.0,
+          "overlap_of_all": 0.0028
+        }
+      },
+      "novel_seq": {
+        "thr=0.0": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.3": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.4": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.5": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.6": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.7": {
+          "n": 4000,
+          "confident": 4000,
+          "abstain": 0,
+          "abstain_frac": 0.0,
+          "exact_of_confident": 0.3162,
+          "overlap_of_confident": 0.3377,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.8": {
+          "n": 4000,
+          "confident": 3998,
+          "abstain": 2,
+          "abstain_frac": 0.0005,
+          "exact_of_confident": 0.3164,
+          "overlap_of_confident": 0.3379,
+          "exact_of_all": 0.3162,
+          "overlap_of_all": 0.3377
+        },
+        "thr=0.9": {
+          "n": 4000,
+          "confident": 3910,
+          "abstain": 90,
+          "abstain_frac": 0.0225,
+          "exact_of_confident": 0.3215,
+          "overlap_of_confident": 0.3425,
+          "exact_of_all": 0.3142,
+          "overlap_of_all": 0.3347
+        }
+      }
+    }
+  }
+}

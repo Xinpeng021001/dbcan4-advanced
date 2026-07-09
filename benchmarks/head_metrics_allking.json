@@ -1,0 +1,60 @@
+{
+  "n_families_trained": 804,
+  "contrastive_knn": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7575,
+      "overlap": 0.8246
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.8948,
+      "overlap": 0.9695
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0014,
+      "overlap": 0.0262
+    }
+  },
+  "contrastive_centroid": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7416,
+      "overlap": 0.8083
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.876,
+      "overlap": 0.9505
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0014,
+      "overlap": 0.0248
+    }
+  },
+  "classifier": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7499,
+      "overlap": 0.8168
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.886,
+      "overlap": 0.9605
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0,
+      "overlap": 0.0248
+    }
+  },
+  "novelty_auroc": {
+    "contrastive_centroid_margin": 0.2318581267217631,
+    "contrastive_centroid_cosine": 0.6090289256198347,
+    "contrastive_knn_purity": 0.4794096074380165,
+    "classifier_maxsoftmax": 0.43196900826446283
+  }
+}

@@ -1,0 +1,271 @@
+method	scope	clustered	bucket	level	n	exact	overlap	jaccard	coverage
+ESM-C kNN	fungi	unclustered	overall	class	4726	0.9137	0.9778	0.9457	4726
+ESM-C kNN	fungi	unclustered	overall	family	4726	0.8639	0.9321	0.8973	4726
+ESM-C kNN	fungi	unclustered	overall	subfamily	4726	0.7262	0.7941	0.7594	4726
+ESM-C kNN	fungi	unclustered	novel_seq	class	4000	0.9055	0.9762	0.9409	4726
+ESM-C kNN	fungi	unclustered	novel_seq	family	4000	0.8622	0.9353	0.898	4726
+ESM-C kNN	fungi	unclustered	novel_seq	subfamily	4000	0.858	0.9313	0.8938	4726
+ESM-C kNN	fungi	unclustered	novel_family	class	726	0.9587	0.9862	0.9725	4726
+ESM-C kNN	fungi	unclustered	novel_family	family	726	0.8733	0.9146	0.8935	4726
+ESM-C kNN	fungi	unclustered	novel_family	subfamily	726	0.0	0.0386	0.0188	4726
+ESM-C kNN	fungi	unclustered	single_domain	class	4394	0.9768	0.9768	0.9768	4726
+ESM-C kNN	fungi	unclustered	single_domain	family	4394	0.9288	0.9288	0.9288	4726
+ESM-C kNN	fungi	unclustered	single_domain	subfamily	4394	0.7811	0.7811	0.7811	4726
+ESM-C kNN	fungi	unclustered	multi_domain	class	332	0.0783	0.991	0.5346	4726
+ESM-C kNN	fungi	unclustered	multi_domain	family	332	0.006	0.9759	0.4804	4726
+ESM-C kNN	fungi	unclustered	multi_domain	subfamily	332	0.0	0.9669	0.4729	4726
+ESM-C kNN	fungi	unclustered	has_subfamily	class	1741	0.9271	0.9845	0.9558	4726
+ESM-C kNN	fungi	unclustered	has_subfamily	family	1741	0.8782	0.9454	0.9114	4726
+ESM-C kNN	fungi	unclustered	has_subfamily	subfamily	1741	0.5083	0.575	0.5413	4726
+ESM-C centroid	fungi	unclustered	overall	class	4726	0.7747	0.8326	0.8036	4726
+ESM-C centroid	fungi	unclustered	overall	family	4726	0.4628	0.503	0.4826	4726
+ESM-C centroid	fungi	unclustered	overall	subfamily	4726	0.3857	0.4215	0.4034	4726
+ESM-C centroid	fungi	unclustered	novel_seq	class	4000	0.7482	0.814	0.7811	4726
+ESM-C centroid	fungi	unclustered	novel_seq	family	4000	0.4798	0.525	0.5022	4726
+ESM-C centroid	fungi	unclustered	novel_seq	subfamily	4000	0.4557	0.4975	0.4764	4726
+ESM-C centroid	fungi	unclustered	novel_family	class	726	0.9201	0.9353	0.9277	4726
+ESM-C centroid	fungi	unclustered	novel_family	family	726	0.3691	0.3815	0.3749	4726
+ESM-C centroid	fungi	unclustered	novel_family	subfamily	726	0.0	0.0028	0.0011	4726
+ESM-C centroid	fungi	unclustered	single_domain	class	4394	0.8273	0.8273	0.8273	4726
+ESM-C centroid	fungi	unclustered	single_domain	family	4394	0.4973	0.4973	0.4973	4726
+ESM-C centroid	fungi	unclustered	single_domain	subfamily	4394	0.4149	0.4149	0.4149	4726
+ESM-C centroid	fungi	unclustered	multi_domain	class	332	0.0783	0.9036	0.491	4726
+ESM-C centroid	fungi	unclustered	multi_domain	family	332	0.006	0.5783	0.2887	4726
+ESM-C centroid	fungi	unclustered	multi_domain	subfamily	332	0.0	0.509	0.2515	4726
+ESM-C centroid	fungi	unclustered	has_subfamily	class	1741	0.857	0.9121	0.8845	4726
+ESM-C centroid	fungi	unclustered	has_subfamily	family	1741	0.5692	0.6123	0.5904	4726
+ESM-C centroid	fungi	unclustered	has_subfamily	subfamily	1741	0.367	0.398	0.3823	4726
+Contrastive kNN	fungi	unclustered	overall	class	4726	0.931	0.9958	0.9634	4726
+Contrastive kNN	fungi	unclustered	overall	family	4726	0.9086	0.9784	0.9428	4726
+Contrastive kNN	fungi	unclustered	overall	subfamily	4726	0.7603	0.8297	0.7943	4726
+Contrastive kNN	fungi	unclustered	novel_seq	class	4000	0.9237	0.995	0.9594	4726
+Contrastive kNN	fungi	unclustered	novel_seq	family	4000	0.901	0.9755	0.9375	4726
+Contrastive kNN	fungi	unclustered	novel_seq	subfamily	4000	0.8982	0.9732	0.935	4726
+Contrastive kNN	fungi	unclustered	novel_family	class	726	0.9711	1.0	0.9855	4726
+Contrastive kNN	fungi	unclustered	novel_family	family	726	0.9504	0.9945	0.972	4726
+Contrastive kNN	fungi	unclustered	novel_family	subfamily	726	0.0	0.0386	0.0191	4726
+Contrastive kNN	fungi	unclustered	single_domain	class	4394	0.9954	0.9954	0.9954	4726
+Contrastive kNN	fungi	unclustered	single_domain	family	4394	0.9768	0.9768	0.9768	4726
+Contrastive kNN	fungi	unclustered	single_domain	subfamily	4394	0.8177	0.8177	0.8177	4726
+Contrastive kNN	fungi	unclustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive kNN	fungi	unclustered	multi_domain	family	332	0.006	1.0	0.4925	4726
+Contrastive kNN	fungi	unclustered	multi_domain	subfamily	332	0.0	0.988	0.4839	4726
+Contrastive kNN	fungi	unclustered	has_subfamily	class	1741	0.9408	0.9994	0.9701	4726
+Contrastive kNN	fungi	unclustered	has_subfamily	family	1741	0.9305	0.9989	0.9643	4726
+Contrastive kNN	fungi	unclustered	has_subfamily	subfamily	1741	0.5313	0.5985	0.5646	4726
+Contrastive centroid	fungi	unclustered	overall	class	4726	0.9295	0.9943	0.9619	4726
+Contrastive centroid	fungi	unclustered	overall	family	4726	0.9048	0.9746	0.939	4726
+Contrastive centroid	fungi	unclustered	overall	subfamily	4726	0.7554	0.8223	0.7881	4726
+Contrastive centroid	fungi	unclustered	novel_seq	class	4000	0.922	0.9932	0.9576	4726
+Contrastive centroid	fungi	unclustered	novel_seq	family	4000	0.8965	0.971	0.933	4726
+Contrastive centroid	fungi	unclustered	novel_seq	subfamily	4000	0.8925	0.9673	0.9291	4726
+Contrastive centroid	fungi	unclustered	novel_family	class	726	0.9711	1.0	0.9855	4726
+Contrastive centroid	fungi	unclustered	novel_family	family	726	0.9504	0.9945	0.972	4726
+Contrastive centroid	fungi	unclustered	novel_family	subfamily	726	0.0	0.0234	0.0115	4726
+Contrastive centroid	fungi	unclustered	single_domain	class	4394	0.9939	0.9939	0.9939	4726
+Contrastive centroid	fungi	unclustered	single_domain	family	4394	0.9727	0.9727	0.9727	4726
+Contrastive centroid	fungi	unclustered	single_domain	subfamily	4394	0.8125	0.8125	0.8125	4726
+Contrastive centroid	fungi	unclustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive centroid	fungi	unclustered	multi_domain	family	332	0.006	1.0	0.4925	4726
+Contrastive centroid	fungi	unclustered	multi_domain	subfamily	332	0.0	0.9518	0.4659	4726
+Contrastive centroid	fungi	unclustered	has_subfamily	class	1741	0.9408	0.9994	0.9701	4726
+Contrastive centroid	fungi	unclustered	has_subfamily	family	1741	0.9305	0.9989	0.9643	4726
+Contrastive centroid	fungi	unclustered	has_subfamily	subfamily	1741	0.5307	0.5916	0.5609	4726
+Classifier	fungi	unclustered	overall	class	4726	0.9272	0.992	0.9596	4726
+Classifier	fungi	unclustered	overall	family	4726	0.9016	0.9708	0.9355	4726
+Classifier	fungi	unclustered	overall	subfamily	4726	0.7539	0.8229	0.7877	4726
+Classifier	fungi	unclustered	novel_seq	class	4000	0.9205	0.9918	0.9561	4726
+Classifier	fungi	unclustered	novel_seq	family	4000	0.8945	0.9688	0.9308	4726
+Classifier	fungi	unclustered	novel_seq	subfamily	4000	0.8908	0.9655	0.9273	4726
+Classifier	fungi	unclustered	novel_family	class	726	0.9642	0.9931	0.9787	4726
+Classifier	fungi	unclustered	novel_family	family	726	0.9408	0.9821	0.961	4726
+Classifier	fungi	unclustered	novel_family	subfamily	726	0.0	0.0372	0.0184	4726
+Classifier	fungi	unclustered	single_domain	class	4394	0.9914	0.9914	0.9914	4726
+Classifier	fungi	unclustered	single_domain	family	4394	0.9693	0.9693	0.9693	4726
+Classifier	fungi	unclustered	single_domain	subfamily	4394	0.8109	0.8109	0.8109	4726
+Classifier	fungi	unclustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Classifier	fungi	unclustered	multi_domain	family	332	0.006	0.991	0.488	4726
+Classifier	fungi	unclustered	multi_domain	subfamily	332	0.0	0.9819	0.4809	4726
+Classifier	fungi	unclustered	has_subfamily	class	1741	0.9374	0.996	0.9667	4726
+Classifier	fungi	unclustered	has_subfamily	family	1741	0.9236	0.9902	0.9565	4726
+Classifier	fungi	unclustered	has_subfamily	subfamily	1741	0.5256	0.5916	0.5583	4726
+ESM-C kNN	fungi	clustered	overall	class	4726	0.912	0.9761	0.944	4726
+ESM-C kNN	fungi	clustered	overall	family	4726	0.8551	0.9219	0.8877	4726
+ESM-C kNN	fungi	clustered	overall	subfamily	4726	0.7171	0.781	0.7483	4726
+ESM-C kNN	fungi	clustered	novel_seq	class	4000	0.9032	0.9738	0.9385	4726
+ESM-C kNN	fungi	clustered	novel_seq	family	4000	0.856	0.9275	0.891	4726
+ESM-C kNN	fungi	clustered	novel_seq	subfamily	4000	0.8472	0.9187	0.8822	4726
+ESM-C kNN	fungi	clustered	novel_family	class	726	0.9601	0.989	0.9745	4726
+ESM-C kNN	fungi	clustered	novel_family	family	726	0.8499	0.8912	0.8701	4726
+ESM-C kNN	fungi	clustered	novel_family	subfamily	726	0.0	0.022	0.0108	4726
+ESM-C kNN	fungi	clustered	single_domain	class	4394	0.975	0.975	0.975	4726
+ESM-C kNN	fungi	clustered	single_domain	family	4394	0.9192	0.9192	0.9192	4726
+ESM-C kNN	fungi	clustered	single_domain	subfamily	4394	0.7713	0.7713	0.7713	4726
+ESM-C kNN	fungi	clustered	multi_domain	class	332	0.0783	0.991	0.5346	4726
+ESM-C kNN	fungi	clustered	multi_domain	family	332	0.006	0.9578	0.4714	4726
+ESM-C kNN	fungi	clustered	multi_domain	subfamily	332	0.0	0.9096	0.4448	4726
+ESM-C kNN	fungi	clustered	has_subfamily	class	1741	0.9288	0.9868	0.9578	4726
+ESM-C kNN	fungi	clustered	has_subfamily	family	1741	0.8673	0.9316	0.8991	4726
+ESM-C kNN	fungi	clustered	has_subfamily	subfamily	1741	0.4968	0.5531	0.5247	4726
+ESM-C centroid	fungi	clustered	overall	class	4726	0.7241	0.7778	0.751	4726
+ESM-C centroid	fungi	clustered	overall	family	4726	0.3542	0.3792	0.3665	4726
+ESM-C centroid	fungi	clustered	overall	subfamily	4726	0.2677	0.2863	0.2768	4726
+ESM-C centroid	fungi	clustered	novel_seq	class	4000	0.701	0.7615	0.7312	4726
+ESM-C centroid	fungi	clustered	novel_seq	family	4000	0.3573	0.3832	0.3701	4726
+ESM-C centroid	fungi	clustered	novel_seq	subfamily	4000	0.3162	0.3377	0.3269	4726
+ESM-C centroid	fungi	clustered	novel_family	class	726	0.8512	0.8678	0.8595	4726
+ESM-C centroid	fungi	clustered	novel_family	family	726	0.3375	0.3567	0.3466	4726
+ESM-C centroid	fungi	clustered	novel_family	subfamily	726	0.0	0.0028	0.0011	4726
+ESM-C centroid	fungi	clustered	single_domain	class	4394	0.7731	0.7731	0.7731	4726
+ESM-C centroid	fungi	clustered	single_domain	family	4394	0.3805	0.3805	0.3805	4726
+ESM-C centroid	fungi	clustered	single_domain	subfamily	4394	0.2879	0.2879	0.2879	4726
+ESM-C centroid	fungi	clustered	multi_domain	class	332	0.0753	0.8404	0.4578	4726
+ESM-C centroid	fungi	clustered	multi_domain	family	332	0.006	0.3614	0.1812	4726
+ESM-C centroid	fungi	clustered	multi_domain	subfamily	332	0.0	0.2651	0.1305	4726
+ESM-C centroid	fungi	clustered	has_subfamily	class	1741	0.8191	0.8759	0.8475	4726
+ESM-C centroid	fungi	clustered	has_subfamily	family	1741	0.4968	0.5336	0.5149	4726
+ESM-C centroid	fungi	clustered	has_subfamily	subfamily	1741	0.2751	0.2947	0.2847	4726
+Contrastive kNN	fungi	clustered	overall	class	4726	0.9298	0.9945	0.9621	4726
+Contrastive kNN	fungi	clustered	overall	family	4726	0.9067	0.9765	0.9409	4726
+Contrastive kNN	fungi	clustered	overall	subfamily	4726	0.7577	0.8248	0.7906	4726
+Contrastive kNN	fungi	clustered	novel_seq	class	4000	0.923	0.9942	0.9586	4726
+Contrastive kNN	fungi	clustered	novel_seq	family	4000	0.8988	0.9732	0.9352	4726
+Contrastive kNN	fungi	clustered	novel_seq	subfamily	4000	0.8952	0.9702	0.932	4726
+Contrastive kNN	fungi	clustered	novel_family	class	726	0.9669	0.9959	0.9814	4726
+Contrastive kNN	fungi	clustered	novel_family	family	726	0.9504	0.9945	0.972	4726
+Contrastive kNN	fungi	clustered	novel_family	subfamily	726	0.0	0.0234	0.0115	4726
+Contrastive kNN	fungi	clustered	single_domain	class	4394	0.9941	0.9941	0.9941	4726
+Contrastive kNN	fungi	clustered	single_domain	family	4394	0.9747	0.9747	0.9747	4726
+Contrastive kNN	fungi	clustered	single_domain	subfamily	4394	0.815	0.815	0.815	4726
+Contrastive kNN	fungi	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive kNN	fungi	clustered	multi_domain	family	332	0.006	1.0	0.4925	4726
+Contrastive kNN	fungi	clustered	multi_domain	subfamily	332	0.0	0.9548	0.4674	4726
+Contrastive kNN	fungi	clustered	has_subfamily	class	1741	0.9408	0.9994	0.9701	4726
+Contrastive kNN	fungi	clustered	has_subfamily	family	1741	0.9299	0.9983	0.9637	4726
+Contrastive kNN	fungi	clustered	has_subfamily	subfamily	1741	0.5302	0.591	0.5603	4726
+Contrastive centroid	fungi	clustered	overall	class	4726	0.9285	0.9932	0.9609	4726
+Contrastive centroid	fungi	clustered	overall	family	4726	0.9012	0.9708	0.9353	4726
+Contrastive centroid	fungi	clustered	overall	subfamily	4726	0.751	0.8176	0.7836	4726
+Contrastive centroid	fungi	clustered	novel_seq	class	4000	0.9215	0.9928	0.9571	4726
+Contrastive centroid	fungi	clustered	novel_seq	family	4000	0.8925	0.9667	0.9288	4726
+Contrastive centroid	fungi	clustered	novel_seq	subfamily	4000	0.8872	0.9617	0.9237	4726
+Contrastive centroid	fungi	clustered	novel_family	class	726	0.9669	0.9959	0.9814	4726
+Contrastive centroid	fungi	clustered	novel_family	family	726	0.949	0.9931	0.9706	4726
+Contrastive centroid	fungi	clustered	novel_family	subfamily	726	0.0	0.0234	0.0115	4726
+Contrastive centroid	fungi	clustered	single_domain	class	4394	0.9927	0.9927	0.9927	4726
+Contrastive centroid	fungi	clustered	single_domain	family	4394	0.9688	0.9688	0.9688	4726
+Contrastive centroid	fungi	clustered	single_domain	subfamily	4394	0.8077	0.8077	0.8077	4726
+Contrastive centroid	fungi	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive centroid	fungi	clustered	multi_domain	family	332	0.006	0.997	0.491	4726
+Contrastive centroid	fungi	clustered	multi_domain	subfamily	332	0.0	0.9488	0.4644	4726
+Contrastive centroid	fungi	clustered	has_subfamily	class	1741	0.9408	0.9994	0.9701	4726
+Contrastive centroid	fungi	clustered	has_subfamily	family	1741	0.9299	0.9983	0.9637	4726
+Contrastive centroid	fungi	clustered	has_subfamily	subfamily	1741	0.5302	0.591	0.5603	4726
+Classifier	fungi	clustered	overall	class	4726	0.9253	0.9901	0.9577	4726
+Classifier	fungi	clustered	overall	family	4726	0.8828	0.9509	0.9161	4726
+Classifier	fungi	clustered	overall	subfamily	4726	0.7349	0.8009	0.7672	4726
+Classifier	fungi	clustered	novel_seq	class	4000	0.9193	0.9905	0.9549	4726
+Classifier	fungi	clustered	novel_seq	family	4000	0.8762	0.95	0.9123	4726
+Classifier	fungi	clustered	novel_seq	subfamily	4000	0.8682	0.9425	0.9046	4726
+Classifier	fungi	clustered	novel_family	class	726	0.9587	0.9876	0.9731	4726
+Classifier	fungi	clustered	novel_family	family	726	0.9187	0.9559	0.9369	4726
+Classifier	fungi	clustered	novel_family	subfamily	726	0.0	0.0207	0.0101	4726
+Classifier	fungi	clustered	single_domain	class	4394	0.9893	0.9893	0.9893	4726
+Classifier	fungi	clustered	single_domain	family	4394	0.949	0.949	0.949	4726
+Classifier	fungi	clustered	single_domain	subfamily	4394	0.7904	0.7904	0.7904	4726
+Classifier	fungi	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Classifier	fungi	clustered	multi_domain	family	332	0.006	0.9759	0.4804	4726
+Classifier	fungi	clustered	multi_domain	subfamily	332	0.0	0.9398	0.4598	4726
+Classifier	fungi	clustered	has_subfamily	class	1741	0.9334	0.992	0.9627	4726
+Classifier	fungi	clustered	has_subfamily	family	1741	0.9087	0.9747	0.9413	4726
+Classifier	fungi	clustered	has_subfamily	subfamily	1741	0.5106	0.5709	0.5405	4726
+ESM-C kNN	allking	clustered	overall	class	4726	0.9122	0.9765	0.9444	4726
+ESM-C kNN	allking	clustered	overall	family	4726	0.8627	0.9298	0.8955	4726
+ESM-C kNN	allking	clustered	overall	subfamily	4726	0.7218	0.7861	0.7532	4726
+ESM-C kNN	allking	clustered	novel_seq	class	4000	0.9035	0.9742	0.9389	4726
+ESM-C kNN	allking	clustered	novel_seq	family	4000	0.8595	0.9313	0.8946	4726
+ESM-C kNN	allking	clustered	novel_seq	subfamily	4000	0.8528	0.9247	0.888	4726
+ESM-C kNN	allking	clustered	novel_family	class	726	0.9601	0.989	0.9745	4726
+ESM-C kNN	allking	clustered	novel_family	family	726	0.8802	0.9215	0.9004	4726
+ESM-C kNN	allking	clustered	novel_family	subfamily	726	0.0	0.022	0.0108	4726
+ESM-C kNN	allking	clustered	single_domain	class	4394	0.9752	0.9752	0.9752	4726
+ESM-C kNN	allking	clustered	single_domain	family	4394	0.9274	0.9274	0.9274	4726
+ESM-C kNN	allking	clustered	single_domain	subfamily	4394	0.7763	0.7763	0.7763	4726
+ESM-C kNN	allking	clustered	multi_domain	class	332	0.0783	0.994	0.5361	4726
+ESM-C kNN	allking	clustered	multi_domain	family	332	0.006	0.9608	0.4729	4726
+ESM-C kNN	allking	clustered	multi_domain	subfamily	332	0.0	0.9157	0.4478	4726
+ESM-C kNN	allking	clustered	has_subfamily	class	1741	0.9294	0.9874	0.9584	4726
+ESM-C kNN	allking	clustered	has_subfamily	family	1741	0.8845	0.95	0.9169	4726
+ESM-C kNN	allking	clustered	has_subfamily	subfamily	1741	0.5049	0.5629	0.5336	4726
+ESM-C centroid	allking	clustered	overall	class	4726	0.7336	0.7821	0.7578	4726
+ESM-C centroid	allking	clustered	overall	family	4726	0.3174	0.3381	0.3276	4726
+ESM-C centroid	allking	clustered	overall	subfamily	4726	0.2503	0.2651	0.2575	4726
+ESM-C centroid	allking	clustered	novel_seq	class	4000	0.7198	0.774	0.7469	4726
+ESM-C centroid	allking	clustered	novel_seq	family	4000	0.3372	0.3615	0.3492	4726
+ESM-C centroid	allking	clustered	novel_seq	subfamily	4000	0.2958	0.313	0.3042	4726
+ESM-C centroid	allking	clustered	novel_family	class	726	0.8099	0.8264	0.8182	4726
+ESM-C centroid	allking	clustered	novel_family	family	726	0.208	0.2094	0.2084	4726
+ESM-C centroid	allking	clustered	novel_family	subfamily	726	0.0	0.0014	0.0005	4726
+ESM-C centroid	allking	clustered	single_domain	class	4394	0.7838	0.7838	0.7838	4726
+ESM-C centroid	allking	clustered	single_domain	family	4394	0.3411	0.3411	0.3411	4726
+ESM-C centroid	allking	clustered	single_domain	subfamily	4394	0.2692	0.2692	0.2692	4726
+ESM-C centroid	allking	clustered	multi_domain	class	332	0.0693	0.759	0.4142	4726
+ESM-C centroid	allking	clustered	multi_domain	family	332	0.003	0.2982	0.1481	4726
+ESM-C centroid	allking	clustered	multi_domain	subfamily	332	0.0	0.2108	0.1029	4726
+ESM-C centroid	allking	clustered	has_subfamily	class	1741	0.8076	0.8564	0.832	4726
+ESM-C centroid	allking	clustered	has_subfamily	family	1741	0.4652	0.4986	0.4816	4726
+ESM-C centroid	allking	clustered	has_subfamily	subfamily	1741	0.297	0.3142	0.3053	4726
+Contrastive kNN	allking	clustered	overall	class	4726	0.9295	0.9943	0.9619	4726
+Contrastive kNN	allking	clustered	overall	family	4726	0.9069	0.9765	0.941	4726
+Contrastive kNN	allking	clustered	overall	subfamily	4726	0.7575	0.8246	0.7903	4726
+Contrastive kNN	allking	clustered	novel_seq	class	4000	0.9223	0.9935	0.9579	4726
+Contrastive kNN	allking	clustered	novel_seq	family	4000	0.899	0.9732	0.9353	4726
+Contrastive kNN	allking	clustered	novel_seq	subfamily	4000	0.8948	0.9695	0.9313	4726
+Contrastive kNN	allking	clustered	novel_family	class	726	0.9697	0.9986	0.9842	4726
+Contrastive kNN	allking	clustered	novel_family	family	726	0.9504	0.9945	0.972	4726
+Contrastive kNN	allking	clustered	novel_family	subfamily	726	0.0014	0.0262	0.0135	4726
+Contrastive kNN	allking	clustered	single_domain	class	4394	0.9939	0.9939	0.9939	4726
+Contrastive kNN	allking	clustered	single_domain	family	4394	0.975	0.975	0.975	4726
+Contrastive kNN	allking	clustered	single_domain	subfamily	4394	0.8147	0.8147	0.8147	4726
+Contrastive kNN	allking	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive kNN	allking	clustered	multi_domain	family	332	0.006	0.997	0.491	4726
+Contrastive kNN	allking	clustered	multi_domain	subfamily	332	0.0	0.9548	0.4674	4726
+Contrastive kNN	allking	clustered	has_subfamily	class	1741	0.9408	0.9994	0.9701	4726
+Contrastive kNN	allking	clustered	has_subfamily	family	1741	0.9305	0.9983	0.964	4726
+Contrastive kNN	allking	clustered	has_subfamily	subfamily	1741	0.5296	0.5905	0.5597	4726
+Contrastive centroid	allking	clustered	overall	class	4726	0.931	0.9958	0.9634	4726
+Contrastive centroid	allking	clustered	overall	family	4726	0.8929	0.9623	0.9269	4726
+Contrastive centroid	allking	clustered	overall	subfamily	4726	0.7416	0.8083	0.7743	4726
+Contrastive centroid	allking	clustered	novel_seq	class	4000	0.924	0.9952	0.9596	4726
+Contrastive centroid	allking	clustered	novel_seq	family	4000	0.8828	0.957	0.9191	4726
+Contrastive centroid	allking	clustered	novel_seq	subfamily	4000	0.876	0.9505	0.9125	4726
+Contrastive centroid	allking	clustered	novel_family	class	726	0.9697	0.9986	0.9842	4726
+Contrastive centroid	allking	clustered	novel_family	family	726	0.949	0.9917	0.9702	4726
+Contrastive centroid	allking	clustered	novel_family	subfamily	726	0.0014	0.0248	0.0131	4726
+Contrastive centroid	allking	clustered	single_domain	class	4394	0.9954	0.9954	0.9954	4726
+Contrastive centroid	allking	clustered	single_domain	family	4394	0.9599	0.9599	0.9599	4726
+Contrastive centroid	allking	clustered	single_domain	subfamily	4394	0.7977	0.7977	0.7977	4726
+Contrastive centroid	allking	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Contrastive centroid	allking	clustered	multi_domain	family	332	0.006	0.994	0.49	4726
+Contrastive centroid	allking	clustered	multi_domain	subfamily	332	0.0	0.9488	0.4649	4726
+Contrastive centroid	allking	clustered	has_subfamily	class	1741	0.9403	0.9989	0.9696	4726
+Contrastive centroid	allking	clustered	has_subfamily	family	1741	0.9299	0.9983	0.9637	4726
+Contrastive centroid	allking	clustered	has_subfamily	subfamily	1741	0.529	0.5905	0.5594	4726
+Classifier	allking	clustered	overall	class	4726	0.9291	0.9939	0.9615	4726
+Classifier	allking	clustered	overall	family	4726	0.901	0.9704	0.9349	4726
+Classifier	allking	clustered	overall	subfamily	4726	0.7499	0.8168	0.7826	4726
+Classifier	allking	clustered	novel_seq	class	4000	0.9217	0.993	0.9574	4726
+Classifier	allking	clustered	novel_seq	family	4000	0.8922	0.9663	0.9285	4726
+Classifier	allking	clustered	novel_seq	subfamily	4000	0.886	0.9605	0.9225	4726
+Classifier	allking	clustered	novel_family	class	726	0.9697	0.9986	0.9842	4726
+Classifier	allking	clustered	novel_family	family	726	0.949	0.9931	0.9706	4726
+Classifier	allking	clustered	novel_family	subfamily	726	0.0	0.0248	0.0122	4726
+Classifier	allking	clustered	single_domain	class	4394	0.9934	0.9934	0.9934	4726
+Classifier	allking	clustered	single_domain	family	4394	0.9686	0.9686	0.9686	4726
+Classifier	allking	clustered	single_domain	subfamily	4394	0.8066	0.8066	0.8066	4726
+Classifier	allking	clustered	multi_domain	class	332	0.0783	1.0	0.5392	4726
+Classifier	allking	clustered	multi_domain	family	332	0.006	0.994	0.4895	4726
+Classifier	allking	clustered	multi_domain	subfamily	332	0.0	0.9518	0.4659	4726
+Classifier	allking	clustered	has_subfamily	class	1741	0.9385	0.9971	0.9678	4726
+Classifier	allking	clustered	has_subfamily	family	1741	0.9276	0.996	0.9614	4726
+Classifier	allking	clustered	has_subfamily	subfamily	1741	0.5215	0.583	0.552	4726

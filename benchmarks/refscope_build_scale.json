@@ -1,0 +1,21 @@
+{
+  "allking": {
+    "kept": 2150909,
+    "labeled": 3613700,
+    "excl_eval": 46,
+    "excl_dup": 1433701,
+    "excl_len": 29044,
+    "n_families": 820
+  },
+  "fungi": {
+    "kept": 398271,
+    "labeled": 457694,
+    "excl_eval": 0,
+    "excl_dup": 49286,
+    "excl_len": 10137,
+    "n_families": 421
+  },
+  "families_only_in_allking": 399,
+  "families_in_both": 421,
+  "families_only_in_fungi": 0
+}

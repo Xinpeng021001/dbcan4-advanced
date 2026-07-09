@@ -21,7 +21,7 @@ def read_fasta(path):
             if line.startswith(">"):
                 if hid is not None:
                     yield hid, "".join(buf)
-                hid = line[1:].rstrip("\n")
+                hid = line[1:].strip()   # strip ALL trailing whitespace (MMseqs rep_seq headers carry a trailing space)
                 buf = []
             else:
                 buf.append(line.strip())

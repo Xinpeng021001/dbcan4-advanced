@@ -1,0 +1,17 @@
+{
+  "allking_c50": {
+    "reps": 465117,
+    "from": 2150909,
+    "reduction": 4.62,
+    "n_families": 820
+  },
+  "fungi_c50": {
+    "reps": 110299,
+    "from": 398271,
+    "reduction": 3.61,
+    "n_families": 419
+  },
+  "families_only_in_allking": 401,
+  "families_in_both": 419,
+  "families_only_in_fungi": 0
+}

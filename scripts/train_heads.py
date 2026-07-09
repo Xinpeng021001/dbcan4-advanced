@@ -150,7 +150,11 @@ def main():
 
     proj.eval(); clf.eval()
     with torch.no_grad():
-        Zref = proj(torch.tensor(remb, device=dev)).cpu().numpy()
+        # batch the reference projection so GPU memory is independent of reference size
+        Zref = np.concatenate([
+            proj(torch.tensor(remb[i:i+50000], device=dev)).cpu().numpy()
+            for i in range(0, remb.shape[0], 50000)
+        ], axis=0)
         eid, efam, eemb = load_shards(args.eval_prefix)
         eemb = l2(eemb)
         Xe = torch.tensor(eemb, device=dev)
@@ -191,15 +195,18 @@ def main():
     cen_pred = np.array([cf[i] for i in csims.argmax(1)])
     cen_conf = csims.max(1)
     cen_margin = csims.max(1) - np.partition(csims,-2,axis=1)[:,-2]
-    # contrastive kNN (projected)
-    ksims = Ze @ Zref.T
+    # contrastive kNN (projected) — batch over eval queries so we never materialize
+    # the full (n_eval, n_ref) similarity matrix at once (scales to any reference size)
     from collections import Counter as Ctr
     knn_pred=[]; knn_pur=[]
-    topk = np.argpartition(-ksims, args.k, axis=1)[:,:args.k]
-    for r in range(Ze.shape[0]):
-        idx=topk[r]; order=idx[np.argsort(-ksims[r,idx])]
-        nf=rfam[order]; v=Ctr(nf); bf,bc=v.most_common(1)[0]
-        knn_pred.append(bf); knn_pur.append(bc/args.k)
+    QB = 512
+    for qb in range(0, Ze.shape[0], QB):
+        ksims = Ze[qb:qb+QB] @ Zref.T                  # (QB, Nref)
+        topk = np.argpartition(-ksims, args.k, axis=1)[:,:args.k]
+        for r in range(ksims.shape[0]):
+            idx=topk[r]; order=idx[np.argsort(-ksims[r,idx])]
+            nf=rfam[order]; v=Ctr(nf); bf,bc=v.most_common(1)[0]
+            knn_pred.append(bf); knn_pur.append(bc/args.k)
     knn_pred=np.array(knn_pred); knn_pur=np.array(knn_pur)
     clf_pred = np.array([fams[i] for i in clf_pred_i])
 

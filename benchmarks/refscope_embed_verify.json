@@ -1,0 +1,16 @@
+{
+  "allking": {
+    "n_shards": 8,
+    "n_seqs": 465117,
+    "dim": 1152,
+    "expected": 465117,
+    "match": true
+  },
+  "fungi": {
+    "n_shards": 8,
+    "n_seqs": 110299,
+    "dim": 1152,
+    "expected": 110299,
+    "match": true
+  }
+}

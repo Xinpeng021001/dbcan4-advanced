@@ -318,6 +318,84 @@ segmentation (sliding-window or a domain-boundary head), which is a concrete
 dbCAN4 development item. The full three-level table for all methods and buckets is
 [`benchmarks/master_benchmark_v4_threelevel.tsv`](../benchmarks/master_benchmark_v4_threelevel.tsv).
 
+### 4.7 Reference scope: fungi-specific vs all-kingdom (MMseqs-clustered)
+
+A recurring design question for dbCAN4 is whether the pLM reference should be
+**fungi-specific** or should include all kingdoms (bacteria, archaea, viruses,
+plants). More reference data is not automatically better: it adds families a
+fungal query will never use, and it dilutes the neighbourhood a kNN searches. We
+tested this directly, with a design that **separates two confounded effects**:
+
+- **Redundancy effect** — the cost of removing near-duplicate sequences. Measured
+  as *unclustered fungal → MMseqs-clustered fungal* (scope held fixed).
+- **Scope effect** — the benefit of adding non-fungal sequences. Measured as
+  *clustered fungal → clustered all-kingdom* (redundancy matched, so the two
+  references are directly comparable).
+
+Both references were built with the identical temporal cutoff (2024) and the same
+eval-leak guard (drop any reference sequence whose exact MD5 matches an eval_2025
+sequence — this caught **46** all-kingdom sequences that appear verbatim in
+non-fungal 2024 genomes, and **0** fungal), then clustered identically with
+`mmseqs easy-linclust --min-seq-id 0.5 -c 0.8`. The **exact eval_2025 set and truth
+labels are held fixed** throughout; only the reference embeddings are swapped.
+
+| Reference | sequences | after 50% clustering | families |
+|---|---|---|---|
+| Fungal, unclustered | 398,271 | — | 421 |
+| Fungal, clustered | 398,271 | **110,299** (3.6×) | 419 |
+| All-kingdom, clustered | 2,150,909 | **465,117** (4.6×) | 820 |
+
+All-kingdom is a strict family **superset** of fungal (399 families present only in
+all-kingdom; **0** present only in fungal). Both clustered references were embedded
+with ESM-C 600M across 8 GPUs (~49 min wall-clock).
+
+**Result — on known families (novel-sequence, n=4,000), reference scope barely
+matters** (class / family / subfamily overlap recall):
+
+| Method | Fungal unclustered | Fungal clustered | All-kingdom clustered |
+|---|---|---|---|
+| ESM-C kNN (off-the-shelf) | 0.976 / 0.935 / 0.931 | 0.974 / 0.927 / 0.919 | 0.974 / 0.931 / 0.925 |
+| Contrastive kNN (trained) | 0.995 / 0.976 / **0.973** | 0.994 / 0.973 / **0.970** | 0.994 / 0.973 / **0.970** |
+| Classifier (trained) | 0.992 / 0.969 / 0.966 | 0.991 / 0.950 / 0.943 | 0.993 / 0.966 / 0.961 |
+
+Three findings:
+
+1. **Redundancy reduction is nearly free for the trained retrieval head.** Clustering
+   the fungal reference 3.6× (398K → 110K) costs the contrastive-kNN head only
+   −0.003 subfamily overlap (0.973 → 0.970). This is a real efficiency win: dbCAN4
+   can ship a **3.6× smaller** pLM reference with no measurable accuracy loss.
+2. **Adding all of bacteria/archaea/plants does not improve fungal CAZyme
+   prediction.** With redundancy matched, the scope effect is ≈0 for every retrieval
+   method (contrastive-kNN subfamily 0.970 → 0.970). The extra 355K sequences and
+   400 extra families are noise for a fungal query. The one exception is the
+   **classifier**, where the larger, more diverse training set recovers the small
+   redundancy loss (family overlap 0.950 → 0.966; novel-family family overlap
+   0.956 → 0.993) — a softmax over more classes benefits from more training
+   examples, whereas a kNN does not.
+3. **The raw (untrained) ESM-C centroid is the one method that is redundancy-
+   *sensitive*** — subfamily overlap drops 0.497 → 0.338 under clustering (−0.16),
+   because a single mean-pooled prototype per family relies on the dense cloud of
+   near-duplicate sequences that clustering removes. Any *trained* head is immune.
+   This is a reason to prefer trained retrieval over off-the-shelf prototypes.
+
+On novel-to-fungi families the subfamily overlap stays ≈0.02–0.04 in **all three**
+conditions: all-kingdom does not unlock genuinely-novel subfamilies. But their
+**parent** families are recovered at ≈0.99 overlap everywhere — consistent with §2.1,
+these are cross-kingdom transfers whose parent family already exists in the 2024
+reference, not new-to-CAZy discoveries.
+
+**Consequence for dbCAN4:** use a **fungi-specific, 50%-clustered** ESM-C reference.
+It is 4× smaller than the all-kingdom reference, embeds and searches proportionally
+faster, and loses nothing on the families a fungal annotator actually encounters.
+
+![Fungi-specific vs all-kingdom ESM-C reference. Panel a: on known families, all three reference conditions give near-identical subfamily overlap recall for every method except the raw ESM-C centroid. Panel b: the redundancy effect (clustering cost) and scope effect (all-kingdom benefit) are both small — except the raw centroid's −0.16 redundancy sensitivity; the classifier is the only method with a positive scope effect.](figures/refscope_effect.png)
+
+Per-method, per-bucket, three-level numbers with both effect sizes:
+[`benchmarks/refscope_threelevel_all.tsv`](../benchmarks/refscope_threelevel_all.tsv)
+and [`benchmarks/refscope_effects.tsv`](../benchmarks/refscope_effects.tsv). Scale
+provenance: [`benchmarks/refscope_build_scale.json`](../benchmarks/refscope_build_scale.json),
+[`benchmarks/refscope_cluster_scale.json`](../benchmarks/refscope_cluster_scale.json).
+
 ## 5. Recommendations for dbCAN4
 
 1. **Keep sequence similarity as tier 1.** DIAMOND/HMMER remain the most accurate
@@ -325,7 +403,11 @@ dbCAN4 development item. The full three-level table for all methods and buckets 
    replacements.
 2. **Add a trained pLM head as tier 2.** Contrastive/classifier heads on frozen
    ESM-C give near-DIAMOND accuracy from an orthogonal representation and are cheap
-   to run (embeddings cached, head trains in ~30 s).
+   to run (embeddings cached, head trains in ~30 s). Use a **fungi-specific
+   reference clustered at 50% identity** (§4.7): it is 4× smaller than an
+   all-kingdom reference and loses nothing on known families. Prefer a *trained*
+   retrieval head over the raw ESM-C centroid, which is the one scheme that
+   degrades under redundancy reduction.
 3. **Add structure similarity as tier 3, gated on a complete reference.** The
    self-contained proof of concept works; production value requires **CAZyme3D**
    (870k structures) as the Foldseek target rather than a folded sample, and

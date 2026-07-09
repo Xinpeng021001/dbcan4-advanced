@@ -1,0 +1,76 @@
+method	bucket	level	unclust_fungi	clust_fungi	clust_allking	redundancy_effect	scope_effect
+ESM-C kNN	overall	class	0.9778	0.9761	0.9765	-0.0017	0.0004
+ESM-C kNN	overall	family	0.9321	0.9219	0.9298	-0.0102	0.0079
+ESM-C kNN	overall	subfamily	0.7941	0.781	0.7861	-0.0131	0.0051
+ESM-C kNN	novel_seq	class	0.9762	0.9738	0.9742	-0.0024	0.0004
+ESM-C kNN	novel_seq	family	0.9353	0.9275	0.9313	-0.0078	0.0038
+ESM-C kNN	novel_seq	subfamily	0.9313	0.9187	0.9247	-0.0126	0.006
+ESM-C kNN	novel_family	class	0.9862	0.989	0.989	0.0028	0.0
+ESM-C kNN	novel_family	family	0.9146	0.8912	0.9215	-0.0234	0.0303
+ESM-C kNN	novel_family	subfamily	0.0386	0.022	0.022	-0.0166	0.0
+ESM-C kNN	multi_domain	class	0.991	0.991	0.994	0.0	0.003
+ESM-C kNN	multi_domain	family	0.9759	0.9578	0.9608	-0.0181	0.003
+ESM-C kNN	multi_domain	subfamily	0.9669	0.9096	0.9157	-0.0573	0.0061
+ESM-C kNN	has_subfamily	class	0.9845	0.9868	0.9874	0.0023	0.0006
+ESM-C kNN	has_subfamily	family	0.9454	0.9316	0.95	-0.0138	0.0184
+ESM-C kNN	has_subfamily	subfamily	0.575	0.5531	0.5629	-0.0219	0.0098
+ESM-C centroid	overall	class	0.8326	0.7778	0.7821	-0.0548	0.0043
+ESM-C centroid	overall	family	0.503	0.3792	0.3381	-0.1238	-0.0411
+ESM-C centroid	overall	subfamily	0.4215	0.2863	0.2651	-0.1352	-0.0212
+ESM-C centroid	novel_seq	class	0.814	0.7615	0.774	-0.0525	0.0125
+ESM-C centroid	novel_seq	family	0.525	0.3832	0.3615	-0.1418	-0.0217
+ESM-C centroid	novel_seq	subfamily	0.4975	0.3377	0.313	-0.1598	-0.0247
+ESM-C centroid	novel_family	class	0.9353	0.8678	0.8264	-0.0675	-0.0414
+ESM-C centroid	novel_family	family	0.3815	0.3567	0.2094	-0.0248	-0.1473
+ESM-C centroid	novel_family	subfamily	0.0028	0.0028	0.0014	0.0	-0.0014
+ESM-C centroid	multi_domain	class	0.9036	0.8404	0.759	-0.0632	-0.0814
+ESM-C centroid	multi_domain	family	0.5783	0.3614	0.2982	-0.2169	-0.0632
+ESM-C centroid	multi_domain	subfamily	0.509	0.2651	0.2108	-0.2439	-0.0543
+ESM-C centroid	has_subfamily	class	0.9121	0.8759	0.8564	-0.0362	-0.0195
+ESM-C centroid	has_subfamily	family	0.6123	0.5336	0.4986	-0.0787	-0.035
+ESM-C centroid	has_subfamily	subfamily	0.398	0.2947	0.3142	-0.1033	0.0195
+Contrastive kNN	overall	class	0.9958	0.9945	0.9943	-0.0013	-0.0002
+Contrastive kNN	overall	family	0.9784	0.9765	0.9765	-0.0019	0.0
+Contrastive kNN	overall	subfamily	0.8297	0.8248	0.8246	-0.0049	-0.0002
+Contrastive kNN	novel_seq	class	0.995	0.9942	0.9935	-0.0008	-0.0007
+Contrastive kNN	novel_seq	family	0.9755	0.9732	0.9732	-0.0023	0.0
+Contrastive kNN	novel_seq	subfamily	0.9732	0.9702	0.9695	-0.003	-0.0007
+Contrastive kNN	novel_family	class	1.0	0.9959	0.9986	-0.0041	0.0027
+Contrastive kNN	novel_family	family	0.9945	0.9945	0.9945	0.0	0.0
+Contrastive kNN	novel_family	subfamily	0.0386	0.0234	0.0262	-0.0152	0.0028
+Contrastive kNN	multi_domain	class	1.0	1.0	1.0	0.0	0.0
+Contrastive kNN	multi_domain	family	1.0	1.0	0.997	0.0	-0.003
+Contrastive kNN	multi_domain	subfamily	0.988	0.9548	0.9548	-0.0332	0.0
+Contrastive kNN	has_subfamily	class	0.9994	0.9994	0.9994	0.0	0.0
+Contrastive kNN	has_subfamily	family	0.9989	0.9983	0.9983	-0.0006	0.0
+Contrastive kNN	has_subfamily	subfamily	0.5985	0.591	0.5905	-0.0075	-0.0005
+Contrastive centroid	overall	class	0.9943	0.9932	0.9958	-0.0011	0.0026
+Contrastive centroid	overall	family	0.9746	0.9708	0.9623	-0.0038	-0.0085
+Contrastive centroid	overall	subfamily	0.8223	0.8176	0.8083	-0.0047	-0.0093
+Contrastive centroid	novel_seq	class	0.9932	0.9928	0.9952	-0.0004	0.0024
+Contrastive centroid	novel_seq	family	0.971	0.9667	0.957	-0.0043	-0.0097
+Contrastive centroid	novel_seq	subfamily	0.9673	0.9617	0.9505	-0.0056	-0.0112
+Contrastive centroid	novel_family	class	1.0	0.9959	0.9986	-0.0041	0.0027
+Contrastive centroid	novel_family	family	0.9945	0.9931	0.9917	-0.0014	-0.0014
+Contrastive centroid	novel_family	subfamily	0.0234	0.0234	0.0248	0.0	0.0014
+Contrastive centroid	multi_domain	class	1.0	1.0	1.0	0.0	0.0
+Contrastive centroid	multi_domain	family	1.0	0.997	0.994	-0.003	-0.003
+Contrastive centroid	multi_domain	subfamily	0.9518	0.9488	0.9488	-0.003	0.0
+Contrastive centroid	has_subfamily	class	0.9994	0.9994	0.9989	0.0	-0.0005
+Contrastive centroid	has_subfamily	family	0.9989	0.9983	0.9983	-0.0006	0.0
+Contrastive centroid	has_subfamily	subfamily	0.5916	0.591	0.5905	-0.0006	-0.0005
+Classifier	overall	class	0.992	0.9901	0.9939	-0.0019	0.0038
+Classifier	overall	family	0.9708	0.9509	0.9704	-0.0199	0.0195
+Classifier	overall	subfamily	0.8229	0.8009	0.8168	-0.022	0.0159
+Classifier	novel_seq	class	0.9918	0.9905	0.993	-0.0013	0.0025
+Classifier	novel_seq	family	0.9688	0.95	0.9663	-0.0188	0.0163
+Classifier	novel_seq	subfamily	0.9655	0.9425	0.9605	-0.023	0.018
+Classifier	novel_family	class	0.9931	0.9876	0.9986	-0.0055	0.011
+Classifier	novel_family	family	0.9821	0.9559	0.9931	-0.0262	0.0372
+Classifier	novel_family	subfamily	0.0372	0.0207	0.0248	-0.0165	0.0041
+Classifier	multi_domain	class	1.0	1.0	1.0	0.0	0.0
+Classifier	multi_domain	family	0.991	0.9759	0.994	-0.0151	0.0181
+Classifier	multi_domain	subfamily	0.9819	0.9398	0.9518	-0.0421	0.012
+Classifier	has_subfamily	class	0.996	0.992	0.9971	-0.004	0.0051
+Classifier	has_subfamily	family	0.9902	0.9747	0.996	-0.0155	0.0213
+Classifier	has_subfamily	subfamily	0.5916	0.5709	0.583	-0.0207	0.0121

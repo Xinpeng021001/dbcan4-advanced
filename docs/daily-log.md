@@ -351,3 +351,56 @@ architectural, not accuracy: pLM tier needs per-domain segmentation for dbCAN4.
 **Artifacts:** benchmarks/master_benchmark_v4_threelevel.tsv (270 rows: 15 methods ×
 6 buckets × 3 levels), threelevel_all_methods.json, foldseek_structure_subset_scored.json;
 docs/figures/threelevel_benchmark.png; benchmark_report.md §4.6.
+
+---
+
+## Day 5 (2026-07-09) — Reference scope: fungi-specific vs all-kingdom ESM-C
+
+User question: should the ESM-C reference be fungi-only, or include all kingdoms
+(bacteria + others)? And use MMseqs to cut size/redundancy. All work on met via screen.
+
+**Design — separate two confounded effects.** Held the eval_2025 set + truth fixed,
+swapped only the reference embeddings. Built two 2024-cutoff references with the same
+eval-MD5 leak guard (dropped 46 all-kingdom seqs that appear verbatim in non-fungal
+2024 genomes; 0 fungal), clustered both identically with `mmseqs easy-linclust
+--min-seq-id 0.5 -c 0.8`:
+- Fungal: 398,271 → 110,299 reps (3.6×), 419 families
+- All-kingdom: 2,150,909 → 465,117 reps (4.6×), 820 families (strict family superset;
+  399 families only in all-kingdom, 0 only in fungal)
+- Redundancy effect = unclustered→clustered fungal; scope effect = clustered
+  fungal→clustered all-kingdom (redundancy matched).
+
+**Embedding.** ESM-C 600M, 8× A5500 in a detached screen (`esmc_embed`), one process
+per GPU. Smoke test measured 27 seq/s/GPU. Full run ~49 min wall-clock; shard
+integrity verified exact (465,117 + 110,299, dim 1152).
+
+**Result — reference scope barely matters on known families (novel-seq, n=4,000),
+subfamily overlap:**
+- Contrastive kNN: 0.973 (unclust fungi) → 0.970 (clust fungi) → 0.970 (clust allking)
+- Classifier: 0.966 → 0.943 → 0.961
+- ESM-C kNN: 0.931 → 0.919 → 0.925
+
+Findings: (1) **redundancy reduction is nearly free** — 3.6× smaller fungal reference
+costs contrastive-kNN only −0.003 subfamily; (2) **all-kingdom does not help** —
+scope effect ≈0 for retrieval (only the classifier gains, recovering its redundancy
+loss: family 0.950→0.966); (3) the **raw ESM-C centroid is uniquely redundancy-
+sensitive** (subfamily 0.497→0.338, −0.16) because one mean prototype relies on
+near-duplicate density — trained heads are immune. Novel-to-fungi subfamily stays
+≈0.02–0.04 in all conditions (parent families recovered ≈0.99 = cross-kingdom transfer).
+
+**Consequence:** dbCAN4 should use a **fungi-specific, 50%-clustered** ESM-C reference
+— 4× smaller, same accuracy on families a fungal annotator sees.
+
+**Blocker + fix.** First head/retrieval run gave near-zero scores (overlap 0.06).
+Root cause: `mmseqs easy-linclust` writes rep_seq FASTA headers with a **trailing
+space** (`>ID|GT4 `), which `embed_esmc.py` (`rstrip("\n")` only) carried into the
+`fams` label (`'GT4 '`), failing all exact matches. Fix: strip the npz `fams` in
+place (embeddings/ids fine, no re-embedding) + patched `embed_esmc.py` to `.strip()`
+the header. Reran all three jobs → sane numbers. Also batched `train_heads.py`
+kNN/projection so GPU/RAM is independent of reference size (numerically identical).
+
+**Scripts committed:** build_labeled_ref.py, cluster_ref_mmseqs.sh, embed_all_gpus.sh,
+embed_both_refs.sh (new); embed_esmc.py, train_heads.py (fixes).
+**Artifacts:** benchmarks/refscope_threelevel_all.tsv, refscope_effects.tsv,
+refscope_{build,cluster,embed_verify}_scale.json, retr_*/head_metrics_* summaries;
+docs/figures/refscope_effect.png; benchmark_report.md §4.7.
