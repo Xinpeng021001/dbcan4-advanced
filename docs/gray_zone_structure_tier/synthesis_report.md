@@ -48,38 +48,42 @@ independent structure-similarity signal that never sees the sequence-evidence ti
    orthogonal structural signal.
 4. The two signals combine into `structure_evidence_score` (0–1, higher = more CAZyme-like).
 
-**Result — the score cleanly separates the two controls, with gray-zone in between:**
+**Result — the score cleanly separates the two controls, with gray-zone in between.** This table
+reflects the FINAL, corrected run: ProstT5 + the fixed (reservoir-sampled) `structure_evidence_score.py`
+scored against Track A's actual 4,000-protein `sample_for_structure.fasta`/`.tsv` handoff (2,000
+gray-zone / 1,200 high-confidence-CAZyme / 800 high-confidence-non-CAZyme; 3,976/4,000 sequences
+scored, 24 dropped on length/fetch):
 
 | Known tier (structure-blind) | n | mean score | median score |
 |---|---:|---:|---:|
-| `high_confidence_cazyme` | 500 | 0.653 | 0.647 |
-| `gray_zone` | 1,500 | 0.566 | 0.556 |
-| `high_confidence_non_cazyme` | 483 | 0.463 | 0.455 |
+| `high_confidence_cazyme` | 1,200 | 0.625 | 0.620 |
+| `gray_zone` | 2,000 | 0.581 | 0.576 |
+| `high_confidence_non_cazyme` | 776 | 0.460 | 0.456 |
 
 This confirms the gray zone is a genuine mixture, not uniformly one class — structure evidence
 gives real discriminating power. Using the midpoints between adjacent tier means as decision
-thresholds (0.609 and 0.514) to adjudicate the 1,500 sampled gray-zone proteins:
+thresholds (0.603 and 0.520) to adjudicate the 2,000 sampled gray-zone proteins:
 
 | Adjudicated call | n | % of sampled gray zone |
 |---|---:|---:|
-| `gray_zone_structure_supports_non_cazyme` | 575 | 38.3% |
-| `gray_zone_structure_supports_cazyme` | 501 | 33.4% |
-| `gray_zone_ambiguous_structure` | 424 | 28.3% |
+| `gray_zone_structure_supports_cazyme` | 844 | 42.2% |
+| `gray_zone_structure_supports_non_cazyme` | 731 | 36.6% |
+| `gray_zone_ambiguous_structure` | 425 | 21.3% |
 
-i.e. on this sample, roughly a third of single-tool CAZy-family hits are corroborated by
-structure (real, currently-missed CAZymes — candidates for dbCAN4's recall story), roughly
-two-fifths look like sequence-level false positives once structure is considered, and the
-remainder stay genuinely ambiguous even with an orthogonal signal — a legitimate abstention
-population, not a labeling failure.
+i.e. on this sample, over two-fifths of single-tool CAZy-family hits are corroborated by
+structure (real, currently-missed CAZymes — candidates for dbCAN4's recall story), a bit over a
+third look like sequence-level false positives once structure is considered, and the remainder
+(a fifth) stay genuinely ambiguous even with an orthogonal signal — a legitimate abstention
+population, not a labeling failure. (An earlier, in-progress version of this report used a
+smaller, independently-drawn 2,483-protein sample as a documented stand-in while this corrected
+4,000-protein run was still executing; those numbers — 33.4%/38.3%/28.3% — pointed the same
+direction but are superseded by the table above.)
 
-**Caveat (carried over from Track B, not yet resolved):** the SaProt-embedding component of
-`structure_evidence_score` was computed with a reference centroid built from the first 2,000
-rows (file order, not a representative draw) of the 178,356-row CAZyme3D_id50 3Di table. The
-script has been fixed to reservoir-sample uniformly, but the numbers above have **not** been
-regenerated with the fix. The foldseek/mmseqs2 3Di-search component (component A) already used
-the full reference set correctly, and the reported tier-discrimination direction/ranking is
-unlikely to reverse, but the exact adjudication counts above should be treated as provisional
-until rerun.
+**Resolved caveat:** the SaProt-embedding component of `structure_evidence_score` previously used
+a reference centroid built from the first 2,000 rows (file order, not a representative draw) of
+the 178,356-row CAZyme3D_id50 3Di table. The script was fixed to reservoir-sample uniformly, and
+the numbers in this report are from that fixed version scored against the correct handoff file —
+this is the final, authoritative result for this analysis.
 
 ## 3. CAZyme3D_id50, ProstT5, SaProt, ESM Atlas 2, AF3db — what each is actually good for
 
@@ -99,9 +103,13 @@ integration investment at this time.
 
 ## 4. Deliverables
 
-- **Gray-zone adjudicated dataset**: [gray_zone_adjudicated_structure_validated.tsv](gray_zone_adjudicated_structure_validated.tsv)
-  — 2,483 structure-validated proteins (protein_id, sequence tier, adjudicated tier, family,
-  foldseek/SaProt evidence columns, structure_evidence_score).
+- **Gray-zone adjudicated dataset (final, authoritative)**:
+  [gray_zone_adjudicated_FINAL_corrected_4000sample.tsv](gray_zone_adjudicated_FINAL_corrected_4000sample.tsv)
+  — the true Track A/Track B merge on Track A's designated 4,000-protein `sample_for_structure`
+  handoff (2,000 gray-zone/1,200 high-conf-CAZyme/800 high-conf-non-CAZyme, 3,976 scored), with
+  adjudicated_tier, all sequence-tiering columns, and all structure-evidence columns
+  (foldseek/SaProt/structure_evidence_score). Supersedes an earlier 2,483-protein documented
+  interim substitute used while this run was still executing.
 - **Full sequence-evidence-tiered population** (28.2M rows, Track A): see
   `tiered_proteins_part{0..3}of4.tsv.gz` artifacts from Track A, plus
   `summary_overall.json`, `summary_tier_by_class.tsv`, `summary_gray_zone_families.tsv`.
