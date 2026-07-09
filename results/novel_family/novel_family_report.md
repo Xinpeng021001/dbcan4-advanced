@@ -136,8 +136,8 @@ Pezizomycetes, Saccharomycotina, Sordariomycetes, Tremellomycetes) — a taxonom
 recurring gene family rather than a lineage-specific artifact. dbCAN's DIAMOND tool gave
 inconsistent single-family hits across members (GT35, GT1, GH47, GT22, GT2, GH152, GH13, GH20 —
 no consensus), consistent with these proteins resembling several different known CAZy families
-weakly rather than any one strongly. By ESM-C embedding, 16/17 members' nearest known-family
-centroid is AA6 (a small, low-occupancy 2024-reference family), at a modest 0.86-0.92 cosine
+weakly rather than any one strongly. By ESM-C embedding, all 17/17 members' nearest known-family
+centroid is AA6 (a small, low-occupancy 2024-reference family), at a modest 0.824-0.927 cosine
 similarity (well below the ~0.97+ typical of confirmed same-family proteins). All 17 members'
 nearest CAZy-0fam neighbor is annotated GH0 or CBM0. Representative sequence:
 `jgi-Boled5-3651784-gm1.13273_g` (Agaricomycetes, 340 aa, structure_evidence_score=0.639).
