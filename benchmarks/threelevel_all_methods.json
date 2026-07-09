@@ -1,0 +1,1892 @@
+{
+  "DIAMOND [run_dbcan, 2024 DB]": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.919,
+          "overlap": 0.9304,
+          "jaccard": 0.9247
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.9063,
+          "overlap": 0.9202,
+          "jaccard": 0.9133
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.759,
+          "overlap": 0.7734,
+          "jaccard": 0.7659
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9113,
+          "overlap": 0.92,
+          "jaccard": 0.9156
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8978,
+          "overlap": 0.9085,
+          "jaccard": 0.9032
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.8965,
+          "overlap": 0.9073,
+          "jaccard": 0.9019
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9614,
+          "overlap": 0.9876,
+          "jaccard": 0.9745
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9532,
+          "overlap": 0.9848,
+          "jaccard": 0.9688
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0014,
+          "overlap": 0.0358,
+          "jaccard": 0.0168
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9197,
+          "overlap": 0.926,
+          "jaccard": 0.9228
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9085,
+          "overlap": 0.9151,
+          "jaccard": 0.9117
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.7522,
+          "overlap": 0.7585,
+          "jaccard": 0.7552
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.9096,
+          "overlap": 0.988,
+          "jaccard": 0.9488
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.8765,
+          "overlap": 0.988,
+          "jaccard": 0.9342
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.8494,
+          "overlap": 0.9699,
+          "jaccard": 0.9076
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9724,
+          "overlap": 0.9787,
+          "jaccard": 0.9756
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9684,
+          "overlap": 0.9776,
+          "jaccard": 0.9731
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5709,
+          "overlap": 0.5818,
+          "jaccard": 0.5757
+        }
+      }
+    }
+  },
+  "dbCAN HMMER [run_dbcan, 2024 DB]": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.8485,
+          "overlap": 0.8961,
+          "jaccard": 0.8723
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8256,
+          "overlap": 0.8737,
+          "jaccard": 0.8493
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.6725,
+          "overlap": 0.7224,
+          "jaccard": 0.6965
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.8327,
+          "overlap": 0.884,
+          "jaccard": 0.8584
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8057,
+          "overlap": 0.8575,
+          "jaccard": 0.8312
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.794,
+          "overlap": 0.8458,
+          "jaccard": 0.8194
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9353,
+          "overlap": 0.9628,
+          "jaccard": 0.949
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9353,
+          "overlap": 0.9628,
+          "jaccard": 0.949
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0028,
+          "overlap": 0.0427,
+          "jaccard": 0.0196
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.886,
+          "overlap": 0.8898,
+          "jaccard": 0.8879
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.8619,
+          "overlap": 0.8657,
+          "jaccard": 0.8638
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.6998,
+          "overlap": 0.7041,
+          "jaccard": 0.702
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.3524,
+          "overlap": 0.9789,
+          "jaccard": 0.6657
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.3464,
+          "overlap": 0.9789,
+          "jaccard": 0.6571
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.3102,
+          "overlap": 0.9639,
+          "jaccard": 0.6242
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9357,
+          "overlap": 0.9713,
+          "jaccard": 0.9535
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9345,
+          "overlap": 0.9713,
+          "jaccard": 0.9533
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5342,
+          "overlap": 0.5767,
+          "jaccard": 0.5544
+        }
+      }
+    }
+  },
+  "dbCAN-sub [run_dbcan, 2024 DB]": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.8953,
+          "overlap": 0.9329,
+          "jaccard": 0.9141
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8673,
+          "overlap": 0.9082,
+          "jaccard": 0.8883
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.5138,
+          "overlap": 0.5656,
+          "jaccard": 0.537
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.884,
+          "overlap": 0.9237,
+          "jaccard": 0.9039
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8512,
+          "overlap": 0.8945,
+          "jaccard": 0.8735
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.607,
+          "overlap": 0.6607,
+          "jaccard": 0.6312
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9573,
+          "overlap": 0.9835,
+          "jaccard": 0.9704
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9559,
+          "overlap": 0.9835,
+          "jaccard": 0.9699
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.0413,
+          "jaccard": 0.0181
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9226,
+          "overlap": 0.9292,
+          "jaccard": 0.9259
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.896,
+          "overlap": 0.9026,
+          "jaccard": 0.8993
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.5353,
+          "overlap": 0.5414,
+          "jaccard": 0.5383
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.5331,
+          "overlap": 0.9819,
+          "jaccard": 0.7575
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.488,
+          "overlap": 0.9819,
+          "jaccard": 0.743
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.2289,
+          "overlap": 0.8855,
+          "jaccard": 0.5198
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9609,
+          "overlap": 0.9805,
+          "jaccard": 0.9707
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9598,
+          "overlap": 0.9805,
+          "jaccard": 0.9704
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.0,
+          "overlap": 0.0505,
+          "jaccard": 0.0169
+        }
+      }
+    }
+  },
+  "dbCAN Recommend [run_dbcan, 2024 DB]": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.8919,
+          "overlap": 0.9291,
+          "jaccard": 0.9105
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8606,
+          "overlap": 0.901,
+          "jaccard": 0.8813
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.7021,
+          "overlap": 0.7463,
+          "jaccard": 0.7243
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.88,
+          "overlap": 0.9193,
+          "jaccard": 0.8996
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8433,
+          "overlap": 0.886,
+          "jaccard": 0.8652
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.829,
+          "overlap": 0.874,
+          "jaccard": 0.8521
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9573,
+          "overlap": 0.9835,
+          "jaccard": 0.9704
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9559,
+          "overlap": 0.9835,
+          "jaccard": 0.9699
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0028,
+          "overlap": 0.0427,
+          "jaccard": 0.0204
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9181,
+          "overlap": 0.9249,
+          "jaccard": 0.9215
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.8878,
+          "overlap": 0.8946,
+          "jaccard": 0.8912
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.7203,
+          "overlap": 0.7294,
+          "jaccard": 0.7249
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.5452,
+          "overlap": 0.9849,
+          "jaccard": 0.7651
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.5,
+          "overlap": 0.9849,
+          "jaccard": 0.7505
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.4608,
+          "overlap": 0.9699,
+          "jaccard": 0.7174
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9609,
+          "overlap": 0.981,
+          "jaccard": 0.971
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9598,
+          "overlap": 0.981,
+          "jaccard": 0.9707
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5445,
+          "overlap": 0.5767,
+          "jaccard": 0.5597
+        }
+      }
+    }
+  },
+  "DIAMOND [run_dbcan, 2025 DB]": {
+    "temporal_clean": "NO (2025 leak)",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.982,
+          "overlap": 0.982,
+          "jaccard": 0.982
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.982,
+          "overlap": 0.982,
+          "jaccard": 0.982
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.982,
+          "overlap": 0.982,
+          "jaccard": 0.982
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9802,
+          "overlap": 0.9802,
+          "jaccard": 0.9802
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.9802,
+          "overlap": 0.9802,
+          "jaccard": 0.9802
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.9802,
+          "overlap": 0.9802,
+          "jaccard": 0.9802
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9917,
+          "overlap": 0.9917,
+          "jaccard": 0.9917
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9917,
+          "overlap": 0.9917,
+          "jaccard": 0.9917
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.9917,
+          "overlap": 0.9917,
+          "jaccard": 0.9917
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9807,
+          "overlap": 0.9807,
+          "jaccard": 0.9807
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9807,
+          "overlap": 0.9807,
+          "jaccard": 0.9807
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.9807,
+          "overlap": 0.9807,
+          "jaccard": 0.9807
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 1.0,
+          "overlap": 1.0,
+          "jaccard": 1.0
+        },
+        "family": {
+          "n": 332,
+          "exact": 1.0,
+          "overlap": 1.0,
+          "jaccard": 1.0
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 1.0,
+          "overlap": 1.0,
+          "jaccard": 1.0
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9931,
+          "overlap": 0.9931,
+          "jaccard": 0.9931
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9931,
+          "overlap": 0.9931,
+          "jaccard": 0.9931
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.9931,
+          "overlap": 0.9931,
+          "jaccard": 0.9931
+        }
+      }
+    }
+  },
+  "dbCAN HMMER [run_dbcan, 2025 DB]": {
+    "temporal_clean": "NO (2025 leak)",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.8555,
+          "overlap": 0.8999,
+          "jaccard": 0.8777
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8326,
+          "overlap": 0.8775,
+          "jaccard": 0.8547
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.8216,
+          "overlap": 0.8671,
+          "jaccard": 0.8439
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.8327,
+          "overlap": 0.884,
+          "jaccard": 0.8584
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8057,
+          "overlap": 0.8575,
+          "jaccard": 0.8312
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.7937,
+          "overlap": 0.8455,
+          "jaccard": 0.8191
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9807,
+          "overlap": 0.9876,
+          "jaccard": 0.9842
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9807,
+          "overlap": 0.9876,
+          "jaccard": 0.9842
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.9752,
+          "overlap": 0.9862,
+          "jaccard": 0.9807
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.8901,
+          "overlap": 0.8939,
+          "jaccard": 0.892
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.866,
+          "overlap": 0.8698,
+          "jaccard": 0.8679
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.8543,
+          "overlap": 0.8594,
+          "jaccard": 0.8569
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.3976,
+          "overlap": 0.9789,
+          "jaccard": 0.6883
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.3916,
+          "overlap": 0.9789,
+          "jaccard": 0.6797
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.3886,
+          "overlap": 0.9699,
+          "jaccard": 0.6732
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9443,
+          "overlap": 0.9799,
+          "jaccard": 0.9621
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9431,
+          "overlap": 0.9799,
+          "jaccard": 0.9619
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.9294,
+          "overlap": 0.9684,
+          "jaccard": 0.9492
+        }
+      }
+    }
+  },
+  "dbCAN-sub [run_dbcan, 2025 DB]": {
+    "temporal_clean": "NO (2025 leak)",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9215,
+          "overlap": 0.9528,
+          "jaccard": 0.9372
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8986,
+          "overlap": 0.9331,
+          "jaccard": 0.9164
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.5438,
+          "overlap": 0.5901,
+          "jaccard": 0.5642
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.91,
+          "overlap": 0.9465,
+          "jaccard": 0.9283
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8832,
+          "overlap": 0.9233,
+          "jaccard": 0.9038
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.6378,
+          "overlap": 0.689,
+          "jaccard": 0.6606
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9848,
+          "overlap": 0.9876,
+          "jaccard": 0.9862
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9835,
+          "overlap": 0.9876,
+          "jaccard": 0.9858
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0262,
+          "overlap": 0.0455,
+          "jaccard": 0.0333
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9431,
+          "overlap": 0.9492,
+          "jaccard": 0.9462
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9219,
+          "overlap": 0.9281,
+          "jaccard": 0.925
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.5603,
+          "overlap": 0.5662,
+          "jaccard": 0.5633
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.6355,
+          "overlap": 1.0,
+          "jaccard": 0.8178
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.5904,
+          "overlap": 1.0,
+          "jaccard": 0.8027
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.3253,
+          "overlap": 0.9066,
+          "jaccard": 0.5771
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9644,
+          "overlap": 0.9828,
+          "jaccard": 0.9736
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9632,
+          "overlap": 0.9828,
+          "jaccard": 0.9733
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.0,
+          "overlap": 0.0517,
+          "jaccard": 0.0173
+        }
+      }
+    }
+  },
+  "dbCAN Recommend [run_dbcan, 2025 DB]": {
+    "temporal_clean": "NO (2025 leak)",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9264,
+          "overlap": 0.9573,
+          "jaccard": 0.9418
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.894,
+          "overlap": 0.9281,
+          "jaccard": 0.9116
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.8798,
+          "overlap": 0.9168,
+          "jaccard": 0.8988
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9157,
+          "overlap": 0.9517,
+          "jaccard": 0.9337
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8778,
+          "overlap": 0.9173,
+          "jaccard": 0.8981
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.8628,
+          "overlap": 0.9042,
+          "jaccard": 0.884
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9848,
+          "overlap": 0.9876,
+          "jaccard": 0.9862
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9835,
+          "overlap": 0.9876,
+          "jaccard": 0.9858
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.9738,
+          "overlap": 0.9862,
+          "jaccard": 0.9803
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9477,
+          "overlap": 0.954,
+          "jaccard": 0.9508
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9162,
+          "overlap": 0.9226,
+          "jaccard": 0.9194
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.9015,
+          "overlap": 0.911,
+          "jaccard": 0.9062
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.6446,
+          "overlap": 1.0,
+          "jaccard": 0.8223
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.5994,
+          "overlap": 1.0,
+          "jaccard": 0.8072
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.5934,
+          "overlap": 0.994,
+          "jaccard": 0.8002
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9644,
+          "overlap": 0.9828,
+          "jaccard": 0.9736
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9632,
+          "overlap": 0.9828,
+          "jaccard": 0.9733
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.9414,
+          "overlap": 0.9684,
+          "jaccard": 0.9551
+        }
+      }
+    }
+  },
+  "ESM-C kNN (off-the-shelf)": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9137,
+          "overlap": 0.9778,
+          "jaccard": 0.9457
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8639,
+          "overlap": 0.9321,
+          "jaccard": 0.8973
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.7262,
+          "overlap": 0.7941,
+          "jaccard": 0.7594
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9055,
+          "overlap": 0.9762,
+          "jaccard": 0.9409
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8622,
+          "overlap": 0.9353,
+          "jaccard": 0.898
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.858,
+          "overlap": 0.9313,
+          "jaccard": 0.8938
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9587,
+          "overlap": 0.9862,
+          "jaccard": 0.9725
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.8733,
+          "overlap": 0.9146,
+          "jaccard": 0.8935
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.0386,
+          "jaccard": 0.0188
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9768,
+          "overlap": 0.9768,
+          "jaccard": 0.9768
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9288,
+          "overlap": 0.9288,
+          "jaccard": 0.9288
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.7811,
+          "overlap": 0.7811,
+          "jaccard": 0.7811
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.0783,
+          "overlap": 0.991,
+          "jaccard": 0.5346
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.006,
+          "overlap": 0.9759,
+          "jaccard": 0.4804
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.0,
+          "overlap": 0.9669,
+          "jaccard": 0.4729
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9271,
+          "overlap": 0.9845,
+          "jaccard": 0.9558
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.8782,
+          "overlap": 0.9454,
+          "jaccard": 0.9114
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5083,
+          "overlap": 0.575,
+          "jaccard": 0.5413
+        }
+      }
+    }
+  },
+  "Contrastive kNN (trained)": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.931,
+          "overlap": 0.9958,
+          "jaccard": 0.9634
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.9086,
+          "overlap": 0.9784,
+          "jaccard": 0.9428
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.7603,
+          "overlap": 0.8297,
+          "jaccard": 0.7943
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9237,
+          "overlap": 0.995,
+          "jaccard": 0.9594
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.901,
+          "overlap": 0.9755,
+          "jaccard": 0.9375
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.8982,
+          "overlap": 0.9732,
+          "jaccard": 0.935
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9711,
+          "overlap": 1.0,
+          "jaccard": 0.9855
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9504,
+          "overlap": 0.9945,
+          "jaccard": 0.972
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.0386,
+          "jaccard": 0.0191
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9954,
+          "overlap": 0.9954,
+          "jaccard": 0.9954
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9768,
+          "overlap": 0.9768,
+          "jaccard": 0.9768
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.8177,
+          "overlap": 0.8177,
+          "jaccard": 0.8177
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.0783,
+          "overlap": 1.0,
+          "jaccard": 0.5392
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.006,
+          "overlap": 1.0,
+          "jaccard": 0.4925
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.0,
+          "overlap": 0.988,
+          "jaccard": 0.4839
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9408,
+          "overlap": 0.9994,
+          "jaccard": 0.9701
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9305,
+          "overlap": 0.9989,
+          "jaccard": 0.9643
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5313,
+          "overlap": 0.5985,
+          "jaccard": 0.5646
+        }
+      }
+    }
+  },
+  "Classifier (trained)": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9272,
+          "overlap": 0.992,
+          "jaccard": 0.9596
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.9016,
+          "overlap": 0.9708,
+          "jaccard": 0.9355
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.7539,
+          "overlap": 0.8229,
+          "jaccard": 0.7877
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9205,
+          "overlap": 0.9918,
+          "jaccard": 0.9561
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8945,
+          "overlap": 0.9688,
+          "jaccard": 0.9308
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.8908,
+          "overlap": 0.9655,
+          "jaccard": 0.9273
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9642,
+          "overlap": 0.9931,
+          "jaccard": 0.9787
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9408,
+          "overlap": 0.9821,
+          "jaccard": 0.961
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.0372,
+          "jaccard": 0.0184
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9914,
+          "overlap": 0.9914,
+          "jaccard": 0.9914
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9693,
+          "overlap": 0.9693,
+          "jaccard": 0.9693
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.8109,
+          "overlap": 0.8109,
+          "jaccard": 0.8109
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.0783,
+          "overlap": 1.0,
+          "jaccard": 0.5392
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.006,
+          "overlap": 0.991,
+          "jaccard": 0.488
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.0,
+          "overlap": 0.9819,
+          "jaccard": 0.4809
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9374,
+          "overlap": 0.996,
+          "jaccard": 0.9667
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9236,
+          "overlap": 0.9902,
+          "jaccard": 0.9565
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5256,
+          "overlap": 0.5916,
+          "jaccard": 0.5583
+        }
+      }
+    }
+  },
+  "Foldseek (structure)": {
+    "temporal_clean": "yes",
+    "coverage": "697 (struct subset)",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.1145,
+          "overlap": 0.1413,
+          "jaccard": 0.1279
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.0554,
+          "overlap": 0.0686,
+          "jaccard": 0.0619
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.0527,
+          "overlap": 0.0641,
+          "jaccard": 0.0583
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.074,
+          "overlap": 0.0858,
+          "jaccard": 0.0799
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.0653,
+          "overlap": 0.0767,
+          "jaccard": 0.0709
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.0622,
+          "overlap": 0.0717,
+          "jaccard": 0.0669
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.3375,
+          "overlap": 0.4477,
+          "jaccard": 0.3926
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.0014,
+          "overlap": 0.0234,
+          "jaccard": 0.0122
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.022,
+          "jaccard": 0.0108
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.1199,
+          "overlap": 0.142,
+          "jaccard": 0.131
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.0569,
+          "overlap": 0.0649,
+          "jaccard": 0.0609
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.0539,
+          "overlap": 0.0603,
+          "jaccard": 0.0571
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.0422,
+          "overlap": 0.1325,
+          "jaccard": 0.0873
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.0361,
+          "overlap": 0.1175,
+          "jaccard": 0.0753
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.0361,
+          "overlap": 0.1145,
+          "jaccard": 0.0738
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.185,
+          "overlap": 0.228,
+          "jaccard": 0.2065
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.0414,
+          "overlap": 0.0482,
+          "jaccard": 0.0448
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.0356,
+          "overlap": 0.0385,
+          "jaccard": 0.037
+        }
+      }
+    }
+  },
+  "FUSION (consensus)": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9329,
+          "overlap": 0.9977,
+          "jaccard": 0.9653
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.9156,
+          "overlap": 0.9854,
+          "jaccard": 0.9497
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.7668,
+          "overlap": 0.8354,
+          "jaccard": 0.8004
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.9267,
+          "overlap": 0.998,
+          "jaccard": 0.9624
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.9093,
+          "overlap": 0.9838,
+          "jaccard": 0.9457
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.906,
+          "overlap": 0.981,
+          "jaccard": 0.9427
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9669,
+          "overlap": 0.9959,
+          "jaccard": 0.9814
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9504,
+          "overlap": 0.9945,
+          "jaccard": 0.972
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0,
+          "overlap": 0.0331,
+          "jaccard": 0.0163
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9975,
+          "overlap": 0.9975,
+          "jaccard": 0.9975
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9843,
+          "overlap": 0.9843,
+          "jaccard": 0.9843
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.8248,
+          "overlap": 0.8248,
+          "jaccard": 0.8248
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.0783,
+          "overlap": 1.0,
+          "jaccard": 0.5392
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.006,
+          "overlap": 1.0,
+          "jaccard": 0.4925
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.0,
+          "overlap": 0.9759,
+          "jaccard": 0.4779
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9403,
+          "overlap": 0.9989,
+          "jaccard": 0.9696
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9305,
+          "overlap": 0.9989,
+          "jaccard": 0.9643
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5313,
+          "overlap": 0.5962,
+          "jaccard": 0.5635
+        }
+      }
+    }
+  },
+  "DIAMOND (custom fungal 2024)": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.9824,
+          "overlap": 0.9987,
+          "jaccard": 0.9906
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.9661,
+          "overlap": 0.9856,
+          "jaccard": 0.9757
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.8168,
+          "overlap": 0.836,
+          "jaccard": 0.8259
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.985,
+          "overlap": 0.9992,
+          "jaccard": 0.9921
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.9675,
+          "overlap": 0.9845,
+          "jaccard": 0.9759
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.9647,
+          "overlap": 0.981,
+          "jaccard": 0.9727
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9683,
+          "overlap": 0.9959,
+          "jaccard": 0.9821
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.9587,
+          "overlap": 0.9917,
+          "jaccard": 0.975
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0014,
+          "overlap": 0.0372,
+          "jaccard": 0.0174
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9873,
+          "overlap": 0.9986,
+          "jaccard": 0.9929
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.9722,
+          "overlap": 0.9845,
+          "jaccard": 0.9781
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.8136,
+          "overlap": 0.825,
+          "jaccard": 0.819
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.9187,
+          "overlap": 1.0,
+          "jaccard": 0.9593
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.8855,
+          "overlap": 1.0,
+          "jaccard": 0.9448
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.8584,
+          "overlap": 0.9819,
+          "jaccard": 0.9182
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.992,
+          "overlap": 1.0,
+          "jaccard": 0.996
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.9874,
+          "overlap": 0.9989,
+          "jaccard": 0.9932
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.5876,
+          "overlap": 0.6002,
+          "jaccard": 0.5932
+        }
+      }
+    }
+  },
+  "dbCAN-sub mapped\u2192CAZy [2024 DB]": {
+    "temporal_clean": "yes",
+    "coverage": "4,726",
+    "buckets": {
+      "overall": {
+        "class": {
+          "n": 4726,
+          "exact": 0.8646,
+          "overlap": 0.9181,
+          "jaccard": 0.8913
+        },
+        "family": {
+          "n": 4726,
+          "exact": 0.8085,
+          "overlap": 0.8654,
+          "jaccard": 0.8369
+        },
+        "subfamily": {
+          "n": 4726,
+          "exact": 0.6464,
+          "overlap": 0.7057,
+          "jaccard": 0.6756
+        }
+      },
+      "novel_seq": {
+        "class": {
+          "n": 4000,
+          "exact": 0.8482,
+          "overlap": 0.9062,
+          "jaccard": 0.8772
+        },
+        "family": {
+          "n": 4000,
+          "exact": 0.8105,
+          "overlap": 0.873,
+          "jaccard": 0.8417
+        },
+        "subfamily": {
+          "n": 4000,
+          "exact": 0.7635,
+          "overlap": 0.8265,
+          "jaccard": 0.7949
+        }
+      },
+      "novel_family": {
+        "class": {
+          "n": 726,
+          "exact": 0.9545,
+          "overlap": 0.9835,
+          "jaccard": 0.969
+        },
+        "family": {
+          "n": 726,
+          "exact": 0.7975,
+          "overlap": 0.8237,
+          "jaccard": 0.8106
+        },
+        "subfamily": {
+          "n": 726,
+          "exact": 0.0014,
+          "overlap": 0.0399,
+          "jaccard": 0.0181
+        }
+      },
+      "single_domain": {
+        "class": {
+          "n": 4394,
+          "exact": 0.9067,
+          "overlap": 0.9133,
+          "jaccard": 0.91
+        },
+        "family": {
+          "n": 4394,
+          "exact": 0.8505,
+          "overlap": 0.8571,
+          "jaccard": 0.8538
+        },
+        "subfamily": {
+          "n": 4394,
+          "exact": 0.6791,
+          "overlap": 0.6878,
+          "jaccard": 0.6834
+        }
+      },
+      "multi_domain": {
+        "class": {
+          "n": 332,
+          "exact": 0.3072,
+          "overlap": 0.9819,
+          "jaccard": 0.6441
+        },
+        "family": {
+          "n": 332,
+          "exact": 0.253,
+          "overlap": 0.9759,
+          "jaccard": 0.6135
+        },
+        "subfamily": {
+          "n": 332,
+          "exact": 0.2139,
+          "overlap": 0.9428,
+          "jaccard": 0.5713
+        }
+      },
+      "has_subfamily": {
+        "class": {
+          "n": 1741,
+          "exact": 0.9236,
+          "overlap": 0.9805,
+          "jaccard": 0.952
+        },
+        "family": {
+          "n": 1741,
+          "exact": 0.8547,
+          "overlap": 0.915,
+          "jaccard": 0.8845
+        },
+        "subfamily": {
+          "n": 1741,
+          "exact": 0.4268,
+          "overlap": 0.494,
+          "jaccard": 0.4589
+        }
+      }
+    }
+  }
+}

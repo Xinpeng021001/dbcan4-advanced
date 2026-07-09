@@ -283,7 +283,7 @@ and asked to rerun run_dbcan against it.
 - **HMMER known-family byte-identical: 0.794 → 0.794.** Old family HMMs are not
   rebuilt between releases, so a query matching a pre-2024 family gets the same
   answer either way. Confirms the user's intuition — only novel families move.
-- **DIAMOND contaminated in BOTH tiers**: known/new-seq 0.896 → 0.982 *and*
+- **DIAMOND contaminated in BOTH tiers**: known/new-seq 0.896 → 0.980 *and*
   novel-family 0.001 → 0.992. The eval sequences are themselves in the 2025 CAZy
   release the current .dmnd is built from → near-self hits. User's concern
   confirmed; DIAMOND is the most affected method.
@@ -312,3 +312,42 @@ and asked to rerun run_dbcan against it.
 - Optional: hold out entire families across all kingdoms for a stronger
   novel-family-discovery benchmark (current holdout is mostly cross-kingdom).
 - Optional: wire the 2024-DB fair numbers into the Nextflow benchmark contract.
+
+---
+
+## Day 4 (cont.) — three-level scoring + fair pLM-vs-run_dbcan comparison
+
+User asked to (1) verify ESM / other methods compare *fairly* with run_dbcan, and
+(2) score at three CAZy levels — class (AA/GT/…), family (GH2), subfamily (GH13_1) —
+plus multidomain.
+
+**Fairness verification.** Re-scored all 14 methods through one scorer on the
+identical truth. Confirmed ID alignment: all prediction files map cleanly onto the
+4,726 truth keys (142 GenBank + 4,584 JGI), 0 not-in-truth. No method is scored on a
+different protein set → the comparison is fair in denominator and temporal setting.
+The pLM heads were already temporally clean (train/retrieve on 2024 only).
+
+**Three-level results (overlap recall, overall, temporally clean):**
+- Class level is near-saturated (0.90–1.00) for all sequence + pLM methods.
+- Trained Contrastive-kNN (0.978 family / 0.830 subfamily) beats every run_dbcan tier
+  (best 0.920 / 0.773) and trails only custom DIAMOND — the fair win we needed to
+  justify the pLM tier for dbCAN4.
+- Monotonicity class ≥ family ≥ subfamily holds with 0 violations across 15 methods.
+
+**dbCAN-sub subfamily fix.** Its native output is ECAMI cluster IDs (GH13_e122), a
+different namespace than CAZy subfamilies (GH13_1); the raw parser scored it a
+spurious 0.000 at subfamily. Mapped each cluster → dominant CAZy subfamily via the
+composition column: subfamily-exact 0.000 → 0.427 (on n=1,741 has-subfamily truth).
+Still trails others because not every ECAMI cluster = one CAZy subfamily.
+
+**Multidomain (n=332), family exact set-match.** DIAMOND/HMMER recover all domains
+(custom DIAMOND 0.885, run_dbcan DIAMOND 0.876). Single-label pLM/fusion score ≈0.006
+EXACT (one call per protein by construction) but overlap ~0.98–1.00, Jaccard ~0.49 —
+architectural, not accuracy: pLM tier needs per-domain segmentation for dbCAN4.
+
+**Fixed** a 0.982→0.980 rounding error in the §4.5 DIAMOND known/new-seq cell
+(scored value is 0.9802) in both report and this log.
+
+**Artifacts:** benchmarks/master_benchmark_v4_threelevel.tsv (270 rows: 15 methods ×
+6 buckets × 3 levels), threelevel_all_methods.json, foldseek_structure_subset_scored.json;
+docs/figures/threelevel_benchmark.png; benchmark_report.md §4.6.

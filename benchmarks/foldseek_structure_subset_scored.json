@@ -1,0 +1,29 @@
+{
+  "foldseek_on_structure_subset": {
+    "temporal_clean": "yes",
+    "coverage": "697 (its structure subset)",
+    "buckets": {
+      "structure_subset": {
+        "class": {
+          "n": 697,
+          "exact": 0.7762,
+          "overlap": 0.9584,
+          "jaccard": 0.8673
+        },
+        "family": {
+          "n": 697,
+          "exact": 0.3759,
+          "overlap": 0.4648,
+          "jaccard": 0.4197
+        },
+        "subfamily": {
+          "n": 697,
+          "exact": 0.3572,
+          "overlap": 0.4347,
+          "jaccard": 0.3953
+        }
+      }
+    }
+  },
+  "note": "Foldseek scored ONLY over the 697 proteins it can fold; class/family/subfamily overlap."
+}

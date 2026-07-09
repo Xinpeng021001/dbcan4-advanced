@@ -1,0 +1,271 @@
+method	temporal_clean	coverage	bucket	level	n	exact	overlap	jaccard
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	overall	class	4726	0.919	0.9304	0.9247
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	overall	family	4726	0.9063	0.9202	0.9133
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	overall	subfamily	4726	0.759	0.7734	0.7659
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_seq	class	4000	0.9113	0.92	0.9156
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_seq	family	4000	0.8978	0.9085	0.9032
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_seq	subfamily	4000	0.8965	0.9073	0.9019
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_family	class	726	0.9614	0.9876	0.9745
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_family	family	726	0.9532	0.9848	0.9688
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	novel_family	subfamily	726	0.0014	0.0358	0.0168
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	single_domain	class	4394	0.9197	0.926	0.9228
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	single_domain	family	4394	0.9085	0.9151	0.9117
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	single_domain	subfamily	4394	0.7522	0.7585	0.7552
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	multi_domain	class	332	0.9096	0.988	0.9488
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	multi_domain	family	332	0.8765	0.988	0.9342
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	multi_domain	subfamily	332	0.8494	0.9699	0.9076
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	class	1741	0.9724	0.9787	0.9756
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	family	1741	0.9684	0.9776	0.9731
+DIAMOND [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	subfamily	1741	0.5709	0.5818	0.5757
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	overall	class	4726	0.8485	0.8961	0.8723
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	overall	family	4726	0.8256	0.8737	0.8493
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	overall	subfamily	4726	0.6725	0.7224	0.6965
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_seq	class	4000	0.8327	0.884	0.8584
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_seq	family	4000	0.8057	0.8575	0.8312
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_seq	subfamily	4000	0.794	0.8458	0.8194
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_family	class	726	0.9353	0.9628	0.949
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_family	family	726	0.9353	0.9628	0.949
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	novel_family	subfamily	726	0.0028	0.0427	0.0196
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	single_domain	class	4394	0.886	0.8898	0.8879
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	single_domain	family	4394	0.8619	0.8657	0.8638
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	single_domain	subfamily	4394	0.6998	0.7041	0.702
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	multi_domain	class	332	0.3524	0.9789	0.6657
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	multi_domain	family	332	0.3464	0.9789	0.6571
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	multi_domain	subfamily	332	0.3102	0.9639	0.6242
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	class	1741	0.9357	0.9713	0.9535
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	family	1741	0.9345	0.9713	0.9533
+dbCAN HMMER [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	subfamily	1741	0.5342	0.5767	0.5544
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	overall	class	4726	0.8953	0.9329	0.9141
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	overall	family	4726	0.8673	0.9082	0.8883
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	overall	subfamily	4726	0.5138	0.5656	0.537
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_seq	class	4000	0.884	0.9237	0.9039
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_seq	family	4000	0.8512	0.8945	0.8735
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_seq	subfamily	4000	0.607	0.6607	0.6312
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_family	class	726	0.9573	0.9835	0.9704
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_family	family	726	0.9559	0.9835	0.9699
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	novel_family	subfamily	726	0.0	0.0413	0.0181
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	single_domain	class	4394	0.9226	0.9292	0.9259
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	single_domain	family	4394	0.896	0.9026	0.8993
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	single_domain	subfamily	4394	0.5353	0.5414	0.5383
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	multi_domain	class	332	0.5331	0.9819	0.7575
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	multi_domain	family	332	0.488	0.9819	0.743
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	multi_domain	subfamily	332	0.2289	0.8855	0.5198
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	class	1741	0.9609	0.9805	0.9707
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	family	1741	0.9598	0.9805	0.9704
+dbCAN-sub [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	subfamily	1741	0.0	0.0505	0.0169
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	overall	class	4726	0.8919	0.9291	0.9105
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	overall	family	4726	0.8606	0.901	0.8813
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	overall	subfamily	4726	0.7021	0.7463	0.7243
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_seq	class	4000	0.88	0.9193	0.8996
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_seq	family	4000	0.8433	0.886	0.8652
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_seq	subfamily	4000	0.829	0.874	0.8521
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_family	class	726	0.9573	0.9835	0.9704
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_family	family	726	0.9559	0.9835	0.9699
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	novel_family	subfamily	726	0.0028	0.0427	0.0204
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	single_domain	class	4394	0.9181	0.9249	0.9215
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	single_domain	family	4394	0.8878	0.8946	0.8912
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	single_domain	subfamily	4394	0.7203	0.7294	0.7249
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	multi_domain	class	332	0.5452	0.9849	0.7651
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	multi_domain	family	332	0.5	0.9849	0.7505
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	multi_domain	subfamily	332	0.4608	0.9699	0.7174
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	class	1741	0.9609	0.981	0.971
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	family	1741	0.9598	0.981	0.9707
+dbCAN Recommend [run_dbcan, 2024 DB]	yes	4,726	has_subfamily	subfamily	1741	0.5445	0.5767	0.5597
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	class	4726	0.982	0.982	0.982
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	family	4726	0.982	0.982	0.982
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	subfamily	4726	0.982	0.982	0.982
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	class	4000	0.9802	0.9802	0.9802
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	family	4000	0.9802	0.9802	0.9802
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	subfamily	4000	0.9802	0.9802	0.9802
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	class	726	0.9917	0.9917	0.9917
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	family	726	0.9917	0.9917	0.9917
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	subfamily	726	0.9917	0.9917	0.9917
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	class	4394	0.9807	0.9807	0.9807
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	family	4394	0.9807	0.9807	0.9807
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	subfamily	4394	0.9807	0.9807	0.9807
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	class	332	1.0	1.0	1.0
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	family	332	1.0	1.0	1.0
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	subfamily	332	1.0	1.0	1.0
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	class	1741	0.9931	0.9931	0.9931
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	family	1741	0.9931	0.9931	0.9931
+DIAMOND [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	subfamily	1741	0.9931	0.9931	0.9931
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	class	4726	0.8555	0.8999	0.8777
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	family	4726	0.8326	0.8775	0.8547
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	subfamily	4726	0.8216	0.8671	0.8439
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	class	4000	0.8327	0.884	0.8584
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	family	4000	0.8057	0.8575	0.8312
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	subfamily	4000	0.7937	0.8455	0.8191
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	class	726	0.9807	0.9876	0.9842
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	family	726	0.9807	0.9876	0.9842
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	subfamily	726	0.9752	0.9862	0.9807
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	class	4394	0.8901	0.8939	0.892
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	family	4394	0.866	0.8698	0.8679
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	subfamily	4394	0.8543	0.8594	0.8569
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	class	332	0.3976	0.9789	0.6883
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	family	332	0.3916	0.9789	0.6797
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	subfamily	332	0.3886	0.9699	0.6732
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	class	1741	0.9443	0.9799	0.9621
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	family	1741	0.9431	0.9799	0.9619
+dbCAN HMMER [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	subfamily	1741	0.9294	0.9684	0.9492
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	class	4726	0.9215	0.9528	0.9372
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	family	4726	0.8986	0.9331	0.9164
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	subfamily	4726	0.5438	0.5901	0.5642
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	class	4000	0.91	0.9465	0.9283
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	family	4000	0.8832	0.9233	0.9038
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	subfamily	4000	0.6378	0.689	0.6606
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	class	726	0.9848	0.9876	0.9862
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	family	726	0.9835	0.9876	0.9858
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	subfamily	726	0.0262	0.0455	0.0333
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	class	4394	0.9431	0.9492	0.9462
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	family	4394	0.9219	0.9281	0.925
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	subfamily	4394	0.5603	0.5662	0.5633
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	class	332	0.6355	1.0	0.8178
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	family	332	0.5904	1.0	0.8027
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	subfamily	332	0.3253	0.9066	0.5771
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	class	1741	0.9644	0.9828	0.9736
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	family	1741	0.9632	0.9828	0.9733
+dbCAN-sub [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	subfamily	1741	0.0	0.0517	0.0173
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	class	4726	0.9264	0.9573	0.9418
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	family	4726	0.894	0.9281	0.9116
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	overall	subfamily	4726	0.8798	0.9168	0.8988
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	class	4000	0.9157	0.9517	0.9337
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	family	4000	0.8778	0.9173	0.8981
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_seq	subfamily	4000	0.8628	0.9042	0.884
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	class	726	0.9848	0.9876	0.9862
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	family	726	0.9835	0.9876	0.9858
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	novel_family	subfamily	726	0.9738	0.9862	0.9803
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	class	4394	0.9477	0.954	0.9508
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	family	4394	0.9162	0.9226	0.9194
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	single_domain	subfamily	4394	0.9015	0.911	0.9062
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	class	332	0.6446	1.0	0.8223
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	family	332	0.5994	1.0	0.8072
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	multi_domain	subfamily	332	0.5934	0.994	0.8002
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	class	1741	0.9644	0.9828	0.9736
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	family	1741	0.9632	0.9828	0.9733
+dbCAN Recommend [run_dbcan, 2025 DB]	NO (2025 leak)	4,726	has_subfamily	subfamily	1741	0.9414	0.9684	0.9551
+ESM-C kNN (off-the-shelf)	yes	4,726	overall	class	4726	0.9137	0.9778	0.9457
+ESM-C kNN (off-the-shelf)	yes	4,726	overall	family	4726	0.8639	0.9321	0.8973
+ESM-C kNN (off-the-shelf)	yes	4,726	overall	subfamily	4726	0.7262	0.7941	0.7594
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_seq	class	4000	0.9055	0.9762	0.9409
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_seq	family	4000	0.8622	0.9353	0.898
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_seq	subfamily	4000	0.858	0.9313	0.8938
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_family	class	726	0.9587	0.9862	0.9725
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_family	family	726	0.8733	0.9146	0.8935
+ESM-C kNN (off-the-shelf)	yes	4,726	novel_family	subfamily	726	0.0	0.0386	0.0188
+ESM-C kNN (off-the-shelf)	yes	4,726	single_domain	class	4394	0.9768	0.9768	0.9768
+ESM-C kNN (off-the-shelf)	yes	4,726	single_domain	family	4394	0.9288	0.9288	0.9288
+ESM-C kNN (off-the-shelf)	yes	4,726	single_domain	subfamily	4394	0.7811	0.7811	0.7811
+ESM-C kNN (off-the-shelf)	yes	4,726	multi_domain	class	332	0.0783	0.991	0.5346
+ESM-C kNN (off-the-shelf)	yes	4,726	multi_domain	family	332	0.006	0.9759	0.4804
+ESM-C kNN (off-the-shelf)	yes	4,726	multi_domain	subfamily	332	0.0	0.9669	0.4729
+ESM-C kNN (off-the-shelf)	yes	4,726	has_subfamily	class	1741	0.9271	0.9845	0.9558
+ESM-C kNN (off-the-shelf)	yes	4,726	has_subfamily	family	1741	0.8782	0.9454	0.9114
+ESM-C kNN (off-the-shelf)	yes	4,726	has_subfamily	subfamily	1741	0.5083	0.575	0.5413
+Contrastive kNN (trained)	yes	4,726	overall	class	4726	0.931	0.9958	0.9634
+Contrastive kNN (trained)	yes	4,726	overall	family	4726	0.9086	0.9784	0.9428
+Contrastive kNN (trained)	yes	4,726	overall	subfamily	4726	0.7603	0.8297	0.7943
+Contrastive kNN (trained)	yes	4,726	novel_seq	class	4000	0.9237	0.995	0.9594
+Contrastive kNN (trained)	yes	4,726	novel_seq	family	4000	0.901	0.9755	0.9375
+Contrastive kNN (trained)	yes	4,726	novel_seq	subfamily	4000	0.8982	0.9732	0.935
+Contrastive kNN (trained)	yes	4,726	novel_family	class	726	0.9711	1.0	0.9855
+Contrastive kNN (trained)	yes	4,726	novel_family	family	726	0.9504	0.9945	0.972
+Contrastive kNN (trained)	yes	4,726	novel_family	subfamily	726	0.0	0.0386	0.0191
+Contrastive kNN (trained)	yes	4,726	single_domain	class	4394	0.9954	0.9954	0.9954
+Contrastive kNN (trained)	yes	4,726	single_domain	family	4394	0.9768	0.9768	0.9768
+Contrastive kNN (trained)	yes	4,726	single_domain	subfamily	4394	0.8177	0.8177	0.8177
+Contrastive kNN (trained)	yes	4,726	multi_domain	class	332	0.0783	1.0	0.5392
+Contrastive kNN (trained)	yes	4,726	multi_domain	family	332	0.006	1.0	0.4925
+Contrastive kNN (trained)	yes	4,726	multi_domain	subfamily	332	0.0	0.988	0.4839
+Contrastive kNN (trained)	yes	4,726	has_subfamily	class	1741	0.9408	0.9994	0.9701
+Contrastive kNN (trained)	yes	4,726	has_subfamily	family	1741	0.9305	0.9989	0.9643
+Contrastive kNN (trained)	yes	4,726	has_subfamily	subfamily	1741	0.5313	0.5985	0.5646
+Classifier (trained)	yes	4,726	overall	class	4726	0.9272	0.992	0.9596
+Classifier (trained)	yes	4,726	overall	family	4726	0.9016	0.9708	0.9355
+Classifier (trained)	yes	4,726	overall	subfamily	4726	0.7539	0.8229	0.7877
+Classifier (trained)	yes	4,726	novel_seq	class	4000	0.9205	0.9918	0.9561
+Classifier (trained)	yes	4,726	novel_seq	family	4000	0.8945	0.9688	0.9308
+Classifier (trained)	yes	4,726	novel_seq	subfamily	4000	0.8908	0.9655	0.9273
+Classifier (trained)	yes	4,726	novel_family	class	726	0.9642	0.9931	0.9787
+Classifier (trained)	yes	4,726	novel_family	family	726	0.9408	0.9821	0.961
+Classifier (trained)	yes	4,726	novel_family	subfamily	726	0.0	0.0372	0.0184
+Classifier (trained)	yes	4,726	single_domain	class	4394	0.9914	0.9914	0.9914
+Classifier (trained)	yes	4,726	single_domain	family	4394	0.9693	0.9693	0.9693
+Classifier (trained)	yes	4,726	single_domain	subfamily	4394	0.8109	0.8109	0.8109
+Classifier (trained)	yes	4,726	multi_domain	class	332	0.0783	1.0	0.5392
+Classifier (trained)	yes	4,726	multi_domain	family	332	0.006	0.991	0.488
+Classifier (trained)	yes	4,726	multi_domain	subfamily	332	0.0	0.9819	0.4809
+Classifier (trained)	yes	4,726	has_subfamily	class	1741	0.9374	0.996	0.9667
+Classifier (trained)	yes	4,726	has_subfamily	family	1741	0.9236	0.9902	0.9565
+Classifier (trained)	yes	4,726	has_subfamily	subfamily	1741	0.5256	0.5916	0.5583
+Foldseek (structure)	yes	697 (struct subset)	overall	class	4726	0.1145	0.1413	0.1279
+Foldseek (structure)	yes	697 (struct subset)	overall	family	4726	0.0554	0.0686	0.0619
+Foldseek (structure)	yes	697 (struct subset)	overall	subfamily	4726	0.0527	0.0641	0.0583
+Foldseek (structure)	yes	697 (struct subset)	novel_seq	class	4000	0.074	0.0858	0.0799
+Foldseek (structure)	yes	697 (struct subset)	novel_seq	family	4000	0.0653	0.0767	0.0709
+Foldseek (structure)	yes	697 (struct subset)	novel_seq	subfamily	4000	0.0622	0.0717	0.0669
+Foldseek (structure)	yes	697 (struct subset)	novel_family	class	726	0.3375	0.4477	0.3926
+Foldseek (structure)	yes	697 (struct subset)	novel_family	family	726	0.0014	0.0234	0.0122
+Foldseek (structure)	yes	697 (struct subset)	novel_family	subfamily	726	0.0	0.022	0.0108
+Foldseek (structure)	yes	697 (struct subset)	single_domain	class	4394	0.1199	0.142	0.131
+Foldseek (structure)	yes	697 (struct subset)	single_domain	family	4394	0.0569	0.0649	0.0609
+Foldseek (structure)	yes	697 (struct subset)	single_domain	subfamily	4394	0.0539	0.0603	0.0571
+Foldseek (structure)	yes	697 (struct subset)	multi_domain	class	332	0.0422	0.1325	0.0873
+Foldseek (structure)	yes	697 (struct subset)	multi_domain	family	332	0.0361	0.1175	0.0753
+Foldseek (structure)	yes	697 (struct subset)	multi_domain	subfamily	332	0.0361	0.1145	0.0738
+Foldseek (structure)	yes	697 (struct subset)	has_subfamily	class	1741	0.185	0.228	0.2065
+Foldseek (structure)	yes	697 (struct subset)	has_subfamily	family	1741	0.0414	0.0482	0.0448
+Foldseek (structure)	yes	697 (struct subset)	has_subfamily	subfamily	1741	0.0356	0.0385	0.037
+FUSION (consensus)	yes	4,726	overall	class	4726	0.9329	0.9977	0.9653
+FUSION (consensus)	yes	4,726	overall	family	4726	0.9156	0.9854	0.9497
+FUSION (consensus)	yes	4,726	overall	subfamily	4726	0.7668	0.8354	0.8004
+FUSION (consensus)	yes	4,726	novel_seq	class	4000	0.9267	0.998	0.9624
+FUSION (consensus)	yes	4,726	novel_seq	family	4000	0.9093	0.9838	0.9457
+FUSION (consensus)	yes	4,726	novel_seq	subfamily	4000	0.906	0.981	0.9427
+FUSION (consensus)	yes	4,726	novel_family	class	726	0.9669	0.9959	0.9814
+FUSION (consensus)	yes	4,726	novel_family	family	726	0.9504	0.9945	0.972
+FUSION (consensus)	yes	4,726	novel_family	subfamily	726	0.0	0.0331	0.0163
+FUSION (consensus)	yes	4,726	single_domain	class	4394	0.9975	0.9975	0.9975
+FUSION (consensus)	yes	4,726	single_domain	family	4394	0.9843	0.9843	0.9843
+FUSION (consensus)	yes	4,726	single_domain	subfamily	4394	0.8248	0.8248	0.8248
+FUSION (consensus)	yes	4,726	multi_domain	class	332	0.0783	1.0	0.5392
+FUSION (consensus)	yes	4,726	multi_domain	family	332	0.006	1.0	0.4925
+FUSION (consensus)	yes	4,726	multi_domain	subfamily	332	0.0	0.9759	0.4779
+FUSION (consensus)	yes	4,726	has_subfamily	class	1741	0.9403	0.9989	0.9696
+FUSION (consensus)	yes	4,726	has_subfamily	family	1741	0.9305	0.9989	0.9643
+FUSION (consensus)	yes	4,726	has_subfamily	subfamily	1741	0.5313	0.5962	0.5635
+DIAMOND (custom fungal 2024)	yes	4,726	overall	class	4726	0.9824	0.9987	0.9906
+DIAMOND (custom fungal 2024)	yes	4,726	overall	family	4726	0.9661	0.9856	0.9757
+DIAMOND (custom fungal 2024)	yes	4,726	overall	subfamily	4726	0.8168	0.836	0.8259
+DIAMOND (custom fungal 2024)	yes	4,726	novel_seq	class	4000	0.985	0.9992	0.9921
+DIAMOND (custom fungal 2024)	yes	4,726	novel_seq	family	4000	0.9675	0.9845	0.9759
+DIAMOND (custom fungal 2024)	yes	4,726	novel_seq	subfamily	4000	0.9647	0.981	0.9727
+DIAMOND (custom fungal 2024)	yes	4,726	novel_family	class	726	0.9683	0.9959	0.9821
+DIAMOND (custom fungal 2024)	yes	4,726	novel_family	family	726	0.9587	0.9917	0.975
+DIAMOND (custom fungal 2024)	yes	4,726	novel_family	subfamily	726	0.0014	0.0372	0.0174
+DIAMOND (custom fungal 2024)	yes	4,726	single_domain	class	4394	0.9873	0.9986	0.9929
+DIAMOND (custom fungal 2024)	yes	4,726	single_domain	family	4394	0.9722	0.9845	0.9781
+DIAMOND (custom fungal 2024)	yes	4,726	single_domain	subfamily	4394	0.8136	0.825	0.819
+DIAMOND (custom fungal 2024)	yes	4,726	multi_domain	class	332	0.9187	1.0	0.9593
+DIAMOND (custom fungal 2024)	yes	4,726	multi_domain	family	332	0.8855	1.0	0.9448
+DIAMOND (custom fungal 2024)	yes	4,726	multi_domain	subfamily	332	0.8584	0.9819	0.9182
+DIAMOND (custom fungal 2024)	yes	4,726	has_subfamily	class	1741	0.992	1.0	0.996
+DIAMOND (custom fungal 2024)	yes	4,726	has_subfamily	family	1741	0.9874	0.9989	0.9932
+DIAMOND (custom fungal 2024)	yes	4,726	has_subfamily	subfamily	1741	0.5876	0.6002	0.5932
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	overall	class	4726	0.8646	0.9181	0.8913
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	overall	family	4726	0.8085	0.8654	0.8369
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	overall	subfamily	4726	0.6464	0.7057	0.6756
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_seq	class	4000	0.8482	0.9062	0.8772
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_seq	family	4000	0.8105	0.873	0.8417
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_seq	subfamily	4000	0.7635	0.8265	0.7949
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_family	class	726	0.9545	0.9835	0.969
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_family	family	726	0.7975	0.8237	0.8106
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	novel_family	subfamily	726	0.0014	0.0399	0.0181
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	single_domain	class	4394	0.9067	0.9133	0.91
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	single_domain	family	4394	0.8505	0.8571	0.8538
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	single_domain	subfamily	4394	0.6791	0.6878	0.6834
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	multi_domain	class	332	0.3072	0.9819	0.6441
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	multi_domain	family	332	0.253	0.9759	0.6135
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	multi_domain	subfamily	332	0.2139	0.9428	0.5713
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	has_subfamily	class	1741	0.9236	0.9805	0.952
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	has_subfamily	family	1741	0.8547	0.915	0.8845
+dbCAN-sub mapped→CAZy [2024 DB]	yes	4,726	has_subfamily	subfamily	1741	0.4268	0.494	0.4589
