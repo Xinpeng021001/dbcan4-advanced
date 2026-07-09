@@ -266,6 +266,66 @@ are installed, validated, and running on met, gated on the gray-zone population 
 
 ---
 
+## 9. Novel-family discovery pipeline — candidate clusters (2026-07-09)
+
+### 9.1 Motivation
+
+Sections 7-8 established the gray-zone tiering (2,844,297 proteins where exactly one sequence
+tool hits a CAZy family) and a structure-evidence score combining ProstT5-predicted 3Di +
+foldseek/mmseqs2 search against CAZyme3D_id50 with SaProt embedding cosine similarity. This
+section describes turning that machinery into a **candidate-generation pipeline** for
+previously-uncharacterized CAZyme families: proteins that (a) fail dbCAN's sequence-tool
+consensus but (b) score structurally CAZyme-like, and that (c) cluster together tightly by
+embedding+structure while (d) sitting far from every existing CAZy family AND (e) landing near
+CAZy's own curated "unclassified" (GH0/GT0/PL0/CE0/AA0/CBM0) entries as independent corroboration.
+
+### 9.2 Pipeline
+
+1. **Candidate pool**: `structure_evidence_score >= 0.60` (calibrated against the tier score
+   distributions — above the 90th percentile of confirmed non-CAZymes, below the median of
+   confirmed CAZymes) on the 2,483-protein structure-validation sample gave 577 candidates
+   (548 gray_zone + 29 high_confidence_non_cazyme, i.e. structure overriding a unanimous-zero
+   sequence-tool call). *Compute-budget note*: the originally-planned 4,000-protein rerun
+   (`gz_handoff/`) had not completed at analysis time; the 2,483-protein sample was used per the
+   handoff's documented fallback and is disclosed as a substitution in the report.
+2. **Embedding**: ESM-C 600M (1,152-dim) for the candidate pool, the full 125,684-entry CAZy
+   0-fam reference, and reuse of the existing 2024-reference (337,759 seqs, 349 families with
+   centroids) and 2025-eval (4,726 seqs, ground-truth `novel_seq`/`novel_family` labels) embeddings.
+3. **Clustering**: UMAP (cosine, 10D) + HDBSCAN (`min_cluster_size=4`) → 36 clusters,
+   500/577 candidates clustered.
+4. **Novelty scoring**: cosine distance to nearest 2024-family centroid, percentile-calibrated
+   against the eval-2025 ground-truth `novel_family` (true new-family, mean cosine 0.978) vs.
+   `novel_seq` (known-family, mean cosine 0.971) distributions — raw cosine gaps are small
+   (dense embedding space) so percentile rank against ground truth is the operative signal.
+5. **Structural coherence**: mean intra-cluster mmseqs2 3Di-sequence identity (candidates'
+   ProstT5-predicted 3Di strings, all-vs-all).
+6. **Cross-validation**: nearest-neighbor cosine search of each candidate against the 125,684
+   CAZy 0-fam embeddings; per-cluster fraction agreeing on 0-fam activity class (GH0/GT0/etc.)
+   is the cross-validation-support score.
+7. **Combined ranking**: `0.35·novelty + 0.30·coherence + 0.25·crossval + 0.10·log(size)`,
+   each min-max normalized across clusters.
+
+### 9.3 Headline results
+
+Top candidate: **cluster 10** (17 members, 17 genomes, 9 fungal taxonomic classes) — novelty
+percentile 99.9 (more distant from known CAZy families than 99.9% of confirmed novel-family
+proteins in the 2024→2025 holdout), 81.8% mean intra-cluster structural identity, 94% of members'
+nearest CAZy-0fam neighbor is GH0. dbCAN's DIAMOND single-tool hits within this cluster are
+inconsistent (GT35/GT1/GH47/GT22/GT2/GH152/GH13/GH20 — no shared family), consistent with a
+taxonomically broad protein family that resembles several known CAZy families weakly rather than
+belonging cleanly to any one. Two further clusters (18, 19; Eurotiomycetes-enriched) show 100%
+cross-validation agreement on GT0. Full ranked table and per-protein detail:
+`novel_family_report.md`, `ranked_candidate_clusters.tsv`, `candidate_pool_per_protein.tsv`
+(saved as Claude Science artifacts this session).
+
+### 9.4 Honest scope
+
+This is a **computational triage step**, analogous to the screening stage of the 2019 PNAS study
+that mined CAZy's GH0/PL0 unclassified buckets and functionally characterized 13 new families —
+not a family-certification pipeline. Candidate clusters need Pfam/domain scanning, ESMFold+TM-align
+structural validation against real CAZyme3D structures, and ultimately biochemical characterization
+before any new-family claim is defensible. See `novel_family_report.md` §4 for the full caveat list.
+
 ## References
 
 **Group A — retrieved and read in this session (full text or abstract confirmed):**
@@ -285,3 +345,4 @@ are installed, validated, and running on met, gated on the gray-zone population 
 10. ESM Cambrian (ESM-C) — EvolutionaryScale (300M/600M/6B protein language models). *(model family known from the loaded `esmfold2` skill; cite the official release before publication)*
 
 > **Provenance note.** Group A (refs 1–7) references were retrieved this session — full text read for refs 1, 3, 4, 5, 6; abstract confirmed for ref 2; DOI+title confirmed via resolver for ref 7 (full text paywalled). Quoted figures come directly from the retrieved text. Group B (refs 8–10) were located by title/venue in web-search results (whose body text was not preserved in full) or known from the loaded skill; their author lists, volume/page, and benchmark specifics have **not** been independently verified here and must be checked against the primary source before this document is used externally. This note replaces an earlier, overstated "all verified" claim.
+

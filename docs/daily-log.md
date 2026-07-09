@@ -448,3 +448,42 @@ but not rerun — adjudication counts are provisional pending rerun.
 (28.2M rows, gzip parts), `summary_overall.json`, `summary_tier_by_class.tsv`,
 `summary_gray_zone_families.tsv`, `tier_summary.png`, `structure_evidence_score_by_tier.png`,
 `track_b_structure_tier_report.md`, `synthesis_report.md`.
+
+## 2026-07-09 — Novel-family discovery pipeline (candidate clusters)
+
+Built and ran the Phase-2 novel-CAZyme-family candidate-generation pipeline on met:
+selected a 577-protein candidate pool from the structure-validation sample
+(structure_evidence_score >= 0.60, i.e. structure disagrees with dbCAN's sequence-tool
+consensus in the CAZyme direction), embedded with ESM-C 600M plus the full 125,684-protein
+CAZy 0-fam (GH0/GT0/PL0/CE0/AA0/CBM0) reference set, clustered with UMAP+HDBSCAN (36 clusters),
+scored novelty via percentile-calibrated nearest-known-family cosine distance (calibrated
+against the 2024->2025 temporal holdout's ground-truth novel_family/novel_seq buckets), scored
+structural coherence via mmseqs2 3Di all-vs-all identity, and cross-validated against CAZy's own
+curated unclassified entries via embedding-space nearest-neighbor class agreement.
+
+Top candidate: cluster 10 (17 members, 17 genomes, 9 fungal classes) -- novelty percentile 99.9,
+81.8% mean intra-cluster structural identity, 94% nearest-0fam-class agreement (GH0). Two further
+clusters (18, 19) show 100% cross-validation agreement on GT0 and are Eurotiomycetes-enriched.
+
+**Compute-budget disclosure**: the handoff's planned 4,000-protein full structure-scoring rerun
+(gz_handoff/) had not completed when this phase began (still at line 0/500 per chunk after
+~40min on all 8 GPUs); proceeded on the documented fallback -- the existing 2,483-protein
+structure-validation sample -- per the handoff's own contingency instructions.
+
+**Scripts committed:** `scripts/novel_family/01..14_*.py` (candidate selection, sequence
+extraction/sanitization, metadata join, UMAP+HDBSCAN clustering, known-family centroid
+construction, nearest-family scoring, ground-truth calibration, 3Di fasta build, structural
+coherence, CAZy-0fam cross-validation, evidence merge, combined ranking).
+
+**Report/tables:** `novel_family_report.md`, `ranked_candidate_clusters.tsv`,
+`candidate_pool_per_protein.tsv`, `umap_clusters.png`, `cluster_ranking_scatter.png`
+(all saved as Claude Science artifacts; report + tables also committed to this repo under
+`results/novel_family/`).
+
+**Design doc:** added §9 (Novel-family discovery pipeline) to `docs/design_dbcan4_advanced.md`.
+
+**Honest caveat carried forward:** this is a computational triage/hypothesis-generation step,
+not family certification -- candidate clusters still need Pfam domain scanning, ESMFold+TM-align
+structural validation against real CAZyme3D structures, and ultimately biochemical
+characterization before any new-family claim is defensible (cf. the 2019 PNAS GH0/PL0
+triage-to-characterization precedent).
