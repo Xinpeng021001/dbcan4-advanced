@@ -18,8 +18,10 @@ top-ranked clusters land close to CAZy's own unassigned bucket in embedding spac
 the candidate calls with an independent, curator-defined "novel/uncharacterized" reference set.
 
 The best-supported cluster (**cluster 10**, 17 members across 9 fungal taxonomic classes and 17
-distinct genomes) combines: (i) a nearest-known-CAZy-family cosine similarity more distant than
-99.9% of the confirmed-true novel-family proteins in our 2024→2025 temporal holdout, (ii) high
+distinct genomes) combines: (i) a nearest-known-CAZy-family cosine similarity lower (more distant)
+than 99.9% of the confirmed-true novel-family proteins in our 2024→2025 temporal holdout —
+i.e. a 99.9th-percentile novelty rank against that ground-truth distribution (the percentile rank,
+not the raw cosine, is the operative signal; see §2.4), (ii) high
 intra-cluster structural coherence (81.8% mean pairwise 3Di sequence identity), and (iii) 94% of
 its members' nearest CAZy-0fam hit falling in the GH0 (unclassified glycoside hydrolase) bucket.
 
@@ -37,11 +39,19 @@ clustering/cross-validation/reporting. Per the handoff's own documented fallback
 therefore used the **already-computed 2,483-protein structure-validation sample**
 (`structure/validation_sample/scores/structure_evidence_scores_final.tsv`, an independently-drawn
 stratified sample: 1,500 gray_zone / 500 high_confidence_cazyme / 483 high_confidence_non_cazyme)
-as the scored population from which to build the candidate pool. **This substitution is disclosed
-explicitly here**: results are drawn from a smaller (2,483 vs. 4,000-protein) and independently
-drawn sample than the one named in the handoff, though built with the same
-corrected `structure_evidence_score.py` (SaProt centroid computed via unbiased reservoir sampling
-across all 178,356 CAZyme3D_id50 reference structures).
+as the scored population from which to build the candidate pool. **Two provenance caveats are
+disclosed explicitly here:**
+1. **Sample substitution:** results are drawn from a smaller (2,483 vs. 4,000-protein) and
+   independently drawn sample than the one named in the handoff.
+2. **Centroid version (corrected 2026-07-09):** the scores in `structure_evidence_scores_final.tsv`
+   used the **original head-slice SaProt centroid** (first 2,000 rows of the CAZyme3D_id50 3Di
+   table, file order), **not** the reservoir-sampled centroid — an earlier draft of this report
+   wrongly stated the latter. The `structure_evidence_score >= 0.60` pool selection below was
+   therefore made on head-slice scores. A subsequent reservoir-sampled rescore of this same
+   2,483-protein sample (`structure_evidence_scores_fixed_centroid.tsv`) confirms the tier means
+   shift by ≤0.003 (0.650/0.563/0.460 vs 0.653/0.566/0.463), so the 0.60 threshold and the
+   resulting candidate pool are essentially unchanged by the fix — but the pool as built is on
+   head-slice scores and would move slightly (retained 561/577) if rebuilt.
 
 Candidate selection threshold: `structure_evidence_score >= 0.60`, chosen empirically from the
 score distributions across the three ground-truth tiers in this sample:
@@ -83,12 +93,16 @@ clusters** covering 500 of the 577 candidates (77 unclustered / noise).
 Per-family centroids were built from the 337,759-protein 2024 reference (349 families with ≥2
 members). Cosine similarity of each candidate to its nearest centroid gives a
 "how CAZy-family-like is this by embedding" score. This was **calibrated** against the temporal
-holdout's ground truth: proteins from CAZy's 2025 release whose family did not exist in the 2024
-reference (`novel_family`, n=726, true new-family proteins) score, on average, more distant from
-every 2024 centroid (mean cosine 0.978) than proteins in already-known families with merely novel
-sequences (`novel_seq`, n=4,000, mean cosine 0.971) — the gap is small in absolute cosine terms
-(ESM-C embeddings are densely packed), so a **percentile rank against these two ground-truth
-distributions**, rather than a raw cosine cutoff, is used to score novelty per cluster.
+holdout's ground truth. Counterintuitively, proteins from CAZy's 2025 release whose family did not
+exist in the 2024 reference (`novel_family`, n=726, true new-family proteins) sit, on average,
+*slightly closer* to their nearest 2024 centroid (mean cosine **0.978**) than proteins in
+already-known families with merely novel sequences (`novel_seq`, n=4,000, mean cosine **0.971**;
+higher cosine = less distant). In other words the raw nearest-centroid cosine does **not** separate
+the two novelty classes in the expected direction — the signal is weak and the gap is small in
+absolute cosine terms (ESM-C embeddings are densely packed). This is why a **percentile rank against
+these two ground-truth distributions**, rather than a raw cosine cutoff, is used to score novelty
+per cluster, and why the novelty signal is reported as weak (raw top-1 cosine AUROC ~0.52, near
+chance; best single signal centroid-margin ~0.63–0.66) elsewhere in the project.
 
 ### 2.5 Cross-validation against CAZy's own unclassified entries
 

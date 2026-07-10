@@ -1,0 +1,9 @@
+approach	scope	exact_set	jaccard	per_domain_family_acc
+whole_protein_kNN	multidomain (n=330)	0.000	0.477	-
+domain_level_raw_kNN	multidomain (n=330)	0.179	0.479	0.673
+domain_level_trained_head	multidomain (n=330)	0.412	0.685	0.897
+domain_level_trained_head	single_domain (n=4220)	0.971	-	-
+whole_protein_kNN	overall eval (n=4550)	0.897	-	-
+domain_level_trained_head	overall eval (n=4550)	0.931	-	-
+domain_level_trained_head	CAZyme3D truth top-1	0.779	-	-
+raw_ESMC	CAZyme3D truth top-1	0.269	-	-

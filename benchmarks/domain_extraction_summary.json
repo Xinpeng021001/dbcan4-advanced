@@ -1,0 +1,16 @@
+{
+  "approach": "overview.tsv per-domain extraction (dbCAN_hmm UNION dbCAN_sub envelope coords); NO hmmsearch rerun",
+  "n_eval_domains": 4938,
+  "n_eval_parent_proteins": 4550,
+  "n_eval_domains_from_hmm": 2720,
+  "n_eval_domains_from_sub": 2218,
+  "n_cbm_domains": 484,
+  "n_distinct_families": 277,
+  "multidomain_truth_proteins": 332,
+  "multidomain_resolved_ge2": 218,
+  "multidomain_resolution_ceiling": "218/332",
+  "truth_slice_n": 1500,
+  "truth_slice_families": 630,
+  "truth_slice_source": "CAZyme3D_id50 structures labeled by all-kingdom CAZyDB.07142024 (accession/MD5), training-MD5 leakage excluded, single-family only",
+  "embedding": "ESM-C 600M mean-pooled, 1152-dim; reference anchor bank reuses existing emb/ref2024.shard*.npz (337759 proteins)"
+}

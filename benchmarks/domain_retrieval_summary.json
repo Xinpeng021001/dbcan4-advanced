@@ -1,0 +1,18 @@
+{
+  "multidomain_n": 330,
+  "multidomain_exact_wholeprotein": 0.0,
+  "multidomain_exact_domain_rawknn": 0.1788,
+  "multidomain_exact_domain_head": 0.4121,
+  "multidomain_jaccard_wholeprotein": 0.4773,
+  "multidomain_jaccard_domain_head": 0.6846,
+  "per_domain_family_acc_rawknn": 0.673,
+  "per_domain_family_acc_head": 0.897,
+  "singledomain_n": 4220,
+  "singledomain_exact_domain_head": 0.9713,
+  "overall_exact_wholeprotein": 0.8974,
+  "overall_exact_domain_head": 0.9308,
+  "truthslice_top1_raw": 0.2688,
+  "truthslice_top1_head": 0.7794,
+  "truthslice_top5_head": 0.8343,
+  "truthslice_unretrievable_frac": 0.405
+}

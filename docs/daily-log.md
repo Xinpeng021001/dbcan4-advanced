@@ -487,3 +487,55 @@ not family certification -- candidate clusters still need Pfam domain scanning, 
 structural validation against real CAZyme3D structures, and ultimately biochemical
 characterization before any new-family claim is defensible (cf. the 2019 PNAS GH0/PL0
 triage-to-characterization precedent).
+
+
+---
+
+## Session — Precision gate + domain-level retrieval + audit (2026-07-09)
+
+Closed the benchmark review's two biggest gaps and audited/corrected the structure-tier
+and novel-family reports.
+
+### 1. CAZyme-vs-non-CAZyme precision gate (review gap: no precision/decoy set)
+- **Decoy/negative set**: 97,818 natural non-CAZyme fungal proteins + 15,000 shuffled-domain
+  decoys; a held-out **realistic slice** of 32,320 proteins from 5 whole genomes / 5 tax classes,
+  2.07% CAZyme base rate, zero training-genome overlap.
+- Logistic-regression gate on L2-normalized ESM-C embeddings. **Balanced AUROC 0.987 / AUPRC
+  0.986.**
+- **The honest number: at realistic 2.2% base rate, AUROC 0.984 but AUPRC 0.66.** Strong ranking,
+  precision collapses at the real base rate. Gate score cleanly ranks tiers (CAZyme 0.893 ≫
+  gray 0.234 ≫ non 0.137). At t=0.10, retires 63.7% of true non-CAZymes at 99.99% purity
+  (loses 1/669 CAZymes).
+- **Design role: triage/abstention, not standalone classifier.**
+- Scripts: `scripts/sample_negatives.py`, `scripts/train_gate.py`. Report:
+  `docs/precision_gate_report.md`.
+
+### 2. Domain-level contrastive retrieval (review priority #1: 0.006 multidomain exact-set)
+- **No hmmsearch rerun** (per user): segmented eval proteins from run_dbcan `overview.tsv`
+  envelope coords (dbCAN_hmm ∪ dbCAN_sub) → 4,938 domains from 4,550 proteins. Reference is
+  already 92.5% single-family, so its ESM-C embeddings are domain-level anchors (307,299
+  single-family anchors, 394 families). Trained contrastive head (1152→512→256, cosine-softmax).
+- **Multidomain exact-set (n=330): 0.000 (whole-protein) → 0.179 (domain raw kNN) → 0.412
+  (domain+head).** Per-domain family accuracy 0.673 → 0.897. No single-domain regression
+  (0.971); overall eval exact-set 0.897 → 0.931.
+- **Independent validation** on 1,500 CAZyme3D structures: top-1 family accuracy **0.779 (head)
+  vs 0.269 (raw ESM-C)** — 2.9×, no overfitting.
+- Scripts: `scripts/extract_domains.py`, `scripts/build_truth_slice.py`,
+  `scripts/train_domain_retrieval.py`. Report: `docs/domain_retrieval_report.md`.
+
+### 3. Audit outcome — 2 findings fixed in `synthesis_report.md` + `novel_family_report.md`
+1. SaProt-centroid provenance: the 577-pool + 4,000-adjudication used the **head-slice** centroid,
+   not the reservoir-sampled one the reports claimed. Fixed-centroid rescore
+   (`docs/gray_zone_structure_tier/structure_evidence_scores_fixed_centroid.tsv`) confirms tier
+   means shift ≤0.003, gray-zone split moves <1 point (33.9/38.1/28.0 vs 33.4/38.3/28.3) — bug
+   did not distort conclusions. Corrected provenance in both reports.
+2. "More distant" wording: novel-family proteins quoted at *higher* cosine (0.978>0.971) but
+   called "more distant" — corrected (higher cosine = less distant); weak novelty AUROC ~0.52
+   noted.
+
+### 4. Deliverables
+- `benchmarks/table1_gate_precision.tsv`, `table2_domain_retrieval.tsv`,
+  `table3_integrated_evidence.tsv` (7-layer dbCAN4 evidence-stack summary).
+- `docs/design_dbcan4_advanced.md` §10 added: gate + domain-retrieval results, audit outcome,
+  sequenced roadmap. **Deferred:** cross-kingdom held-out-family benchmark (n≈6 novelty problem);
+  substrate/EC Phase-2.

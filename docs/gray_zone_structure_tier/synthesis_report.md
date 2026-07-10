@@ -48,11 +48,12 @@ independent structure-similarity signal that never sees the sequence-evidence ti
    orthogonal structural signal.
 4. The two signals combine into `structure_evidence_score` (0–1, higher = more CAZyme-like).
 
-**Result — the score cleanly separates the two controls, with gray-zone in between.** This table
-reflects the FINAL, corrected run: ProstT5 + the fixed (reservoir-sampled) `structure_evidence_score.py`
-scored against Track A's actual 4,000-protein `sample_for_structure.fasta`/`.tsv` handoff (2,000
-gray-zone / 1,200 high-confidence-CAZyme / 800 high-confidence-non-CAZyme; 3,976/4,000 sequences
-scored, 24 dropped on length/fetch):
+**Result — the score cleanly separates the two controls, with gray-zone in between.** This table is
+ProstT5 + `structure_evidence_score.py` scored against Track A's actual 4,000-protein
+`sample_for_structure.fasta`/`.tsv` handoff (2,000 gray-zone / 1,200 high-confidence-CAZyme / 800
+high-confidence-non-CAZyme; 3,976/4,000 sequences scored, 24 dropped on length/fetch). It used the
+original head-slice SaProt centroid; the fixed-centroid cross-check (see caveat below) confirms the
+tier means shift by ≤0.003:
 
 | Known tier (structure-blind) | n | mean score | median score |
 |---|---:|---:|---:|
@@ -79,11 +80,22 @@ smaller, independently-drawn 2,483-protein sample as a documented stand-in while
 4,000-protein run was still executing; those numbers — 33.4%/38.3%/28.3% — pointed the same
 direction but are superseded by the table above.)
 
-**Resolved caveat:** the SaProt-embedding component of `structure_evidence_score` previously used
-a reference centroid built from the first 2,000 rows (file order, not a representative draw) of
-the 178,356-row CAZyme3D_id50 3Di table. The script was fixed to reservoir-sample uniformly, and
-the numbers in this report are from that fixed version scored against the correct handoff file —
-this is the final, authoritative result for this analysis.
+**Centroid caveat and cross-check (corrected 2026-07-09).** Provenance note: the SaProt-embedding
+component of `structure_evidence_score` uses a CAZyme3D_id50 reference centroid. Two centroid
+versions exist and this report must be precise about which produced which number:
+- The **4,000-protein adjudication table above** (means 0.625/0.581/0.460) was scored with the
+  **original head-slice centroid** (first 2,000 rows of the 178,356-row 3Di table, file order —
+  not a representative draw). An earlier draft of this report wrongly described these numbers as
+  coming from the fixed centroid; they do not.
+- The centroid was subsequently **fixed to reservoir-sample uniformly** and the 2,483-protein
+  validation sample re-scored. The fix **confirms the conclusions hold**: fixed-centroid tier means
+  are 0.650/0.563/0.460 (vs head-slice 0.653/0.566/0.463 — differences ≤0.003), and the gray-zone
+  adjudication is 33.9%/38.1%/28.0% (vs the head-slice 33.4%/38.3%/28.3%). The head-slice bug did
+  **not** materially distort tier separation or the adjudication split.
+- The fixed-centroid rescore is saved as `structure_evidence_scores_fixed_centroid.tsv`. Regenerating
+  the full 4,000-protein adjudicated TSV under the fixed centroid is a low-priority follow-up (the
+  cross-check shows it would move the numbers by <1 point); until then the 4,000-row table above
+  is the authoritative population and its structure scores carry the ≤0.003 centroid caveat.
 
 ## 3. CAZyme3D_id50, ProstT5, SaProt, ESM Atlas 2, AF3db — what each is actually good for
 
@@ -122,9 +134,11 @@ integration investment at this time.
 
 ## 5. Open follow-ups
 
-1. Rerun `structure_evidence_score.py` with the fixed reservoir-sampled SaProt reference
-   centroid and regenerate the adjudicated TSV before using the SaProt-embedding component for
-   downstream training decisions.
+1. ~~Rerun `structure_evidence_score.py` with the fixed reservoir-sampled SaProt reference
+   centroid~~ **(done — `structure_evidence_scores_fixed_centroid.tsv`; the fix moves tier means
+   ≤0.003 and the adjudication split <1 point, so conclusions are unchanged).** Remaining: regenerate
+   the full 4,000-protein adjudicated TSV under the fixed centroid for exact reproducibility (low
+   priority given the cross-check).
 2. Scale structure-evidence scoring from the 2,483-protein validation sample to the full
    2.84M-protein gray zone (or a larger stratified sample) once the rerun is validated.
 3. Build a Mycocosm JGI→UniProt/RefSeq ID-mapping step if AF3db coverage is worth a second look.

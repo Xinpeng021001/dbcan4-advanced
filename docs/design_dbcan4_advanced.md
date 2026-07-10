@@ -346,3 +346,96 @@ before any new-family claim is defensible. See `novel_family_report.md` §4 for 
 
 > **Provenance note.** Group A (refs 1–7) references were retrieved this session — full text read for refs 1, 3, 4, 5, 6; abstract confirmed for ref 2; DOI+title confirmed via resolver for ref 7 (full text paywalled). Quoted figures come directly from the retrieved text. Group B (refs 8–10) were located by title/venue in web-search results (whose body text was not preserved in full) or known from the loaded skill; their author lists, volume/page, and benchmark specifics have **not** been independently verified here and must be checked against the primary source before this document is used externally. This note replaces an earlier, overstated "all verified" claim.
 
+---
+
+## 10. Precision gate + domain-level retrieval — Phase-2 results and audit outcome (2026-07-09)
+
+Closes the two largest gaps the benchmark review flagged (no precision/decoy set; the 0.006
+multidomain exact-set collapse) and records the audit outcome of §8/§9's structure-tier and
+novel-family reports.
+
+### 10.1 CAZyme vs non-CAZyme precision gate
+
+Built a decoy-backed negative set (`scripts/sample_negatives.py`): 337,759 reference-2024 CAZyme
+positives; 112,818 negatives (97,818 natural non-CAZyme + 15,000 shuffled-domain decoys); a
+held-out **realistic slice** of 32,320 proteins from 5 whole genomes / 5 tax classes (2.07% CAZyme
+base rate, zero training overlap). Trained (`scripts/train_gate.py`) a logistic-regression gate on
+L2-normalized ESM-C embeddings.
+
+**Result — the headline is the AUROC/AUPRC gap.** Balanced held-out: AUROC 0.987 / AUPRC 0.986.
+**At the realistic 2.2% base rate: AUROC 0.984 but AUPRC 0.66** — strong ranking, precision
+collapses at the real base rate (precision 0.57 @ 0.69 recall; 0.84 @ 0.14 recall). Gate score
+cleanly ranks the three tiers (CAZyme mean 0.893 ≫ gray 0.234 ≫ non-CAZyme 0.137); at a single
+threshold t=0.10, scores below it are 99.99% truly non-CAZyme, retiring 63.7% of true non-CAZymes
+for the cost of 1/669 true CAZymes.
+
+**Design role: triage/abstention, not a standalone classifier.** Retire confident non-CAZymes
+cheaply and feed a calibrated abstention signal to the fusion module; precision on positive calls
+still comes from sequence homology (HMMER/DIAMOND) combined with the gate, per the existing fusion
+design. Artifacts: `scripts/train_gate.py`, `docs/precision_gate_report.md`,
+`benchmarks/gate_calibration.json`, `benchmarks/gate_operating_points.tsv`,
+`benchmarks/table1_gate_precision.tsv`, `docs/figures/gate_precision_recall.png`,
+`docs/figures/gate_score_by_tier.png`.
+
+### 10.2 Domain-level contrastive retrieval
+
+Single-label whole-protein pLM/fusion scored **0.006 exact-set** on multidomain proteins (a
+whole-protein embedding averages its domains into a vector matching none). Fixed by segmenting eval
+proteins directly from run_dbcan `overview.tsv` envelope coordinates (dbCAN_hmm ∪ dbCAN_sub — no
+hmmsearch rerun, per project decision), retrieving per-domain against a 307,299-anchor bank of
+single-family reference-2024 CAZymes (the reference is already 92.5% single-family, i.e.
+domain-level), and training a contrastive projection head
+(1152→512→256, cosine-softmax, 193+ families ≥20 anchors) — `scripts/extract_domains.py`,
+`scripts/build_truth_slice.py`, `scripts/train_domain_retrieval.py`.
+
+| approach | multidomain exact-set (n=330–332) | Jaccard | per-domain family acc |
+|---|---:|---:|---:|
+| whole-protein kNN (baseline) | **0.000** | 0.477 | — |
+| domain-level raw ESM-C kNN | 0.179 | 0.479 | 0.673 |
+| **domain-level + trained head** | **0.412** | **0.685** | **0.897** |
+
+No regression on single-domain proteins (exact-set 0.971); overall eval exact-set 0.897 → 0.931.
+**Independent validation** on 1,500 CAZyme3D structures (CAZyDB-labeled, training-MD5 leakage
+excluded): top-1 family accuracy **0.779 (head) vs 0.269 (raw ESM-C)** — 2.9×, confirming genuine
+family-discriminative learning rather than eval overfitting.
+
+Honest limits: 40.5% of truth-slice structures belong to families with no fungal anchor
+(unretrievable — reference-coverage ceiling); CBM accessory modules are the residual failure mode
+(short, structurally diverse); segmentation ceiling is 218–332 curated-multidomain eval proteins
+with ≥2 domains resolvable from overview coordinates alone. **Design conclusion:** domain-level
+contrastive retrieval replaces whole-protein pLM labeling as the pLM branch's operating mode.
+Artifacts: `benchmarks/domain_retrieval_summary.json`,
+`benchmarks/domain_retrieval_multidomain_eval.tsv`, `docs/domain_retrieval_report.md`,
+`docs/figures/domain_retrieval_multidomain.png`.
+
+### 10.3 Audit outcome — §8/§9 structure-tier & novel-family reports
+
+An audit found and fixed three issues in `docs/gray_zone_structure_tier/synthesis_report.md` and
+`results/novel_family/novel_family_report.md` (none changed a scientific conclusion):
+1. **SaProt-centroid provenance** — the 577-candidate novel-family pool and the 4,000-protein
+   gray-zone adjudication were selected on the **original head-slice** SaProt centroid, not the
+   reservoir-sampled one the reports claimed. A fixed-centroid rescore
+   (`docs/gray_zone_structure_tier/structure_evidence_scores_fixed_centroid.tsv`) confirms tier
+   means shift ≤0.003 and the gray-zone split moves <1 point (33.9/38.1/28.0 vs 33.4/38.3/28.3) —
+   the bug did not distort conclusions, but both reports now state provenance correctly.
+2. **"More distant" wording** — new-family proteins were described as "more distant" from 2024
+   centroids while quoted at *higher* cosine (0.978 > 0.971 for novel_seq); corrected (higher
+   cosine = less distant), and the weak raw-cosine novelty signal (AUROC ~0.52) is now stated
+   where the number appears.
+3. A parallel Claude Science session artifact had a dead cross-reference to a differently-named
+   deliverable file; this repository's own `gray_zone_adjudicated_FINAL_corrected_4000sample.tsv`
+   link was already correct and required no change.
+
+### 10.4 Sequenced roadmap
+
+**Next (near-term, ranked):** (1) wire the gate + domain retrieval into `fusion_consensus.py` as
+the pLM branch's operating mode and abstention layer, then re-run the fusion benchmark end-to-end;
+(2) CBM-specific retrieval for the residual multidomain failure mode; (3) scale structure-evidence
+scoring to the full 2.84M gray zone under the fixed centroid; (4) regenerate the 4,000-protein
+adjudicated TSV under the reservoir-sampled centroid (low priority — cross-check shows <1-point
+movement).
+
+**Deferred (explicitly out of scope this phase):** a cross-kingdom held-out-family benchmark for
+the n≈6 genuinely-novel-to-CAZy problem (hold out entire families across all kingdoms, not just
+fungi); substrate/EC prediction (Phase 2 of the broader plan).
+

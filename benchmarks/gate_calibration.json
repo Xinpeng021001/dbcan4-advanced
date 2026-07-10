@@ -1,0 +1,11 @@
+{
+  "t_lo": 0.865796685218811,
+  "t_hi": 0.9943646192550659,
+  "base_rate": 0.02193083101130962,
+  "confident_cazyme_precision": 0.9090909090909091,
+  "confident_cazyme_recall": 0.07473841554559044,
+  "confident_non_purity": 0.9950567123751481,
+  "abstain_fraction": 0.029995082773315848,
+  "auroc_balanced": 0.9872,
+  "auprc_realistic": 0.6616
+}

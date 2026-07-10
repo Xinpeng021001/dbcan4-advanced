@@ -1,0 +1,8 @@
+evidence_layer	role_in_dbcan4	key_metric	value	notes
+DIAMOND (custom fungal 2024)	sequence homology	subfamily overlap-recall	0.836	DB-vintage sensitive
+HMMER dbCAN.hmm	sequence domain calls	family exact (known)	0.906	provides domain coords
+Contrastive kNN (whole-protein)	pLM retrieval	family/subfamily exact	0.978/0.830	fair 2024-only train
+Domain-level retrieval + head	pLM retrieval (multidomain)	multidomain exact-set	0.412	was 0.000 whole-protein
+Fusion (consensus)	combine seq+pLM+struct	family/subfamily overlap	0.985/0.835	headline w/ abstention
+CAZyme gate (ESM-C)	precision triage/abstention	AUPRC @ 2.2% base rate	0.66	retires 64% non-CAZyme @99.99% purity
+Structure evidence (ProstT5+SaProt)	gray-zone adjudication	tier separation	0.625/0.581/0.460	cazyme/gray/non means
