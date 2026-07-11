@@ -24,6 +24,8 @@ nextflow.enable.dsl = 2
 include { ESMC_EMBED; ESMC_RETRIEVAL; ESMC_CONTRASTIVE } from './modules/esmc.nf'
 include { ESMFOLD; FOLDSEEK_CAZYME3D; SAPROT }           from './modules/structure.nf'
 include { SIGNALP6; DEEPTMHMM; FUSION; COLLATE_MANIFEST } from './modules/features.nf'
+include { BASELINE_DBCAN }                                  from './modules/baseline.nf'
+include { PFAM_DOMAINS; STRUCTURE_HITS; LOCALIZATION; PHYSICOCHEM; CLEAN_EC } from './modules/features_extra.nf'
 
 def helpMessage() {
     log.info """
@@ -47,6 +49,9 @@ workflow {
         | map { row -> tuple(row.sample, file(row.faa, checkIfExists: true)) }
         | set { ch_faa }
 
+    // --- Baseline dbCAN (run_dbcan) -> funcscan layout for BioForge ---
+    BASELINE_DBCAN(ch_faa)
+
     ref_emb   = file(params.ref_emb_dir)
     ref_sap   = file(params.ref_saprot_dir)
     ev_labels = file(params.eval_labels)
@@ -62,8 +67,18 @@ workflow {
     SAPROT(ESMFOLD.out.struct, ref_sap)
 
     // --- Per-protein features ---
-    SIGNALP6(ch_faa)
+    // DeepTMHMM runs first: it predicts BOTH tm topology and the signal peptide,
+    // and its derived signal_peptide feeds SIGNALP6's honest fallback when the
+    // licensed signalp6 binary is not installed.
     DEEPTMHMM(ch_faa)
+    SIGNALP6(ch_faa.join(DEEPTMHMM.out.sp_derived))
+
+    // --- Comprehensive v1.1 features (§2.5-2.9) ---
+    PFAM_DOMAINS(ch_faa)
+    PHYSICOCHEM(ch_faa)
+    CLEAN_EC(ch_faa)
+    LOCALIZATION(SIGNALP6.out.feat)
+    STRUCTURE_HITS(ESMFOLD.out.struct)
 
     // --- Fusion: gather every per-method prediction TSV per sample ---
     ESMC_RETRIEVAL.out.preds
@@ -85,7 +100,12 @@ workflow {
             SIGNALP6.out.feat.map { s, f -> tuple(s, [f]) }
                 .join(DEEPTMHMM.out.feat.map { s, f -> tuple(s, [f]) })
                 .join(ESMFOLD.out.struct.map { s, tsv, dir -> tuple(s, [tsv]) })
-                .map { s, a, b, c -> tuple(s, a + b + c) }
+                .join(PFAM_DOMAINS.out.feat.map { s, f -> tuple(s, [f]) })
+                .join(STRUCTURE_HITS.out.feat.map { s, f -> tuple(s, [f]) })
+                .join(LOCALIZATION.out.feat.map { s, f -> tuple(s, [f]) })
+                .join(PHYSICOCHEM.out.feat.map { s, f -> tuple(s, [f]) })
+                .join(CLEAN_EC.out.feat.map { s, f -> tuple(s, [f]) })
+                .map { s, a, b, c, d, e, f, g, h -> tuple(s, a + b + c + d + e + f + g + h) }
         )
         .map { s, preds, feats -> tuple(s, preds, feats) }
         .set { ch_collate }

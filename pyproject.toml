@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbcan4-advanced"
+version = "0.1.0"
+description = "dbCAN4-advanced: protein-language-model + structure CAZyme family annotation beyond HMMER/DIAMOND, for fungal proteins."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "dbCAN4-advanced" }]
+dependencies = [
+    "numpy>=1.23",
+]
+
+[project.optional-dependencies]
+# The pLM/structure engines pull heavy deps (torch, esm, foldseek). These are
+# expected to already live in the project venv on met; listed here for a full
+# from-scratch install.
+engine = ["torch>=2.0"]
+
+[project.scripts]
+dbcan4 = "dbcan4_advanced.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dbcan4_advanced = ["nf/**/*"]

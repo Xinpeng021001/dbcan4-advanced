@@ -1,0 +1,2 @@
+protein_id	localization	confidence	method	extra
+demo_p01	Extracellular	0.99	derived-from-SP	{"basis": "signalp"}

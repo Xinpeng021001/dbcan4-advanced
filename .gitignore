@@ -41,3 +41,6 @@ venv/
 .DS_Store
 .ipynb_checkpoints/
 *.swp
+
+# keep small example FASTAs (override the *.faa ignore above)
+!examples/*.faa

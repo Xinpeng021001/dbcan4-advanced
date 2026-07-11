@@ -1,0 +1,2 @@
+protein_id	ec_number	confidence	rank	tool	extra
+demo_p01	3.2.1.40	0.1053	1	CLEAN	{"confidence_type": "maxsep"}

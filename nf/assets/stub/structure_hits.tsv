@@ -1,0 +1,2 @@
+protein_id	target	target_family	tmscore	prob	lddt	evalue	extra
+demo_p01	QKX54669.1	GH28	0.8240		0.6412	2.95e-14	{"bits": 220.0, "fident": 0.201, "rank": 1}
