@@ -154,8 +154,9 @@ The whole chain was run on met on **3 real held-out 2025 fungal CAZymes**:
 
 The three cases span the honest range: **602276** all four heads agree on GH11 (unanimous, correct); **267317** majority-correct (kNN + contrastive + fusion → GH78; centroid dissents GH92); **169208** a genuinely hard case where the **ESM-C-centroid head recovers the true GH183 at high confidence (0.98)** but the other two heads miss it (kNN GH43_6, contrastive PL42) and the fusion consensus is dragged onto the wrong high-confidence kNN call (GH43_6, low fusion confidence 0.31). 169208 is a useful diagnostic: it shows the heads are genuinely orthogonal — one recovers a family the others miss — and it also exposes a real fusion weakness (a confident-but-wrong kNN vote can outweigh a correct centroid vote), which is honest to surface rather than hide.
 
-Result: **3 genes, 12 advanced CAZyme calls, 22 protein features (7 real tracks × 3
-proteins, including ESMFold structure) ingested, 3 live web pages served with every
+Result: **3 genes, 12 advanced CAZyme calls, 22 protein features across 7 real tracks
+(ec_prediction, localization, physicochem, signal_peptide, tm_topology, structure — one
+per protein — plus 4 Pfam domain rows), ingested; 3 live web pages served with every
 feature card populated — the 3D structure viewer renders the folded model, and each page
 carries a per-residue DeepTMHMM topology/signal-peptide track.** Genes are built directly
 from the protein FASTA (protein-input mode: no genome, no Prokka, no GFF).
