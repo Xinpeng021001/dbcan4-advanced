@@ -188,10 +188,12 @@ the 3 held-out proteins:
 - **Function · EC · substrate**, **Subcellular localization**, **Physicochemistry**,
   **Pfam domain architecture**, **GO**.
 
-The screenshots in this repo are **true-browser captures** (headless Google Chrome against
-the live server — real CSS + JavaScript + WebGL), captured by `capture_ui.sh`. Earlier
-chat previews were print-render substitutes that could not show the JS 3Dmol viewer; the
-UI itself was never a mock-up.
+The screenshots in `docs/ui/` are **true-browser captures** (headless Google Chrome
+against the live server — real CSS + JavaScript + the 3Dmol WebGL viewer), produced by
+`capture_ui.sh` and described in `docs/ui/README.md`. `ui_hero_267317.png` and
+`ui_gene_169208.png` show the ESMFold structure actually rendered in the 3Dmol viewer.
+Earlier in-development previews were print-render substitutes that could not show the JS
+3Dmol viewer; the UI itself was never a mock-up.
 
 ## Feature tools & environments
 
