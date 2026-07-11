@@ -76,21 +76,32 @@ bash $REPO/repo_clone/dbcan4_workup.sh my_proteins.faa --serve
 That single call runs, in order: **(1)** baseline dbCAN (run_dbcan V5) → **(2)** ESM-C embed
 + label-free infer (kNN/centroid/contrastive) → **(3)** fusion → **(4)** Pfam domains
 (hmmscan) → **(5)** physicochem (Biopython) → **(6)** DeepTMHMM topology + signal peptide +
-derived localization → **(7)** CLEAN EC → **(8)** v1.1 manifest, then ingest + serve. It
-handles all the real-tool gotchas internally (biolib bare-filename staging, CLEAN
-stop-codon strip + truncation, flat manifest staging).
+derived localization → **(7)** CLEAN EC → **(7b)** ESMFold 3D structure (local GPU) →
+**(8)** v1.1 manifest, then ingest + serve. It handles all the real-tool gotchas internally
+(biolib bare-filename staging, CLEAN stop-codon strip + truncation, flat manifest staging).
+
+dbCAN4 is **fungal + protein-input**: genes come straight from the FASTA — **no genome, no
+Prokka, no GFF**. Pass `--gff FILE` only if you genuinely have genomic coordinates.
 
 ```
-Options:  --outdir DIR   --sample NAME   --serve   --port N   --gpu N
+Options:  --outdir DIR   --sample NAME   --gff FILE   --serve   --port N   --gpu N
           --no-deeptmhmm    (skip the BioLib-cloud step, e.g. offline)
           --no-clean        (skip CLEAN EC)
+          --no-structure    (skip ESMFold folding, e.g. no GPU)
 ```
 
 Verified end-to-end on the 3 held-out proteins (`real3.faa`): the one command produced
-**3 genes, 12 advanced calls, 19 protein features across 6 real tracks (domains,
-ec_prediction, localization, physicochem, signal_peptide, tm_topology), 0 unmatched**, and
-served `/genes/1` (267317), `/genes/2` (602276), `/genes/3` (169208) with **every feature
-card populated (no "not analysed")**.
+**3 genes, 12 advanced calls, 22 protein features across 7 real tracks (domains,
+ec_prediction, localization, physicochem, signal_peptide, tm_topology, structure),
+0 unmatched**, and served `/genes/1` (267317), `/genes/2` (602276), `/genes/3` (169208)
+with **every feature card populated (no "not analysed")** — the 3Dmol viewer renders the
+ESMFold model and each page shows the per-residue DeepTMHMM topology track. The funcscan
+tree carries **no `annotation/prokka/` directory** (protein-input mode).
+
+**True-browser screenshots:** `capture_ui.sh <base_url> <out_dir> [gene_ids...]` drives
+headless Google Chrome (real CSS + JS + WebGL) against the live server, so the 3Dmol viewer
+and topology tracks are captured as a user actually sees them — not a print-render
+substitute.
 
 For just label-free family calls on a novel sequence (no features, no web), the CLI is a
 one-liner too:
@@ -131,3 +142,13 @@ dbcan4 annotate my_proteins.faa --outdir calls_out
   both as honest fallbacks: `SIGNALP6` uses the real binary if it's on `PATH`, else copies
   the DeepTMHMM-derived signal peptide; localization is a transparent derived rule
   (secreted if SP + no TM), labelled "not DeepLoc". Neither fabricates a probability.
+- **ESMFold structure**: `scripts/fold_esmfold.py` folds each protein on the local GPU via
+  `facebook/esmfold_v1` (transformers) from the **engine venv** (torch + esm — same stack
+  as ESM-C, so no separate env). `structures_to_tsv.py` then emits `structures.tsv` and
+  **rescales the per-residue pLDDT B-factors ×100 (0–1 → 0–100)** so the 3Dmol viewer's
+  colour ramp (min 50, max 90) is correct. Weights (~16 GB) cache under `hf_cache/`; the
+  hero (1089 aa) folds in ~4 min, the two ~200-aa proteins in seconds.
+- **Tool environments**: each Nextflow module carries its own `conda`/`container` directive
+  so envs never conflict. Pinned conda recipes are in `nf/envs/`; `nf/TOOLS.md` covers all
+  three install routes (conda YAML, BioContainers image, license-gated manual) and how to
+  add a new feature tool.

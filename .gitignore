@@ -44,3 +44,9 @@ venv/
 
 # keep small example FASTAs (override the *.faa ignore above)
 !examples/*.faa
+real3_workup/
+esmfold_out/
+ui_chrome/
+ui_struct/
+results/
+*.db

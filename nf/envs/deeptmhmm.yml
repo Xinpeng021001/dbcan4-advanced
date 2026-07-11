@@ -1,0 +1,13 @@
+# dbcan4-advanced — DeepTMHMM tier (TM topology + signal peptide)
+# DeepTMHMM runs through pybiolib against the BioLib cloud, so this env is thin:
+# just the client. The `biolib` console script is what the DEEPTMHMM process calls.
+#
+# Build:   conda env create -f deeptmhmm.yml
+# Point the pipeline at it with  --deeptmhmm_env <prefix>   (biolib_bin derives from it)
+name: dbcan4-deeptmhmm
+channels: [conda-forge]
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - pybiolib==1.4.262

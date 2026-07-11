@@ -5,12 +5,18 @@
 ```bash
 # the full real workup, verified end-to-end on met:
 bash dbcan4_workup.sh proteins.faa --serve
-# → baseline dbCAN + advanced ESM-C/fusion + 6 real feature tracks
-#   (Pfam domains, physicochem, EC, TM topology, signal peptide, localization)
+# → baseline dbCAN + advanced ESM-C/fusion + 7 real feature tracks
+#   (Pfam domains, physicochem, EC, TM topology, signal peptide,
+#    localization, ESMFold 3D structure)
 # → publishes the standard v1.1 output contract
 # → ingests into a BioForge SQLite database
 # → serves a live web UI at http://127.0.0.1:8000
 ```
+
+dbCAN4 is **fungal + protein-input**: genes are built straight from the protein
+FASTA — **no genome, no Prokka, no GFF**. Each protein becomes its own gene with
+residue coordinates (`1–L`). A genomic GFF is *optional* — pass `--gff FILE` only
+when you genuinely have coordinates, and the gene pages gain a genome track.
 
 `dbcan4_workup.sh` is the one-command entry point for a real run — every step is a
 validated real tool, and it handles all the tool-specific gotchas internally. The
@@ -103,9 +109,11 @@ the matching baseline gene as a new versioned release. See `nf/OUTPUT_CONTRACT.m
 
 Every CAZyme the pipeline calls is then put through a complete functional workup —
 this is what makes each protein's web page a genuine deep-dive rather than a bare family
-label. On the 3 real held-out proteins, **6 of the 8 feature tracks run on real tools**;
-the two license-gated tools (SignalP-6.0, DeepLoc-2.0) are not installed and are handled
-as **honest fallbacks** — clearly labelled, never fabricated.
+label. On the 3 real held-out proteins, **7 of the 8 feature tracks run on real tools**
+(including ESMFold 3D structure, folded on met's GPU); only Foldseek-vs-CAZyme3D structure
+search is left unrun (wired + stub-proven, needs the CAZyme3D DB). The two license-gated
+tools (SignalP-6.0, DeepLoc-2.0) are not installed and are handled as **honest fallbacks**
+— clearly labelled, never fabricated.
 
 ![feature coverage]({{artifact:art_97942c1e-b1fb-4580-9f33-3f37058eba14}})
 
@@ -117,8 +125,8 @@ as **honest fallbacks** — clearly labelled, never fabricated.
 | Signal peptide | DeepTMHMM → SignalP6 slot | **honest fallback** — SignalP-6.0 not installed; sourced from DeepTMHMM's SP call, `sp_prob` left blank (not fabricated) |
 | Localization | derived from DeepTMHMM SP + topology | **honest fallback** — DeepLoc-2.0 not installed; a transparent rule (secreted if SP + no TM), labelled "not DeepLoc" |
 | Physicochem | Biopython (MW, pI, GRAVY, N-glyc sequons) | **real** |
-| Structure | ESMFold | not run on these 3 (GPU-heavy; wired + stub-proven) |
-| Structure hits | Foldseek vs CAZyme3D | not run on these 3 (wired + stub-proven) |
+| Structure | ESMFold (facebook/esmfold_v1, met GPU) | **real** — all 3 folded; pLDDT 267317 69.2, 602276 82.3, 169208 75.8; served in the 3Dmol viewer |
+| Structure hits | Foldseek vs CAZyme3D | not run on these 3 (wired + stub-proven; needs CAZyme3D DB) |
 
 DeepTMHMM is the workhorse of the secretion/topology tracks: one real BioLib-cloud run
 predicts *both* the transmembrane topology and the N-terminal signal peptide, so it
@@ -146,9 +154,12 @@ The whole chain was run on met on **3 real held-out 2025 fungal CAZymes**:
 
 The three cases span the honest range: **602276** all four heads agree on GH11 (unanimous, correct); **267317** majority-correct (kNN + contrastive + fusion → GH78; centroid dissents GH92); **169208** a genuinely hard case where the **ESM-C-centroid head recovers the true GH183 at high confidence (0.98)** but the other two heads miss it (kNN GH43_6, contrastive PL42) and the fusion consensus is dragged onto the wrong high-confidence kNN call (GH43_6, low fusion confidence 0.31). 169208 is a useful diagnostic: it shows the heads are genuinely orthogonal — one recovers a family the others miss — and it also exposes a real fusion weakness (a confident-but-wrong kNN vote can outweigh a correct centroid vote), which is honest to surface rather than hide.
 
-Result: **3 genes, 12 advanced CAZyme calls, 19 protein features (6 real tracks × 3
-proteins + Pfam domains) ingested, 3 live web pages served with every feature card
-populated.** All three true families are recovered by at least one ESM-C head — 267317
+Result: **3 genes, 12 advanced CAZyme calls, 22 protein features (7 real tracks × 3
+proteins, including ESMFold structure) ingested, 3 live web pages served with every
+feature card populated — the 3D structure viewer renders the folded model, and each page
+carries a per-residue DeepTMHMM topology/signal-peptide track.** Genes are built directly
+from the protein FASTA (protein-input mode: no genome, no Prokka, no GFF).
+All three true families are recovered by at least one ESM-C head — 267317
 and 602276 by the majority/consensus, and 169208's GH183 by the centroid head specifically
 (the kNN and contrastive heads miss it, and the fusion consensus lands on the wrong
 high-confidence kNN call). 169208 is the honest diagnostic case: the correct answer is
@@ -156,6 +167,39 @@ present in the method ensemble but the current fusion rule does not surface it �
 disclosed limitation of the consensus step, not a clean success. Evidence:
 `run_real_demo.sh`, `manifest.json`, `real_demo.db`,
 `fig_real_end2end.png`, `docs/fig_feature_coverage.png`.
+
+---
+
+## The web UI
+
+Each gene page is a genuine deep-dive. Every card below is populated from real data on
+the 3 held-out proteins:
+
+- **Protein / Provenance** — protein-input mode (residue length, "no genomic coordinates";
+  a per-source provenance table with honest tool labels + sha256 of every input file).
+- **CAZyme annotations — advanced vs baseline** — advanced-only families the baseline
+  missed are flagged; each call shows the method + confidence pill.
+- **Secretion & membrane topology** — signal-peptide + TM-topology text **and an inline
+  per-residue SVG track** drawn from the real DeepTMHMM Viterbi path (orange signal / green
+  extracellular / blue TM), with cleavage site and residue ruler.
+- **Predicted 3D structure** — an interactive **3Dmol viewer** rendering the ESMFold model,
+  cartoon coloured by per-residue pLDDT, with a PDB download.
+- **Function · EC · substrate**, **Subcellular localization**, **Physicochemistry**,
+  **Pfam domain architecture**, **GO**.
+
+The screenshots in this repo are **true-browser captures** (headless Google Chrome against
+the live server — real CSS + JavaScript + WebGL), captured by `capture_ui.sh`. Earlier
+chat previews were print-render substitutes that could not show the JS 3Dmol viewer; the
+UI itself was never a mock-up.
+
+## Feature tools & environments
+
+Each tool tier is its own Nextflow module with its **own** `conda`/`container` directive,
+so environments never conflict. Pinned conda recipes live in `nf/envs/`
+(`engine.yml`, `deeptmhmm.yml`, `foldseek.yml`); **`nf/TOOLS.md`** documents which tools
+matter for a CAZyme, all three install routes (conda YAML, BioContainers image,
+license-gated manual for SignalP6/DeepLoc/CLEAN), and the 5-step contract for adding a new
+feature tool.
 
 ---
 

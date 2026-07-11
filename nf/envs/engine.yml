@@ -1,0 +1,33 @@
+# dbcan4-advanced — engine tier (GPU pLM + folding + baseline dbCAN)
+# Powers: BASELINE_DBCAN, ESMC_* , ESMFOLD, PFAM_DOMAINS, PHYSICOCHEM,
+#         FOLDSEEK caller, fusion. One env; conda base + pip for the CUDA wheels.
+#
+# Why ESMFold rides this env (not a separate one): ESMFold via transformers needs
+# exactly torch + transformers + (fair-)esm — the same stack ESM-C and run_dbcan
+# use — so these GPU/Python tiers are mutually COMPATIBLE and co-locate cleanly.
+# This is the opposite case from CLEAN (torch 1.11) or the DeepTMHMM client, which
+# have conflicting pins and therefore get their own envs. Verified: all 3 demo
+# proteins fold from this exact stack (the met project venv, torch 2.12.1+cu130).
+# (The older standalone `esmfold2` conda env referenced in early configs is
+#  superseded — folding runs from the shared engine venv.)
+#
+# Build:   conda env create -f engine.yml         (or: mamba env create -f ...)
+# The pipeline points at it with  --esmc_env / --dbcan_env / --esmfold_env / ...
+name: dbcan4-engine
+channels: [conda-forge, bioconda]
+dependencies:
+  - python=3.11
+  - hmmer=3.4                 # hmmscan for Pfam domains
+  - pip
+  - pip:
+    # protein language model + folding stack (CUDA build; drop +cu* for CPU)
+    - torch==2.12.1
+    - torchvision==0.27.1
+    - transformers==4.48.1    # ESMFold (facebook/esmfold_v1)
+    - fair-esm==2.0.0         # ESMFold openfold-free path
+    - esm==3.2.1.post1        # ESM-C embeddings
+    - dbcan==5.2.9            # run_dbcan V5 baseline
+    - pyhmmer==0.11.0
+    - biopython==1.85
+    - numpy==2.4.6
+    - scikit-learn==1.9.0

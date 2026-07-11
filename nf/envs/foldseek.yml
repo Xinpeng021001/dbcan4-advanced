@@ -1,0 +1,10 @@
+# dbcan4-advanced — structure-search tier (Foldseek vs CAZyme3D)
+# Feeds STRUCTURE_HITS (structural homology of ESMFold models against CAZyme3D_id50).
+#
+# Build:   conda env create -f foldseek.yml
+# Point the pipeline at it with  --foldseek_env <prefix>
+name: dbcan4-foldseek
+channels: [conda-forge, bioconda]
+dependencies:
+  - python=3.10
+  - foldseek=9.427df8a        # bioconda; pin to the build you validated
