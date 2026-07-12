@@ -16,7 +16,7 @@ as a transitive dep, `pip uninstall fair-esm` and `pip install --force-reinstall
 
 System binaries already on met: `foldseek`, `diamond`, `TMalign`, `hmmscan` (structure/baseline tiers).
 
-Frozen package list: [`met_env_freeze.txt`](../met_env_freeze.txt).
+Frozen package list: [`met_env_freeze.txt`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/met_env_freeze.txt).
 
 ## Data
 `/array1/xinpeng/fungi-cazyme-project/` — CAZy 2024 (`CAZyDB.07142024.fungi.faa`) and

@@ -50,3 +50,6 @@ ui_chrome/
 ui_struct/
 results/
 *.db
+
+# MkDocs local build output
+site/

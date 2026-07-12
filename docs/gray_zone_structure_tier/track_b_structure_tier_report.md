@@ -12,7 +12,7 @@ dbCAN4 fungal CAZyme annotation project — met.unl.edu, `/array1/xinpeng/dbcan4
 | SaProt (650M-AF2) | Installed & validated; 1280-dim embeddings produced for all query + reference structures |
 | ESM Atlas 2 coverage | **85.9%** of a 2000-protein sample have a hit, but median identity only **51.2%** (distant homology; MGnify-derived, not fungal-specific) |
 | AF3db (AlphaFold DB) coverage | **75.9%** of queryable CAZyme3D-homolog accessions have an AFDB entry (944/1243; a further 216 accessions are non-UniProt-format and rejected by the API) |
-| Structure-evidence score | [structure_evidence_scores_final.tsv](structure_evidence_scores_final.tsv) — 2483 rows, discriminates tiers as expected (below) |
+| Structure-evidence score | `structure_evidence_scores_final.tsv` — 2483 rows, discriminates tiers as expected (below). Superseded after the centroid-provenance audit by the shipped [`structure_evidence_scores_fixed_centroid.tsv`](structure_evidence_scores_fixed_centroid.tsv) |
 
 ## 1. CAZyme3D_id50: download, extraction, ID mapping
 
@@ -118,7 +118,7 @@ The score cleanly separates known CAZymes from known non-CAZymes, with gray-zone
 falling in between as expected — confirming the structure-similarity signal is informative
 for tiering gray-zone candidates. See the distribution plot below.
 
-![Structure evidence score by tier]({{artifact:61657d2c-4985-41ed-97ea-f9c7b87547cf}})
+![Structure evidence score by tier](structure_evidence_score_by_tier.png)
 
 ## Scripts (in `dbcan4-advanced/scripts/`)
 

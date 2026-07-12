@@ -231,8 +231,8 @@ Three findings:
 are the **2024-DB** column. The pLM and structure tiers (§4.1) were already fair —
 they train and retrieve only on 2024 data — so no rerun was needed; likewise
 Foldseek. The full fair-vs-current table for all four tiers at both subfamily and
-parent granularity is in [`benchmarks/master_benchmark_v3.tsv`](../benchmarks/master_benchmark_v3.tsv)
-and [`benchmarks/dbcan_db_2024_vs_2025_comparison.tsv`](../benchmarks/dbcan_db_2024_vs_2025_comparison.tsv).
+parent granularity is in [`benchmarks/master_benchmark_v3.tsv`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/master_benchmark_v3.tsv)
+and [`benchmarks/dbcan_db_2024_vs_2025_comparison.tsv`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/dbcan_db_2024_vs_2025_comparison.tsv).
 
 ### 4.6 One footing, three CAZy levels, and multidomain handling
 
@@ -316,7 +316,7 @@ exact** — they emit one family per protein by construction, so they can never 
 an accuracy gap**: to compete on multidomain proteins the pLM tier needs per-domain
 segmentation (sliding-window or a domain-boundary head), which is a concrete
 dbCAN4 development item. The full three-level table for all methods and buckets is
-[`benchmarks/master_benchmark_v4_threelevel.tsv`](../benchmarks/master_benchmark_v4_threelevel.tsv).
+[`benchmarks/master_benchmark_v4_threelevel.tsv`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/master_benchmark_v4_threelevel.tsv).
 
 ### 4.7 Reference scope: fungi-specific vs all-kingdom (MMseqs-clustered)
 
@@ -392,10 +392,10 @@ faster, and loses nothing on the families a fungal annotator actually encounters
 ![Fungi-specific vs all-kingdom ESM-C reference. Panel a: on known families, all three reference conditions give near-identical subfamily overlap recall for every method except the raw ESM-C centroid. Panel b: the redundancy effect (clustering cost) and scope effect (all-kingdom benefit) are both small — except the raw centroid's −0.16 redundancy sensitivity; the classifier is the only method with a positive scope effect.](figures/refscope_effect.png)
 
 Per-method, per-bucket, three-level numbers with both effect sizes:
-[`benchmarks/refscope_threelevel_all.tsv`](../benchmarks/refscope_threelevel_all.tsv)
-and [`benchmarks/refscope_effects.tsv`](../benchmarks/refscope_effects.tsv). Scale
-provenance: [`benchmarks/refscope_build_scale.json`](../benchmarks/refscope_build_scale.json),
-[`benchmarks/refscope_cluster_scale.json`](../benchmarks/refscope_cluster_scale.json).
+[`benchmarks/refscope_threelevel_all.tsv`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/refscope_threelevel_all.tsv)
+and [`benchmarks/refscope_effects.tsv`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/refscope_effects.tsv). Scale
+provenance: [`benchmarks/refscope_build_scale.json`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/refscope_build_scale.json),
+[`benchmarks/refscope_cluster_scale.json`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/benchmarks/refscope_cluster_scale.json).
 
 ## 5. Recommendations for dbCAN4
 
@@ -433,7 +433,7 @@ provenance: [`benchmarks/refscope_build_scale.json`](../benchmarks/refscope_buil
 ## 7. Reproducibility
 
 Exact commands, parameters, and cutoffs for every step are in
-[`REPRODUCE.md`](../REPRODUCE.md). run_dbcan tiers use dbCAN production defaults
+[`REPRODUCE.md`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/REPRODUCE.md). run_dbcan tiers use dbCAN production defaults
 (DIAMOND CAZy E-value **1e-102**; dbCAN-sub HMM E-value 1e-2, coverage 0). The
 custom temporal baselines use their own operating points (standalone DIAMOND
 E-value 1e-15 on a fungal-only reference; standalone HMMER E-value 1e-3). Foldseek

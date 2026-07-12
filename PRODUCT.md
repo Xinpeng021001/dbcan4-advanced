@@ -31,7 +31,7 @@ This repository is three parts that compose into one product:
 | **Nextflow pipeline** | orchestrates baseline dbCAN + advanced ESM-C/structure tiers + 8 comprehensive feature tracks → standard output contract | `nf/` |
 | **BioForge db + web** | versioned SQLite schema + FastAPI web UI that ingests the contract and serves per-gene deep-dive pages | `github.com/Xinpeng021001/biodb` |
 
-![product architecture]({{artifact:art_da9d0df3-2a6c-4b5c-978a-c98beb04b5f5}})
+![product architecture](docs/architecture_product.png)
 
 ---
 
@@ -115,7 +115,7 @@ search is left unrun (wired + stub-proven, needs the CAZyme3D DB). The two licen
 tools (SignalP-6.0, DeepLoc-2.0) are not installed and are handled as **honest fallbacks**
 — clearly labelled, never fabricated.
 
-![feature coverage]({{artifact:art_97942c1e-b1fb-4580-9f33-3f37058eba14}})
+![feature coverage](docs/fig_feature_coverage.png)
 
 | track | tool | status |
 |---|---|---|

@@ -84,7 +84,7 @@ This answers dbCAN's *next* question after family assignment. Today dbCAN maps f
 
 A **two-tier** design: a fast sequence-only tier that runs on every protein, and a structure tier reserved for hard/ambiguous cases — with a fusion layer producing one calibrated call.
 
-![dbCAN4 advanced-methods architecture]({{artifact:art_4947927e-ba6d-477a-a081-b183ca5ab94b}})
+![dbCAN4 advanced-methods architecture](architecture.png)
 
 ```
                               query proteins (FASTA)

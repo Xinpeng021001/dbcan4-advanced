@@ -1,7 +1,7 @@
 # BioForge web UI — true-browser captures
 
 These are **real headless-Google-Chrome screenshots** of the live BioForge web
-server (`uvicorn bioforge.api.main:app`), taken by [`capture_ui.sh`](../../capture_ui.sh)
+server (`uvicorn bioforge.api.main:app`), taken by [`capture_ui.sh`](https://github.com/Xinpeng021001/dbcan4-advanced/blob/main/capture_ui.sh)
 on the 3 held-out fungal proteins. They render the actual CSS + JavaScript + the
 3Dmol WebGL structure viewer — i.e. what a user sees in a browser, not a static
 figure.

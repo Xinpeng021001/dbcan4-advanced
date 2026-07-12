@@ -1,0 +1,93 @@
+site_name: dbCAN4-advanced
+site_description: >-
+  Protein-language-model + structure-similarity CAZyme annotation for fungal
+  proteins — beyond HMMER/DIAMOND.
+site_url: https://dbcan4-advanced.readthedocs.io
+repo_url: https://github.com/Xinpeng021001/dbcan4-advanced
+repo_name: Xinpeng021001/dbcan4-advanced
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; the dbCAN development team — MIT License
+
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Installation: installation.md
+      - Quick start: quickstart.md
+  - User guide:
+      - Running the workup: usage.md
+      - CLI reference: cli.md
+      - Output contract: output-contract.md
+      - Feature tools: tools.md
+      - Web UI: webui.md
+      - UI capture notes: ui/README.md
+      - Troubleshooting: troubleshooting.md
+  - Science & benchmarks:
+      - Design & architecture: design_dbcan4_advanced.md
+      - Benchmark report: benchmark_report.md
+      - Domain-level retrieval: domain_retrieval_report.md
+      - Precision gate: precision_gate_report.md
+      - Gray-zone & structure tier:
+          - Synthesis: gray_zone_structure_tier/synthesis_report.md
+          - Tiering schema (Track A): gray_zone_structure_tier/track_a_tiering_schema.md
+          - Structure tier (Track B): gray_zone_structure_tier/track_b_structure_tier_report.md
+  - Reference:
+      - Compute environment: env_setup.md
+      - Development log: daily-log.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Xinpeng021001/dbcan4-advanced
