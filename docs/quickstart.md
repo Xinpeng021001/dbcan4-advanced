@@ -51,6 +51,9 @@ Three paths, fastest first. All use the shipped 3-protein example `examples/real
     ```
 
 !!! success "Verified"
-    All three paths were re-verified from a clean working directory on the reference host
-    (2026-07-12). See [Running the workup](usage.md) for the full option set and how to run on
-    your own data.
+    Paths **A** (`dbcan4 annotate`) and **B** (`dbcan4 run --stub`) were re-verified from a clean
+    working directory on the reference host on 2026-07-12 (the family calls and manifest shown
+    above are from that run). Path **C** (the full `dbcan4_workup.sh --serve` product workup —
+    DeepTMHMM/CLEAN/ESMFold/ingest/web UI) was verified end-to-end earlier, on 2026-07-10, on the
+    same three held-out proteins. See [Running the workup](usage.md) for the full option set and
+    how to run on your own data.
