@@ -1,0 +1,48 @@
+[
+  {
+    "protein_id": "267317",
+    "true_family": "GH78 (multidomain GH28+GH78)",
+    "menu": {
+      "GH78": 0.9953,
+      "GH92": 0.9774
+    },
+    "pred_set_70pct": [],
+    "pred_set_80pct": [],
+    "pred_set_90pct_saturated": [
+      "GH78",
+      "GH92"
+    ]
+  },
+  {
+    "protein_id": "602276",
+    "true_family": "GH11",
+    "menu": {
+      "GH11": 1.0
+    },
+    "pred_set_70pct": [
+      "GH11"
+    ],
+    "pred_set_80pct": [
+      "GH11"
+    ],
+    "pred_set_90pct_saturated": [
+      "GH11"
+    ]
+  },
+  {
+    "protein_id": "169208",
+    "true_family": "GH183",
+    "menu": {
+      "GH43_6": 0.9861,
+      "GH183": 0.9844,
+      "PL42": 0.2972
+    },
+    "pred_set_70pct": [],
+    "pred_set_80pct": [],
+    "pred_set_90pct_saturated": [
+      "GH43_6",
+      "GH183",
+      "PL42"
+    ]
+  }
+]

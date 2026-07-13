@@ -1,0 +1,20 @@
+[
+  {
+    "protein_id": "267317",
+    "true_family": "GH78 (multidomain GH28+GH78)",
+    "energy_novelty_score": 0.628,
+    "percentile_vs_eval_slice": 97.8
+  },
+  {
+    "protein_id": "602276",
+    "true_family": "GH11",
+    "energy_novelty_score": 0.4813,
+    "percentile_vs_eval_slice": 34.0
+  },
+  {
+    "protein_id": "169208",
+    "true_family": "GH183",
+    "energy_novelty_score": 0.859,
+    "percentile_vs_eval_slice": 100.0
+  }
+]

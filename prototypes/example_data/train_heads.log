@@ -1,0 +1,68 @@
+ref: (337705, 1152), families(>= 2): 349
+epoch   0 loss 9.9417 val_clf_acc 0.1642 (1s)
+epoch   5 loss 4.2832 val_clf_acc 0.9217 (6s)
+epoch  10 loss 4.0328 val_clf_acc 0.9484 (10s)
+epoch  15 loss 3.9491 val_clf_acc 0.9572 (15s)
+epoch  20 loss 3.9025 val_clf_acc 0.9610 (19s)
+epoch  25 loss 3.8720 val_clf_acc 0.9644 (23s)
+epoch  29 loss 3.8565 val_clf_acc 0.9655 (27s)
+{
+  "n_families_trained": 349,
+  "contrastive_knn": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7603,
+      "overlap": 0.8297
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.8982,
+      "overlap": 0.9732
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0,
+      "overlap": 0.0386
+    }
+  },
+  "contrastive_centroid": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7554,
+      "overlap": 0.8223
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.8925,
+      "overlap": 0.9673
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0,
+      "overlap": 0.0234
+    }
+  },
+  "classifier": {
+    "overall": {
+      "n": 4726,
+      "exact": 0.7539,
+      "overlap": 0.8229
+    },
+    "novel_seq": {
+      "n": 4000,
+      "exact": 0.8908,
+      "overlap": 0.9655
+    },
+    "novel_family": {
+      "n": 726,
+      "exact": 0.0,
+      "overlap": 0.0372
+    }
+  },
+  "novelty_auroc": {
+    "contrastive_centroid_margin": 0.3704400826446281,
+    "contrastive_centroid_cosine": 0.5126305096418733,
+    "contrastive_knn_purity": 0.05805337465564738,
+    "classifier_maxsoftmax": 0.5457706611570248
+  }
+}

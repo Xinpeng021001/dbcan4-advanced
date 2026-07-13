@@ -1,0 +1,75 @@
+{
+  "contract_version": "1.1",
+  "pipeline": "dbcan4-advanced",
+  "pipeline_version": "0.1.0",
+  "created": "2026-07-11T02:38:31Z",
+  "release_label": "workup-2026-07-10",
+  "release_notes": "ESM-C + structure advanced CAZyme calls",
+  "tool_versions": {
+    "esm": "3.2.1",
+    "deeptmhmm": "1.0.24",
+    "clean": "maxsep",
+    "hmmscan": "3.4",
+    "biopython": "1.85"
+  },
+  "samples": [
+    {
+      "sample_key": "real3",
+      "cazyme_predictions": [
+        {
+          "tool": "ESM-C-kNN",
+          "path": "predictions/real3/ESM-C-kNN.tsv"
+        },
+        {
+          "tool": "ESM-C-centroid",
+          "path": "predictions/real3/ESM-C-centroid.tsv"
+        },
+        {
+          "tool": "ESM-C-contrastive",
+          "path": "predictions/real3/ESM-C-contrastive.tsv"
+        },
+        {
+          "tool": "fusion",
+          "path": "predictions/real3/fusion.tsv"
+        }
+      ],
+      "protein_features": [
+        {
+          "feature_type": "signal_peptide",
+          "tool": "SignalP6/DeepTMHMM",
+          "path": "features/real3/signalp6.tsv"
+        },
+        {
+          "feature_type": "tm_topology",
+          "tool": "DeepTMHMM",
+          "path": "features/real3/deeptmhmm.tsv"
+        },
+        {
+          "feature_type": "structure",
+          "tool": "ESMFold",
+          "path": "features/real3/structures.tsv"
+        },
+        {
+          "feature_type": "domains",
+          "tool": "Pfam/hmmscan",
+          "path": "features/real3/domains.tsv"
+        },
+        {
+          "feature_type": "localization",
+          "tool": "DeepLoc/derived",
+          "path": "features/real3/localization.tsv"
+        },
+        {
+          "feature_type": "physicochem",
+          "tool": "Biopython",
+          "path": "features/real3/physicochem.tsv"
+        },
+        {
+          "feature_type": "ec_prediction",
+          "tool": "CLEAN",
+          "path": "features/real3/ec_prediction.tsv"
+        }
+      ]
+    }
+  ]
+}

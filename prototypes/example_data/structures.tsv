@@ -1,0 +1,4 @@
+protein_id	plddt	path	length	source	extra
+267317	69.2	structures/267317.pdb	1089	ESMFold	"{""model"": ""facebook/esmfold_v1"", ""note"": ""ESMFold prediction (mean pLDDT 69.2/100)""}"
+602276	82.3	structures/602276.pdb	203	ESMFold	"{""model"": ""facebook/esmfold_v1"", ""note"": ""ESMFold prediction (mean pLDDT 82.3/100)""}"
+169208	75.8	structures/169208.pdb	205	ESMFold	"{""model"": ""facebook/esmfold_v1"", ""note"": ""ESMFold prediction (mean pLDDT 75.8/100)""}"

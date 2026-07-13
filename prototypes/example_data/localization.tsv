@@ -1,0 +1,4 @@
+protein_id	localization	confidence	method	extra
+267317	Extracellular		derived-from-SP	"{""basis"": ""signalp"", ""sp_prediction"": ""SP""}"
+602276	Extracellular		derived-from-SP	"{""basis"": ""signalp"", ""sp_prediction"": ""SP""}"
+169208	Extracellular		derived-from-SP	"{""basis"": ""signalp"", ""sp_prediction"": ""NO_SP""}"

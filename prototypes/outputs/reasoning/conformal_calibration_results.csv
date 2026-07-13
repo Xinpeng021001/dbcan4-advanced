@@ -1,0 +1,5 @@
+alpha,target_coverage_label,q_hat,empirical_coverage_test,mean_set_size,pct_size_0_abstain,pct_size_1,pct_size_ge2
+0.3,70%,0.0,0.7994,0.953,0.0474,0.9522,0.0004
+0.2,80%,0.0046,0.8113,0.973,0.0326,0.9619,0.0055
+0.1,"90% (target, see ceiling note)",1.0,0.8443,1.601,0.0,0.4778,0.5222
+0.05,"95% (target, see ceiling note)",1.0,0.8443,1.601,0.0,0.4778,0.5222

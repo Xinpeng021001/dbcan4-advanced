@@ -1,0 +1,4 @@
+query_id	clf_pred	clf_conf	contr_knn_pred	contr_knn_purity
+267317	GH78	0.9495	GH78	0.8667
+602276	GH11	0.9986	GH11	1.0000
+169208	PL42	0.2972	GH183	0.2667

@@ -1,0 +1,4 @@
+protein_id	family	confidence	ec	all_families	votes	agreement	signals
+169208	GH43_6	0.3082	-	GH43_6,GH183,PL42	"{""ESM-C-centroid"":""GH183"",""ESM-C-contrastive"":""PL42"",""ESM-C-kNN"":""GH43_6"",""fusion"":""GH43_6""}"	2	"[""sequence""]"
+267317	GH78	0.6671	-	GH78,GH92	"{""ESM-C-centroid"":""GH92"",""ESM-C-contrastive"":""GH78"",""ESM-C-kNN"":""GH78"",""fusion"":""GH78""}"	3	"[""sequence""]"
+602276	GH11	0.9823	-	GH11	"{""ESM-C-centroid"":""GH11"",""ESM-C-contrastive"":""GH11"",""ESM-C-kNN"":""GH11"",""fusion"":""GH11""}"	4	"[""sequence""]"

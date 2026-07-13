@@ -37,9 +37,10 @@ workup — then ingests everything into a versioned database with a per-gene dee
 9. [Results & benchmarks](#results--benchmarks)
 10. [Worked example — hero protein 267317](#worked-example--hero-protein-267317)
 11. [Troubleshooting](#troubleshooting)
-12. [Documentation](#documentation)
-13. [Citing the methods](#citing-the-methods)
-14. [License](#license)
+12. [Prototypes](#prototypes)
+13. [Documentation](#documentation)
+14. [Citing the methods](#citing-the-methods)
+15. [License](#license)
 
 ---
 
@@ -368,6 +369,29 @@ DeepTMHMM secreted (SP cleave@18); ESMFold pLDDT 69.2. Full record in
 | Web UI blank / no 3D structure | pass `--structures-dir` on ingest (the workup does this); the 3Dmol viewer needs the served PDB |
 
 More gotchas: [`REPRODUCE_PRODUCT.md`](REPRODUCE_PRODUCT.md), [`nf/TOOLS.md`](nf/TOOLS.md).
+
+---
+
+## Prototypes
+
+Two standalone, review-stage prototypes live in [`prototypes/`](prototypes/README.md). Each runs
+end-to-end from a small checked-in `example_data/` bundle (2.1 MB) — no GPU, no reference index, no
+live compute, no network:
+
+- **Visualization** ([`prototypes/viz/`](prototypes/viz/)) — an interactive embedding explorer
+  (raw-ESM-C ⇄ trained-head UMAP toggle over 9,815 reference proteins / 814 families), a training
+  dashboard from the real per-epoch head-training log, and a calibration + confusion explorer. One
+  command regenerates all of it: `python build_visualizations.py --assets ../example_data`.
+- **Reasoning** ([`prototypes/reasoning/`](prototypes/reasoning/)) — grounded per-protein reasoning
+  reports (incl. the 169208 disagreement case), a disagreement-detection / review-triage rule
+  (AUROC 0.61 for flagging wrong calls), split-conformal prediction sets, and an OOD/novelty score.
+  The supervised novelty score reaches **AUROC 0.786** (5-fold CV) vs. the current pipeline's 0.655
+  baseline — a **+0.13** gain using only signals the pipeline already computes. Reproduce with
+  `PYTHONPATH="$PWD" python run_example.py --assets ../example_data`.
+
+See [`prototypes/SYNTHESIS_REPORT.md`](prototypes/SYNTHESIS_REPORT.md) for a cross-track review and
+the recommendation of what to integrate into the product. These are prototypes, not yet wired into
+the main pipeline or web UI.
 
 ---
 

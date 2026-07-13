@@ -53,3 +53,6 @@ results/
 
 # MkDocs local build output
 site/
+
+# Prototype interactive HTML explorers — large (~6MB each), regenerable via prototypes/viz/build_visualizations.py
+prototypes/outputs/viz/*.html

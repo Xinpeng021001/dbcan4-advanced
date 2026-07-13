@@ -1,0 +1,4 @@
+protein_id	ec_number	confidence	rank	tool	extra
+267317	3.2.1.40	0.1053	1	CLEAN	"{""confidence_type"": ""maxsep""}"
+602276	3.2.1.8	0.9905	1	CLEAN	"{""confidence_type"": ""maxsep""}"
+169208	3.2.1.55	0.0014	1	CLEAN	"{""confidence_type"": ""maxsep""}"

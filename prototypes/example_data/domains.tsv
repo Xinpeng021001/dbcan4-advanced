@@ -1,0 +1,5 @@
+protein_id	acc	name	start	end	evalue	score	extra
+169208	PF13810	DUF4185	1	200	1.40e-44	153.3	"{""hmm_coverage"": 0.6429}"
+267317	PF00295	Glyco_hydro_28	93	403	3.70e-36	125.6	"{""hmm_coverage"": 0.8765}"
+267317	PF17389	Bac_rhamnosid6H	672	871	8.20e-13	49.1	"{""hmm_coverage"": 0.6047}"
+602276	PF00457	Glyco_hydro_11	21	198	3.60e-80	268.5	"{""hmm_coverage"": 1.0}"

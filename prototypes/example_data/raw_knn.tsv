@@ -1,0 +1,4 @@
+query_id	knn_pred	knn_conf	knn_purity	knn_margin
+267317	GH78	0.9953	0.8667	0.0000
+602276	GH11	0.9905	0.8000	0.0129
+169208	GH43_6	0.9861	0.2667	0.0000

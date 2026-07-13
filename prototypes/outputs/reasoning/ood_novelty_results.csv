@@ -1,0 +1,4 @@
+method,auroc_reported,auroc_reproduced_here,evaluation
+Baseline: off-the-shelf centroid_margin (current pipeline),0.6549,0.6548,full eval slice n=4726 (as in esmc_retrieval_summary.json)
+"Energy score (unsupervised, 5-signal combination)",,0.7386,"full eval slice n=4726, calibration-only scaler fit"
+"Logistic regression (supervised, 10-signal combination)",,0.7856,"5-fold CV mean +/- 0.0249, n=4726"
