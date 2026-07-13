@@ -73,19 +73,39 @@ def _mean_bfactor(pdb: str) -> float:
     return sum(vals) / len(vals) if vals else 0.0
 
 
+def _residue_count(pdb: str):
+    """Number of distinct residues actually present in the folded PDB.
+
+    Preferred over the manifest ``length``, which is the input sequence length
+    and can include a trailing ``*`` stop codon (e.g. 1089 vs the folded 1088)."""
+    res = set()
+    with open(pdb) as fh:
+        for line in fh:
+            if line.startswith("ATOM") and len(line) >= 27:
+                res.add((line[21], line[22:27]))  # chain + resSeq(+icode)
+    return len(res) or None
+
+
 def _plddt_0_100(plddt_mean, src_pdb: str) -> float:
-    """pLDDT on a 0-100 scale. Prefer the manifest's plddt_mean; when it is
-    blank/unparseable — which is exactly what fold_esmfold.py writes for a
-    `cached` row on any re-run — fall back to the source PDB's B-factor column.
-    Either input scale (0-1 or 0-100) is normalized to 0-100."""
-    v = None
-    if plddt_mean not in (None, ""):
-        try:
-            v = float(plddt_mean)
-        except (TypeError, ValueError):
-            v = None
-    if v is None:
-        v = _mean_bfactor(src_pdb)
+    """Mean per-residue pLDDT on a 0-100 scale.
+
+    Source of truth is the PDB's CA B-factor column (what ESMFold actually wrote
+    per residue, and what the 3Dmol viewer colours by). The manifest's
+    ``plddt_mean`` is deliberately NOT trusted: fold_esmfold.py computes it as
+    ``out["plddt"].mean()`` over the full padded/atomic tensor, which for the
+    multidomain example reads 0.692 (=69.2) while the PDB's own CA mean is 76.6 —
+    a stale/low value that had propagated into structures.tsv and the gene page.
+    Using the PDB directly makes pLDDT consistent whether a protein was folded
+    fresh or restored from a cached PDB on a re-run. The manifest value is used
+    only as a last resort when the PDB yields nothing. Either input scale (0-1 or
+    0-100) is normalized to 0-100."""
+    v = _mean_bfactor(src_pdb)
+    if not v:  # PDB gave nothing usable -> fall back to the manifest value
+        if plddt_mean not in (None, ""):
+            try:
+                v = float(plddt_mean)
+            except (TypeError, ValueError):
+                v = 0.0
     return round(v * 100, 1) if v <= 1.5 else round(v, 1)
 
 
@@ -122,11 +142,14 @@ def main():
                 continue
             _rescale_bfactors(src_pdb, os.path.join(struct_out, f"{pid}.pdb"))
             plddt = _plddt_0_100(r.get("plddt_mean"), src_pdb)
+            # Prefer the residue count actually in the PDB over the manifest
+            # length (the latter is the input length and may count a `*` stop).
+            length = _residue_count(src_pdb) or r.get("length", "")
             rows.append({
                 "protein_id": pid,
                 "plddt": plddt,
                 "path": f"structures/{pid}.pdb",
-                "length": r.get("length", ""),
+                "length": length,
                 "source": args.source,
                 "extra": json.dumps({"model": "facebook/esmfold_v1",
                                      "note": f"ESMFold prediction (mean pLDDT {plddt}/100)"}),
