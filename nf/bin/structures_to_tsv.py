@@ -47,6 +47,37 @@ def _rescale_bfactors(src_pdb: str, dst_pdb: str) -> None:
             fo.write(line)
 
 
+def _mean_bfactor(pdb: str) -> float:
+    """Mean of the per-atom B-factor column. ESMFold stores per-residue pLDDT
+    there, so this recovers a structure's mean pLDDT straight from the PDB when
+    the fold manifest didn't carry it (e.g. rows folded on a previous pass)."""
+    vals = []
+    with open(pdb) as fh:
+        for line in fh:
+            if line.startswith(("ATOM", "HETATM")) and len(line) >= 66:
+                try:
+                    vals.append(float(line[60:66]))
+                except ValueError:
+                    pass
+    return sum(vals) / len(vals) if vals else 0.0
+
+
+def _plddt_0_100(plddt_mean, src_pdb: str) -> float:
+    """pLDDT on a 0-100 scale. Prefer the manifest's plddt_mean; when it is
+    blank/unparseable — which is exactly what fold_esmfold.py writes for a
+    `cached` row on any re-run — fall back to the source PDB's B-factor column.
+    Either input scale (0-1 or 0-100) is normalized to 0-100."""
+    v = None
+    if plddt_mean not in (None, ""):
+        try:
+            v = float(plddt_mean)
+        except (TypeError, ValueError):
+            v = None
+    if v is None:
+        v = _mean_bfactor(src_pdb)
+    return round(v * 100, 1) if v <= 1.5 else round(v, 1)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--esmfold-dir", required=True, help="dir with <id>.pdb + fold_manifest.tsv")
@@ -63,15 +94,23 @@ def main():
     rows = []
     with open(man) as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
-            if r.get("status") != "ok":
+            pid = r.get("id")
+            if not pid:
                 continue
-            pid = r["id"]
+            # A structure exists iff there is a real (non-empty) PDB on disk.
+            # Do NOT gate on the manifest `status` string: a re-run logs
+            # status="cached" (with a blank plddt_mean) for every PDB folded on
+            # a previous pass, while genuine non-folds (skip_len / oom / err:*)
+            # simply never wrote a PDB. The old `status != "ok"` skip therefore
+            # dropped all cached structures, leaving structures.tsv header-only
+            # and removing the entire 3D-structure card (and its colour dropdown)
+            # from the gene page on any second run. File existence is the
+            # invariant fold_esmfold.py itself uses for the cached decision.
             src_pdb = os.path.join(args.esmfold_dir, f"{pid}.pdb")
-            if not os.path.exists(src_pdb):
+            if not (os.path.exists(src_pdb) and os.path.getsize(src_pdb) > 0):
                 continue
             _rescale_bfactors(src_pdb, os.path.join(struct_out, f"{pid}.pdb"))
-            plddt01 = float(r["plddt_mean"])
-            plddt = round(plddt01 * 100, 1) if plddt01 <= 1.5 else round(plddt01, 1)
+            plddt = _plddt_0_100(r.get("plddt_mean"), src_pdb)
             rows.append({
                 "protein_id": pid,
                 "plddt": plddt,
