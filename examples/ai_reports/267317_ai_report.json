@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0.0",
+  "generated_by": "dbcan4-advanced build_ai_report.py",
+  "report_type": "prompt_pack",
+  "protein_id": "267317",
+  "about": {
+    "pipeline": "dbCAN4-advanced fungal CAZyme annotation (standalone prototype)",
+    "family_call_methods": {
+      "sequence_baselines": "dbCAN3 standalone (HMMER + dbCAN_sub + DIAMOND consensus) and DIAMOND vs a 2025 CAZy reference.",
+      "esm_c_heads": "Three retrieval heads over ESM-C protein-language-model embeddings: kNN (majority vote of nearest neighbours), centroid (nearest per-family prototype), and a trained contrastive head (softmax classifier + contrastive kNN/centroid sub-signals).",
+      "fusion": "A confidence-weighted vote across the baselines and the ESM-C heads; produces the final family + confidence + agreement, and abstains below its confidence threshold."
+    },
+    "supporting_evidence": "Pfam domain architecture (hmmscan), CLEAN sequence->EC, ESMFold structure (mean pLDDT) with optional Foldseek structural homology, DeepTMHMM topology/signal-peptide, localization, and physicochemistry.",
+    "confidence_semantics": {
+      "fusion_abstain_threshold": 0.35,
+      "ec_bands": "HIGH >= 0.50, LOW 0.05-0.50, VERY_LOW < 0.05",
+      "plddt_scale": "0-100 (per-residue confidence, mean reported)"
+    }
+  },
+  "system_prompt": "You are a carbohydrate-active-enzyme (CAZyme) annotation expert helping a researcher interpret an automated annotation for a single fungal protein (protein_id 267317) produced by the dbCAN4-advanced pipeline.\n\nThis message contains a self-contained evidence report. You must follow these rules WITHOUT EXCEPTION:\n\n1. GROUND EVERYTHING IN THE REPORT. Use ONLY the evidence provided in the `evidence` and `annotation_summary` blocks of this report. Do not use outside knowledge to assert facts about THIS protein.\n2. NEVER INVENT. Do not invent or guess a CAZy family, EC number, domain, numeric value (confidence, pLDDT, coverage, MW, etc.), organism, or literature citation. Every family/EC/number you state must appear verbatim in the report.\n3. EXPLAIN DISAGREEMENT, DO NOT SILENTLY PICK. When the tools disagree (the kNN, centroid, and contrastive ESM-C heads; the fusion call; the sequence baselines), lay out what each method said and why they differ. If the report carries a review flag, foreground it and explain the reason rather than presenting a single confident answer.\n4. RESPECT CONFIDENCE. Report confidence values and their bands as given. Treat low-confidence or abstaining calls (fusion below its abstain threshold, a VERY_LOW/LOW EC) as weak evidence and say so.\n5. SAY WHEN YOU CANNOT ANSWER. If the user asks something the report does not cover, respond exactly: \"not determinable from the provided evidence\" (and state what additional evidence would be needed). Do not fill the gap with general knowledge presented as fact about this protein.\n6. GENERAL CAZyme BACKGROUND is allowed ONLY when clearly framed as general context (e.g. what a GH78 family does in general), never as a measured property of this specific protein, and never to override or add to the report's evidence.\n\nWhen you answer, prefer to: (a) give the pipeline's final call and its confidence, (b) summarize the supporting and dissenting evidence, (c) surface any review flag and its cause, and (d) state the limitations. You are an interpreter of the evidence in this report, not an independent predictor.",
+  "evidence": {
+    "curated_reference": {
+      "curated_families": [
+        "GH28",
+        "GH78"
+      ],
+      "novelty_bucket": "novel_seq",
+      "source_file": "head_eval_pred.tsv (true_families column)",
+      "note": "Benchmark ground-truth label for this example/eval protein. This is NOT available for a novel query protein in deployment; it is included here so tool agreement/disagreement can be judged."
+    },
+    "cazyme_calls": {
+      "sequence_baselines": {
+        "dbcan3_standalone": {
+          "call": "no CAZyme call",
+          "n_tools_supporting": 0,
+          "dbCAN_hmm": "-",
+          "dbCAN_sub": "-",
+          "DIAMOND": "-",
+          "baseline_missed": true,
+          "source_file": "real3_baseline_overview.tsv",
+          "note": "dbCAN3 standalone (shipped baseline) returned no CAZyme call for this protein -- a baseline-missed case that the advanced ESM-C / structure tier is designed to recover."
+        },
+        "diamond_2025ref": {
+          "call": "GH28",
+          "top_percent_identity": 85,
+          "top_evalue": "0.0",
+          "exact_match_vs_curated": false,
+          "overlap_match_vs_curated": true,
+          "source_file": "diamond_eval2025_pred.tsv",
+          "note": "DIAMOND against the 2025 CAZy reference (research comparator, distinct from the dbCAN3 standalone run above)."
+        }
+      },
+      "esm_c_heads": {
+        "knn": {
+          "predicted_family": "GH78",
+          "confidence": 0.9953,
+          "neighborhood_purity": 0.8667,
+          "margin": 0,
+          "source_file": "raw_knn.tsv",
+          "description": "k-nearest-neighbour retrieval over the ESM-C embedding reference; purity = fraction of the k neighbours sharing the winning family."
+        },
+        "centroid": {
+          "predicted_family": "GH92",
+          "confidence": 0.9774,
+          "margin": 0.0041,
+          "source_file": "raw_centroid.tsv",
+          "description": "nearest per-family centroid (CLEAN-style prototype) in ESM-C embedding space; small margin = the top two family prototypes are nearly equidistant."
+        },
+        "contrastive": {
+          "predicted_family": "GH78",
+          "confidence": 0.9495,
+          "primary_signal": "classifier",
+          "source_file": "raw_contrastive.tsv",
+          "retrieval_sub_signals": {
+            "contrastive_knn_pred": "GH78",
+            "contrastive_knn_purity": 0.8667,
+            "contrastive_centroid_pred": "GH78",
+            "contrastive_centroid_margin": 0.0493,
+            "source_file": "raw_contrastive.tsv + head_eval_pred.tsv"
+          },
+          "description": "trained contrastive head. Its reported prediction is the softmax classifier; the retrieval sub-signals (contrastive kNN / centroid over the trained embedding) are shown separately and may disagree with the classifier."
+        }
+      },
+      "fusion": {
+        "final_family": "GH78",
+        "confidence": 0.6671,
+        "abstain": false,
+        "abstain_threshold": 0.35,
+        "agreement": "3/4",
+        "agreement_count": 3,
+        "candidate_families": [
+          "GH78",
+          "GH92"
+        ],
+        "per_method_votes": {
+          "ESM-C-centroid": "GH92",
+          "ESM-C-contrastive": "GH78",
+          "ESM-C-kNN": "GH78",
+          "fusion": "GH78"
+        },
+        "signals": [
+          "sequence"
+        ],
+        "source_file": "fusion_raw.tsv",
+        "description": "confidence-weighted vote across DIAMOND / HMMER / the three ESM-C heads; calls below the abstain threshold are flagged as putative-novel / uncertain."
+      }
+    },
+    "pfam_domains": {
+      "architecture": "Glyco_hydro_28 - Bac_rhamnosid6H",
+      "n_domains": 2,
+      "domains": [
+        {
+          "pfam_accession": "PF00295",
+          "name": "Glyco_hydro_28",
+          "seq_start": 93,
+          "seq_end": 403,
+          "evalue": "3.70e-36",
+          "bitscore": 125.6,
+          "hmm_coverage": 0.8765
+        },
+        {
+          "pfam_accession": "PF17389",
+          "name": "Bac_rhamnosid6H",
+          "seq_start": 672,
+          "seq_end": 871,
+          "evalue": "8.20e-13",
+          "bitscore": 49.1,
+          "hmm_coverage": 0.6047
+        }
+      ],
+      "source_file": "domains.tsv",
+      "tool": "hmmscan (HMMER3) vs Pfam-A"
+    },
+    "ec_prediction": {
+      "ec_number": "3.2.1.40",
+      "confidence": 0.1053,
+      "confidence_band": "LOW",
+      "confidence_type": "maxsep",
+      "rank": 1,
+      "tool": "CLEAN",
+      "source_file": "ec_prediction.tsv",
+      "description": "CLEAN sequence->EC prediction (contrastive-learning EC assignment), independent of the family-inherited EC. Low confidence means the sequence is far from CLEAN's EC training space and the EC should be treated as weak."
+    },
+    "structure": {
+      "tool": "ESMFold",
+      "model": "facebook/esmfold_v1",
+      "mean_plddt": 76.6,
+      "plddt_scale": "0-100",
+      "length_aa": 1088,
+      "source_file": "structures.tsv",
+      "provenance_note": "structures.tsv listed mean pLDDT 69.2 over 1089 residues; corrected to 76.6 over 1088 residues from 267317_comprehensive.json (the structures.tsv record is stale).",
+      "fold": "compact globular (Rg/extended=0.030)",
+      "foldseek": {
+        "reference": "CAZyme3D (917 structures)",
+        "tool": "Foldseek easy-search",
+        "n_hits": 296,
+        "top_hits": [
+          {
+            "target": "QKX54669.1",
+            "family": "GH28",
+            "tmscore": 0.824,
+            "prob": 1.0,
+            "evalue": 2.949e-14
+          },
+          {
+            "target": "385166",
+            "family": "GH28",
+            "tmscore": 0.799,
+            "prob": 1.0,
+            "evalue": 6.632e-13
+          },
+          {
+            "target": "130678",
+            "family": "GH28",
+            "tmscore": 0.819,
+            "prob": 1.0,
+            "evalue": 4.273e-11
+          },
+          {
+            "target": "596197",
+            "family": "GH16_10",
+            "tmscore": 0.759,
+            "prob": 1.0,
+            "evalue": 7.728e-12
+          },
+          {
+            "target": "536182",
+            "family": "GH105",
+            "tmscore": 0.653,
+            "prob": 1.0,
+            "evalue": 1.073e-10
+          }
+        ],
+        "source_file": "267317_comprehensive.json"
+      }
+    },
+    "topology_secretion": {
+      "tool": "DeepTMHMM",
+      "prediction": "SP",
+      "n_tm_helices": 0,
+      "has_signal_peptide": true,
+      "signal_peptide_span": [
+        1,
+        18
+      ],
+      "topology": "signal:1-18|outside:19-1089",
+      "secretion_call": "classically secreted (signal peptide, 0 TM helices)",
+      "source_file": "deeptmhmm.tsv"
+    },
+    "localization": {
+      "localization": "Extracellular",
+      "confidence": null,
+      "method": "derived-from-SP",
+      "basis": "signalp",
+      "sp_prediction": "SP",
+      "source_file": "localization.tsv",
+      "note": "Derived from the signal-peptide call (labelled derived-from-SP), not a DeepLoc run."
+    },
+    "physicochem": {
+      "molecular_weight_da": 117294.16,
+      "theoretical_pi": 5.18,
+      "instability_index": 29.42,
+      "instability_class": "stable",
+      "gravy": -0.1977,
+      "aromaticity": 0.1057,
+      "n_glycosylation_sequons": 23,
+      "source_file": "physicochem.tsv",
+      "tool": "Biopython ProtParam"
+    },
+    "tool_provenance": {
+      "pipeline": "dbcan4-advanced",
+      "pipeline_version": "0.1.0",
+      "contract_version": "1.1",
+      "release_label": "workup-2026-07-10",
+      "tool_versions": {
+        "esm": "3.2.1",
+        "deeptmhmm": "1.0.24",
+        "clean": "maxsep",
+        "hmmscan": "3.4",
+        "biopython": "1.85"
+      },
+      "assets_manifest": "manifest.json"
+    }
+  },
+  "annotation_summary": {
+    "final_family": "GH78",
+    "final_confidence": 0.6671,
+    "fusion_agreement": "3/4",
+    "tools_in_agreement": "2/3",
+    "review_flag": {
+      "review_level": "attention",
+      "flagged": false,
+      "reasons": [
+        "ESM-C heads are not unanimous (knn=GH78, centroid=GH92, contrastive=GH78)",
+        "fusion confidence 0.6671 is below the high-confidence band (0.90)",
+        "multidomain architecture (Glyco_hydro_28 - Bac_rhamnosid6H) -- a single family label may not capture the protein",
+        "sequence baseline (DIAMOND GH28) disagrees with the advanced fusion call (GH78)"
+      ]
+    },
+    "verdict": "correct/consistent top call but with genuine complexity (e.g. multidomain architecture or a diverging head) -- worth a look, not a hard review block."
+  },
+  "suggested_questions": [
+    "Describe this protein: what is the pipeline's best call, how confident is it, and what evidence supports it?",
+    "This protein has multiple Pfam domains (Glyco_hydro_28 - Bac_rhamnosid6H) -- how should I interpret a single family label, and why do the sequence baseline and the ESM-C call differ?",
+    "Do the different tools agree on the CAZy family? Walk me through what each method (baselines, kNN, centroid, contrastive, fusion) predicted.",
+    "Is this protein secreted, and what does the structure/topology evidence say?",
+    "How reliable is the predicted EC number, and does it fit the family call?",
+    "What are the main limitations or caveats of this annotation?",
+    "What substrate class and reaction would a GH78 enzyme typically act on (general context only)?"
+  ],
+  "usage": "Paste or upload this entire JSON into an LLM. The `system_prompt` field is the instruction block; the rest is the grounded evidence. Then ask any of the suggested_questions or your own question."
+}

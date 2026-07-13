@@ -18,7 +18,7 @@
 # Usage:
 #     dbcan4_workup.sh <proteins.faa> [--outdir DIR] [--sample NAME] [--gff FILE]
 #                      [--serve] [--port N] [--gpu N]
-#                      [--no-deeptmhmm] [--no-clean] [--no-structure]
+#                      [--no-deeptmhmm] [--no-clean] [--no-structure] [--no-ai-report]
 #
 # Example (the whole product in one line):
 #     dbcan4_workup.sh my_proteins.faa --serve
@@ -36,7 +36,7 @@ DBCAN_DB=/array1/xinpeng/dbcan_db
 PFAM=/array1/xinpeng/pfam/Pfam-A.hmm
 
 FAA=""; OUTDIR=""; SAMPLE=""; SERVE=0; PORT=8000; GPU=0
-DO_DEEPTMHMM=1; DO_CLEAN=1; DO_STRUCTURE=1
+DO_DEEPTMHMM=1; DO_CLEAN=1; DO_STRUCTURE=1; DO_AI_REPORT=1
 GFF=""                                            # OPTIONAL user-provided genomic GFF
 HOST=127.0.0.1
 
@@ -52,6 +52,7 @@ while [ $# -gt 0 ]; do
     --no-deeptmhmm) DO_DEEPTMHMM=0; shift;;
     --no-clean) DO_CLEAN=0; shift;;
     --no-structure) DO_STRUCTURE=0; shift;;
+    --no-ai-report) DO_AI_REPORT=0; shift;;
     --gff) GFF="$2"; shift 2;;
     -h|--help) sed -n '2,25p' "$0"; exit 0;;
     -*) echo "unknown option: $1" >&2; exit 2;;
@@ -154,6 +155,25 @@ cp "$FEAT/"*.tsv "$STAGE/" 2>/dev/null || true
     --release-label "workup-$(date +%Y-%m-%d)" --pipeline-version '0.1.0' \
     --tool-versions '{"esm":"3.2.1","deeptmhmm":"1.0.24","clean":"maxsep","hmmscan":"3.4","biopython":"1.85"}' )
 echo "manifest -> $OUT/cazyme_advanced/manifest.json"
+
+if [ "$DO_AI_REPORT" = 1 ]; then
+  echo "=== 8b/8 AI-ready per-protein JSON reports ==="
+  # Assemble the evidence the report generator reads: the raw ESM-C head +
+  # fusion calls (written in CWD=$OUTDIR), the per-protein feature TSVs, and the
+  # manifest. Then emit one grounded "prompt pack" JSON per protein.
+  AIA="$OUTDIR/ai_report_assets"; rm -rf "$AIA"; mkdir -p "$AIA"
+  for f in raw_knn.tsv raw_centroid.tsv raw_contrastive.tsv fusion_raw.tsv; do
+    [ -f "$OUTDIR/$f" ] && cp "$OUTDIR/$f" "$AIA/"
+  done
+  cp "$FEAT/"*.tsv "$AIA/" 2>/dev/null || true
+  cp "$OUT/cazyme_advanced/manifest.json" "$AIA/" 2>/dev/null || true
+  AIOUT="$OUT/cazyme_advanced/ai_reports"
+  "$VENV/bin/python" "$REPO/scripts/build_ai_report.py" --assets "$AIA" --all --outdir "$AIOUT" \
+    && echo "AI reports -> $AIOUT/<protein_id>_ai_report.json" \
+    || echo "WARN: AI-report generation failed (non-fatal); continuing."
+else
+  echo "=== 8b/8 AI reports SKIPPED (--no-ai-report) ==="
+fi
 
 if [ "$SERVE" = 1 ]; then
   echo "=== ingest + serve ==="

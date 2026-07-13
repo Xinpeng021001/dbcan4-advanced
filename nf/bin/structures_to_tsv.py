@@ -48,17 +48,28 @@ def _rescale_bfactors(src_pdb: str, dst_pdb: str) -> None:
 
 
 def _mean_bfactor(pdb: str) -> float:
-    """Mean of the per-atom B-factor column. ESMFold stores per-residue pLDDT
-    there, so this recovers a structure's mean pLDDT straight from the PDB when
-    the fold manifest didn't carry it (e.g. rows folded on a previous pass)."""
-    vals = []
+    """Mean CA-atom pLDDT recovered from the PDB B-factor column.
+
+    ESMFold stores per-residue pLDDT in the B-factor column, so the mean over
+    CA atoms is one value per residue -- matching fold_esmfold.py's own
+    ``out["plddt"].mean()`` (the manifest ``plddt_mean``) and the canonical
+    per-residue pLDDT reported everywhere else in the product. Averaging over
+    ALL atoms instead would weight residues by atom count and drift a few points
+    low (e.g. 73.1 vs the true 76.6 for the multidomain example), so this is
+    deliberately CA-only. Falls back to all-atom only if a PDB somehow has no CA
+    records, so a value is still recovered rather than 0."""
+    ca, allatom = [], []
     with open(pdb) as fh:
         for line in fh:
             if line.startswith(("ATOM", "HETATM")) and len(line) >= 66:
                 try:
-                    vals.append(float(line[60:66]))
+                    b = float(line[60:66])
                 except ValueError:
-                    pass
+                    continue
+                allatom.append(b)
+                if line[12:16].strip() == "CA":
+                    ca.append(b)
+    vals = ca or allatom
     return sum(vals) / len(vals) if vals else 0.0
 
 

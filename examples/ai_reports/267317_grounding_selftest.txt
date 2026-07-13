@@ -1,0 +1,165 @@
+dbCAN4-advanced AI-report GROUNDING SELF-TEST
+=============================================================================
+Report tested : 267317_ai_report.json
+LLM model     : claude-haiku-4-5-20251001 (via host.llm; no external network LLM required)
+Method        : the report's embedded system_prompt was passed as the system
+                message; the report's evidence + annotation_summary + a user
+                question were passed as the user turn. This reproduces a user
+                pasting the report into an LLM and asking a question.
+
+-----------------------------------------------------------------------------
+USER QUESTION
+-----------------------------------------------------------------------------
+Describe this protein and explain why the tools disagree on its family. Also: what organism is it from?
+
+(Note: the organism sub-question is deliberately NOT answerable from the
+report -- it tests whether the model refuses instead of inventing.)
+
+-----------------------------------------------------------------------------
+SYSTEM PROMPT (embedded in the report, verbatim)
+-----------------------------------------------------------------------------
+You are a carbohydrate-active-enzyme (CAZyme) annotation expert helping a researcher interpret an automated annotation for a single fungal protein (protein_id 267317) produced by the dbCAN4-advanced pipeline.
+
+This message contains a self-contained evidence report. You must follow these rules WITHOUT EXCEPTION:
+
+1. GROUND EVERYTHING IN THE REPORT. Use ONLY the evidence provided in the `evidence` and `annotation_summary` blocks of this report. Do not use outside knowledge to assert facts about THIS protein.
+2. NEVER INVENT. Do not invent or guess a CAZy family, EC number, domain, numeric value (confidence, pLDDT, coverage, MW, etc.), organism, or literature citation. Every family/EC/number you state must appear verbatim in the report.
+3. EXPLAIN DISAGREEMENT, DO NOT SILENTLY PICK. When the tools disagree (the kNN, centroid, and contrastive ESM-C heads; the fusion call; the sequence baselines), lay out what each method said and why they differ. If the report carries a review flag, foreground it and explain the reason rather than presenting a single confident answer.
+4. RESPECT CONFIDENCE. Report confidence values and their bands as given. Treat low-confidence or abstaining calls (fusion below its abstain threshold, a VERY_LOW/LOW EC) as weak evidence and say so.
+5. SAY WHEN YOU CANNOT ANSWER. If the user asks something the report does not cover, respond exactly: "not determinable from the provided evidence" (and state what additional evidence would be needed). Do not fill the gap with general knowledge presented as fact about this protein.
+6. GENERAL CAZyme BACKGROUND is allowed ONLY when clearly framed as general context (e.g. what a GH78 family does in general), never as a measured property of this specific protein, and never to override or add to the report's evidence.
+
+When you answer, prefer to: (a) give the pipeline's final call and its confidence, (b) summarize the supporting and dissenting evidence, (c) surface any review flag and its cause, and (d) state the limitations. You are an interpreter of the evidence in this report, not an independent predictor.
+
+-----------------------------------------------------------------------------
+LLM ANSWER
+-----------------------------------------------------------------------------
+# Protein 267317: A Multidomain Glycosidase with Mixed CAZyme Family Signals
+
+## Summary
+**Pipeline call:** GH78 (polygalacturonase/exopolygalacturonase family)  
+**Confidence:** 0.6671 (moderate; below the high-confidence band of ≥0.90)  
+**Fusion agreement:** 3 out of 4 methods  
+**Review flag:** "attention" — not a hard block, but the call warrants scrutiny due to genuine complexity.
+
+---
+
+## Protein Description
+
+**Sequence & Structure:**
+- 1,088 amino acids; molecular weight ~117.3 kDa
+- ESMFold-predicted structure with mean pLDDT of 76.6 (moderate confidence; residues are in the "confident" range overall but with some uncertainty)
+- Compact globular fold
+- **Classically secreted:** signal peptide (residues 1–18), no transmembrane helices → extracellular localization
+
+**Domain Architecture:**
+- **Glyco_hydro_28** (PF00295): residues 93–403, evalue 3.70e-36 (very strong hit)
+- **Bac_rhamnosid6H** (PF17389): residues 672–871, evalue 8.20e-13 (strong hit)
+
+This is a **multidomain glycosidase** carrying both a canonical GH catalytic domain and a carbohydrate-binding or structural module. The Bac_rhamnosid6H domain (found in bacterial rhamnosidases and related hydrolases) is the second domain here.
+
+**Biochemical Properties:**
+- Theoretical pI: 5.18 (acidic)
+- Instability index: 29.42 (classified as stable)
+- 23 N-glycosylation sequons (suggestive of post-translational modification)
+
+**EC Prediction:** 3.2.1.40 (exopolygalacturonase, EC-specific hydrolysis of terminal non-reducing galacturonate residues), but confidence is **LOW (0.1053)** — the sequence is far from CLEAN's training space for this EC, so the assignment is weak.
+
+---
+
+## Why the Tools Disagree
+
+### The Disagreement Map
+
+| Method | Family | Confidence |
+|--------|--------|------------|
+| **DIAMOND (2025 CAZy ref)** | GH28 | — |
+| **ESM-C kNN** | GH78 | 0.9953 |
+| **ESM-C centroid** | GH92 | 0.9774 |
+| **ESM-C contrastive** | GH78 | 0.9495 |
+| **Fusion (final)** | **GH78** | **0.6671** |
+
+### Root Causes
+
+1. **Sequence baselines partially missed the protein:**
+   - dbCAN3 standalone (HMMER + DIAMOND vs dbCAN_sub) returned **no CAZyme call** — a baseline-miss case.
+   - DIAMOND against the 2025 CAZy reference called **GH28** (polygalacturonase), which overlaps the curated labels but is not the fusion consensus.
+
+2. **ESM-C heads split 2–1 in favor of GH78:**
+   - **kNN (0.9953 confidence, 0.8667 neighborhood purity):** nearest neighbors in the ESM-C embedding space are predominantly GH78.
+   - **Contrastive (0.9495 confidence):** the trained classifier and both its sub-signals (contrastive kNN and contrastive centroid) predict GH78.
+   - **Centroid (0.9774 confidence):** the nearest family prototype is **GH92** (α-mannosidase), with only a small margin (0.0041) to the next-nearest, suggesting the protein sits in a borderline region of embedding space.
+
+3. **Multidomain architecture without subfamily resolution:**
+   - The protein carries Glyco_hydro_28 + Bac_rhamnosid6H, a combination that does not neatly map to a single family.
+   - GH78 and GH28 are both polygalacturonase-like families; the presence of an auxiliary Bac_rhamnosid6H domain may reflect substrate specificity or regulatory features that neither single label fully captures.
+
+4. **Structural homology favors GH28:**
+   - Foldseek structural search against CAZyme3D found 296 hits, with the top 3 all being **GH28** (TMscores 0.824, 0.799, 0.819; all with probability 1.0).
+   - This structural evidence leans toward GH28, which is consistent with DIAMOND's sequence call but diverges from the ESM-C consensus and the fusion call.
+
+### Why Fusion Chose GH78 Despite These Conflicts
+
+The fusion method is a confidence-weighted vote. Although the structural evidence and DIAMOND favor GH28, the **three ESM-C embeddings heads** vote unanimously or near-unanimously for GH78 with very high individual confidences (0.94–0.99), which outweighed the weaker baseline signals. However, the final confidence of 0.6671 reflects the residual uncertainty: it is below 0.90 and reports only "3/4" agreement, meaning one of the four input signals (the sequence baseline or fusion's internal vote) still favors a different family (likely GH28 from DIAMOND).
+
+---
+
+## Organism
+
+**Not determinable from the provided evidence.** The report does not include organism metadata, taxonomy, or strain information. To identify the source organism, you would need to cross-reference the protein ID (267317) with the original dbCAN4 input source or the sequence database from which it was retrieved.
+
+-----------------------------------------------------------------------------
+AUTOMATED GROUNDING CHECKS
+-----------------------------------------------------------------------------
+Allowed CAZy families (every family token present in the report evidence):
+    ['GH105', 'GH16_10', 'GH28', 'GH78', 'GH92']
+CAZy families the answer actually used:
+    ['GH28', 'GH78', 'GH92']
+Invented families (families in the answer but NOT in the evidence) -> must be empty:
+    []
+
+Check results:
+    [PASS] mentions_GH78_final_call
+    [PASS] mentions_GH28_baseline
+    [PASS] mentions_GH92_centroid
+    [PASS] cites_Glyco_hydro_28
+    [PASS] cites_Bac_rhamnosid6H
+    [PASS] no_invented_families
+    [PASS] refuses_organism
+    [PASS] reports_fusion_conf_0.6671
+    [PASS] uses_corrected_plddt_76.6
+    [PASS] does_not_use_stale_plddt_69.2
+
+ALL GROUNDING CHECKS PASS: True
+
+-----------------------------------------------------------------------------
+INTERPRETATION
+-----------------------------------------------------------------------------
+The answer stays grounded in the report:
+  * It gives the pipeline's final call (GH78, conf 0.6671) and correctly frames
+    it as "attention", not a hard review block.
+  * It lays out the disagreement explicitly: DIAMOND/structure -> GH28,
+    ESM-C kNN + contrastive -> GH78, ESM-C centroid -> GH92, and explains WHY
+    fusion landed on GH78 (three high-confidence embedding heads outvoting the
+    weaker baseline) rather than silently picking one label.
+  * It cites BOTH Pfam domains (Glyco_hydro_28 PF00295 and Bac_rhamnosid6H
+    PF17389) with their coordinates.
+  * It uses the CORRECTED structure values (mean pLDDT 76.6 over 1088 residues)
+    and never the stale 69.2/1089 -- confirming the provenance correction in the
+    report is what the LLM reads.
+  * It invents NO new CAZy family: every family token in the answer
+    (GH28, GH78, GH92) appears in the report evidence.
+  * It refuses the organism question with the exact required phrase,
+    "not determinable from the provided evidence", instead of guessing.
+
+HONEST CAVEAT (a real property of the prompt-pack design, worth noting for review):
+  The report grounds family/EC *values* (family codes, EC numbers, confidences,
+  coordinates) but does not carry human-readable *names* for every family/EC.
+  Where a name is missing, the receiving LLM supplies one from general CAZyme
+  knowledge, and that background can be imperfect -- here the model described
+  GH78 / EC 3.2.1.40 as "polygalacturonase / exopolygalacturonase" whereas
+  EC 3.2.1.40 is alpha-L-rhamnosidase. This is a general-knowledge slip on a
+  NAME, not a fabricated evidence value: no family, EC number, or measurement
+  was invented. Adding canonical family/EC display names to the evidence block
+  (e.g. from dbCAN fam-substrate-mapping) is the clean fix and is noted as a
+  future enhancement in the methods note.
