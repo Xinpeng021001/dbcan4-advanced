@@ -419,14 +419,44 @@ protein sequence:
 
 ![Hero 267317 comprehensive poster](examples/267317_comprehensive/comprehensive_267317_full.png)
 
-Regenerate it (renders the structure via 3Dmol in headless Chrome, then captures the full page):
+#### Reproduce the poster (`build_comprehensive_poster.py`)
+
+**What it does.** `build_comprehensive_poster.py` renders the committed, self-contained page
+`comprehensive_267317.html` into the poster PNG above. That HTML already carries every card, the
+full 1,088-aa sequence, **and the ESMFold PDB embedded inline** (`<script id="pdbdata">`), so the
+poster needs **no pipeline run, no GPU, and no external data** — it regenerates from the checkout
+alone. It works in two phases because a naive full-page screenshot races the 3Dmol WebGL canvas:
+(A) render the ESMFold structure to a static PNG via 3Dmol's `pngURI()` framebuffer readback, then
+(B) splice that PNG into the page as a static `<img>` and capture the whole page.
 
 ```bash
 cd examples/267317_comprehensive
-python build_comprehensive_poster.py --html . --outdir out
-# → out/comprehensive_267317_full.png  (cards + 3D structure + sequence)
-#   out/structure_267317.png           (standalone ESMFold cartoon, pLDDT-coloured)
+python build_comprehensive_poster.py --html . --outdir out \
+    --threedmol ../../src/bioforge/api/static/3Dmol-min.js   # omit to fetch 3Dmol from cdnjs
+# → out/comprehensive_267317_full.png  (cards + 3D structure + sequence; 2238×10309)
+#   out/structure_267317.png           (standalone ESMFold cartoon, pLDDT-coloured; 1460×1977)
 ```
+
+Prerequisites: **`google-chrome-stable`/`chromium` on `PATH`** (renders the WebGL structure) and
+**`pip install pillow`**. The optional `--threedmol` flag points at the vendored 3Dmol copy so the
+render runs fully offline; omit it to fetch 3Dmol 2.1.0 from cdnjs once. (Verified: reproduces the
+committed PNGs at identical dimensions.)
+
+> The upstream `build_comprehensive_page.py` *builds* `comprehensive_267317.html` from the real DB
+> export (`handoff/`, `real_structures/267317.pdb`); those inputs are a live-run artifact and are
+> not committed, so use the poster script above to reproduce from the clone — the HTML it reads is.
+
+#### Poster vs. the live web UI — two different artifacts
+
+| | `build_comprehensive_poster.py` (this section) | `capture_ui.sh` → `docs/ui/ui_hero_267317.png` |
+|---|---|---|
+| Source | committed static `comprehensive_267317.html` (self-contained) | the **running** BioForge FastAPI server |
+| Needs a server? | no | yes — `dbcan4_workup.sh --serve` (real data or the stub demo DB) first |
+| What it is | a single publication-style **poster** merging every card + 3D structure + sequence | a **true-browser capture** of the actual gene-detail web page (real CSS/JS/3Dmol) |
+| Reproducible from a bare clone? | **yes**, offline | only after a run is ingested and served |
+
+Use the poster to regenerate the figure from the repo alone; use `capture_ui.sh` to screenshot the
+live product exactly as a user sees it in the browser.
 
 ### Structure colouring schemes
 
