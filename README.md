@@ -349,10 +349,25 @@ the ideal case for why comprehensive multi-tool annotation matters:
 | baseline HMMER/DIAMOND | GH28 | keys on the strong N-terminal Glyco_hydro_28 domain |
 
 Real Pfam architecture: Glyco_hydro_28 (PF00295) + Bac_rhamnosid6H (PF17389); CLEAN EC 3.2.1.40;
-DeepTMHMM secreted (SP cleave@18); ESMFold pLDDT 69.2. Full record in
+DeepTMHMM secreted (SP cleave@18); ESMFold mean pLDDT 76.6. Full record in
 [`examples/267317_comprehensive/`](examples/267317_comprehensive/).
 
-![Hero 267317 comprehensive poster](examples/267317_comprehensive/comprehensive_267317_poster.png)
+The comprehensive poster below combines **all** signals in one view — the multi-tool CAZyme
+evidence and function/secretion/domain/localization/physicochemistry cards, the real ESMFold **3D
+structure** (3Dmol cartoon coloured by per-residue pLDDT, confident blue core → low-confidence red
+termini — the two-domain GH28 + GH78 architecture is clearly visible), **and** the full 1,088-aa
+protein sequence:
+
+![Hero 267317 comprehensive poster](examples/267317_comprehensive/comprehensive_267317_full.png)
+
+Regenerate it (renders the structure via 3Dmol in headless Chrome, then captures the full page):
+
+```bash
+cd examples/267317_comprehensive
+python build_comprehensive_poster.py --html . --outdir out
+# → out/comprehensive_267317_full.png  (cards + 3D structure + sequence)
+#   out/structure_267317.png           (standalone ESMFold cartoon, pLDDT-coloured)
+```
 
 ---
 
