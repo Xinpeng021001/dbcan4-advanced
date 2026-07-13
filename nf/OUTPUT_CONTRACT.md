@@ -173,7 +173,7 @@ TSV** (`bioforge.ingest.parse_interpro`): cols `1 protein  2 md5  3 length  4 an
 Produced by the `INTERPROSCAN` process (`nf/modules/interproscan.nf`) / step 4b of
 `dbcan4_workup.sh`, which uses **real InterProScan** when `params.interproscan_sh` /
 `INTERPROSCAN_SH` points at an install, otherwise derives Analysis=Pfam signatures + GO
-from the §2.5 Pfam domains via the vendored `pfam2go` map (offline). `interpro_acc`/`desc`
+from the §2.5 Pfam domains via the bundled `pfam2go` map (offline). `interpro_acc`/`desc`
 are filled only when a real InterProScan run or an optional `--pfam2interpro` map supplies them.
 
 ---

@@ -29,7 +29,7 @@ This repository is three parts that compose into one product:
 |---|---|---|
 | **`dbcan4` Python package** | the annotation engine + CLI (`embed` / `infer` / `annotate` / `run`) | `src/dbcan4_advanced/`, `pyproject.toml` |
 | **Nextflow pipeline** | orchestrates baseline dbCAN + advanced ESM-C/structure tiers + 8 comprehensive feature tracks → standard output contract | `nf/` |
-| **BioForge db + web** | versioned SQLite schema + FastAPI web UI that ingests the contract and serves per-gene deep-dive pages | vendored in-repo at `src/bioforge` (historically from `github.com/Xinpeng021001/biodb`) |
+| **BioForge db + web** | versioned SQLite schema + FastAPI web UI that ingests the contract and serves per-gene deep-dive pages | in this repo at `src/bioforge` |
 
 ![product architecture](docs/architecture_product.png)
 
@@ -210,7 +210,7 @@ feature tool.
 
 ```bash
 # engine venv (torch + esm 3.2.1 ESM-C, on a GPU host)
-pip install -e .            # installs the dbcan4 console script + the vendored BioForge
+pip install -e .            # installs the dbcan4 console script + the BioForge web layer
                             # web layer (bioforge-ingest, bioforge-ingest-advanced, web app)
 ```
 

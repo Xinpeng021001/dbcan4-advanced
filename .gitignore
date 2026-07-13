@@ -74,3 +74,7 @@ examples/267317_comprehensive/view_*.png
 # Vendored GO/InterPro mapping for the offline Pfam->GO fallback (nf/assets/mappings/pfam2go.txt):
 !nf/assets/mappings/
 !nf/assets/mappings/**
+
+# transient poster-render intermediates (build_comprehensive_poster.py)
+examples/267317_comprehensive/_render.html
+examples/267317_comprehensive/comprehensive_267317_static.html

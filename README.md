@@ -85,18 +85,17 @@ most tool comparisons skip. Full detail: [`docs/benchmark_report.md`](docs/bench
 | PyTorch | ≥2.0 (CUDA build) | `torch.cuda.is_available()` must be `True` |
 | EvolutionaryScale `esm` | 3.2.1 | provides **ESM-C** (`esmc_600m` → 1152-dim). **Do NOT also install `fair-esm`** — it clashes on the `esm/` namespace |
 | `run_dbcan` | V5 (dev 5.0.7 on the reference host) | baseline HMMER/dbCAN_sub/DIAMOND |
-| Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` |
+| Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` / stub DAG. Install: `curl -s https://get.nextflow.io \| bash` |
 | foldseek, diamond, hmmscan | on `PATH` | structure/baseline tiers |
-| FastAPI/uvicorn/SQLAlchemy/Alembic | **vendored** (`src/bioforge`) | web stack — installed by `pip install -e .`, no second repo |
+| FastAPI/uvicorn/SQLAlchemy/Alembic | included (`src/bioforge`) | web stack — installed by `pip install -e .` |
 | InterProScan | optional (tens of GB) | GO/InterPro; if absent, GO is derived offline from Pfam via the bundled `pfam2go` map |
 
 License-gated (optional, handled as honest fallbacks if absent): **SignalP-6.0**, **DeepLoc-2.0**
 (DTU academic download). **CLEAN** and **DeepTMHMM** run in isolated environments (see below).
 
-> **The web UI + ingest layer (BioForge) is vendored into this repo** (`src/bioforge`,
-> `db/alembic`, `alembic.ini`) — a single `git clone` + `pip install -e .` gives you the whole
-> product. It is a snapshot of the [biodb](https://github.com/Xinpeng021001/biodb) repo; refresh
-> it with `scripts/vendor_bioforge.sh`.
+> **The web UI + ingest layer (BioForge) ships in this repo** (`src/bioforge`, `db/alembic`,
+> `alembic.ini`) — a single `git clone` + `pip install -e .` gives you the whole product: pipeline
+> **and** the browsable web app, with no second repository to fetch.
 
 ### 3. Data assets
 
@@ -134,10 +133,11 @@ dbcan4 info      # prints resolved pipeline / reference-index / heads paths
 
 ### From scratch on a new GPU machine
 
-The web UI is **vendored** — a single clone gives you both the pipeline and the web app.
+A single clone gives you both the pipeline and the web app — the web UI + ingest layer live in
+this repo (`src/bioforge`), so `pip install -e .` installs everything.
 
 ```bash
-# 1. code (ONE repo — the web layer is vendored inside it)
+# 1. code (ONE repo — pipeline + web UI included)
 git clone https://github.com/Xinpeng021001/dbcan4-advanced.git
 cd dbcan4-advanced
 
@@ -145,10 +145,17 @@ cd dbcan4-advanced
 python -m venv venv && source venv/bin/activate
 pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
 pip install "esm==3.2.1" faiss-cpu scikit-learn biopython h5py pandas numpy
-pip install -e .            # installs `dbcan4` AND the vendored `bioforge-ingest*` + web app
+pip install -e .            # installs `dbcan4` AND `bioforge-ingest*` + the web app
 # (add ".[dev]" to also get pytest; ".[web-postgres]" only if you use Postgres instead of SQLite)
 
-# 3. data assets — copy from the reference host (fastest) or rebuild (see table above),
+# 3. Nextflow + Java 17+  (needed for `dbcan4 run` / the -profile stub DAG;
+#    the one-command dbcan4_workup.sh does NOT need Nextflow)
+conda install -c conda-forge 'openjdk>=17'      # or any JDK 17–21 on PATH (java -version)
+curl -s https://get.nextflow.io | bash          # -> ./nextflow
+mkdir -p ~/.local/bin && mv nextflow ~/.local/bin/   # any dir on your PATH
+nextflow -version
+
+# 4. data assets — copy from the reference host (fastest) or rebuild (see table above),
 #    then point the env vars at them (defaults assume they live under DBCAN4_ROOT):
 #    export DBCAN4_ROOT=/path/to/assets        # emb/, results/heads/, hf_cache/
 #    export DBCAN_DB=/path/to/dbcan_db  PFAM_HMM=/path/to/Pfam-A.hmm
@@ -156,10 +163,16 @@ pip install -e .            # installs `dbcan4` AND the vendored `bioforge-inges
 #    scp -r met:/array1/xinpeng/dbcan4-advanced/results/heads "$DBCAN4_ROOT/results/heads"
 #    run_dbcan database --db_dir "$DBCAN_DB"    # ~7.4 GB
 
-# 4. verify
+# 5. verify
 dbcan4 info
+dbcan4 run --fasta examples/real3.faa --sample smoke --outdir /tmp/smoke --profile stub --stub  # Nextflow DAG smoke test
 pytest            # optional: 47 web-layer tests (needs the ".[dev]" extra)
 ```
+
+> **Nextflow needs Java 17+** (up to 24). If `nextflow -version` complains about Java, install a
+> JDK 17–21 and put it first on `PATH` (e.g. `export JAVA_HOME=/path/to/jdk-21 PATH=$JAVA_HOME/bin:$PATH`).
+> Nextflow is only required for `dbcan4 run` and the `-profile stub` DAG; the recommended real path
+> `dbcan4_workup.sh` invokes each tool directly and does not use Nextflow.
 
 Point the engine at non-default asset locations with `DBCAN4_ROOT`, `DBCAN4_REF_EMB`,
 `DBCAN4_HEADS`, `DBCAN4_PROJ_REF`, `DBCAN4_ENGINE_PYTHON`, or `--assets` — see
@@ -184,7 +197,7 @@ environment variable with a met-host default. Set only what differs on your mach
 | `DBCAN4_HEADS`, `DBCAN4_PROJ_REF` | trained heads | `$DBCAN4_ROOT/results/heads/…` |
 | `HF_HOME` | HuggingFace cache (ESM-C/ESMFold weights) | `$DBCAN4_ROOT/hf_cache` |
 | `BIODB_VENV` | venv where `bioforge` is installed (web UI) | the engine venv |
-| `BIODB_SRC` | dir with `alembic.ini` + `db/alembic` | the checkout (vendored) |
+| `BIODB_SRC` | dir with `alembic.ini` + `db/alembic` | the checkout |
 | `BIOLIB_BIN` | BioLib CLI (DeepTMHMM) | `/array1/xinpeng/scratch/venv_biolib/bin/biolib` |
 | `INTERPROSCAN_SH` | real `interproscan.sh` (optional) | unset → offline Pfam→GO fallback |
 | `PFAM2GO` | Pfam→GO mapping | `nf/assets/mappings/pfam2go.txt` (bundled) |
@@ -219,7 +232,8 @@ CUDA_VISIBLE_DEVICES=0 dbcan4 annotate examples/real3.faa --outdir calls_out
 ### B. Full DAG with no GPU/tools (stub — proves the pipeline anywhere, ~1 min)
 
 ```bash
-source /array1/xinpeng/scratch/bin/nxf_env.sh               # Nextflow + Java
+# needs Nextflow + Java 17+ on PATH (see Installation step 3);
+# on the reference host: source /array1/xinpeng/scratch/bin/nxf_env.sh
 dbcan4 run --fasta examples/real3.faa --sample smoke --outdir stub_out --profile stub --stub
 # → stub_out/cazyme_advanced/manifest.json  (contract v1.1: 6 methods + 8 feature types)
 ```
@@ -438,7 +452,7 @@ python build_comprehensive_poster.py --html . --outdir out \
 ```
 
 Prerequisites: **`google-chrome-stable`/`chromium` on `PATH`** (renders the WebGL structure) and
-**`pip install pillow`**. The optional `--threedmol` flag points at the vendored 3Dmol copy so the
+**`pip install pillow`**. The optional `--threedmol` flag points at the bundled 3Dmol copy so the
 render runs fully offline; omit it to fetch 3Dmol 2.1.0 from cdnjs once. (Verified: reproduces the
 committed PNGs at identical dimensions.)
 
@@ -514,7 +528,7 @@ The same generator colours any structure by your own domain spec:
 | DeepTMHMM `FileNotFoundError: hash/…` | biolib stages by **basename** — the workup `cd`s into the FASTA dir and passes a bare filename; use `--no-deeptmhmm` offline |
 | CLEAN errors on a `*` char / very long protein | ESM-1b has no `*` token and caps at 1022 aa — `run_clean.sh` strips stops + truncates; use `--no-clean` to skip |
 | `dbcan4 run -profile met` (real Nextflow) not fully working | **use `dbcan4_workup.sh` for real runs** — the full-Nextflow *real* path is not proven end-to-end; only `-profile stub` is validated |
-| Nextflow "requires Java 17+" | system Java is 11 — `source /array1/xinpeng/scratch/bin/nxf_env.sh` (portable Temurin 21) |
+| Nextflow "requires Java 17+" | install a JDK 17–21 and put it first on `PATH` (`export JAVA_HOME=/path/to/jdk PATH=$JAVA_HOME/bin:$PATH`). On the reference host: `source /array1/xinpeng/scratch/bin/nxf_env.sh` (Temurin 21) |
 | Web UI blank / no 3D structure | pass `--structures-dir` on ingest (the workup does this); the 3Dmol viewer needs the served PDB |
 
 More gotchas: [`REPRODUCE_PRODUCT.md`](REPRODUCE_PRODUCT.md), [`nf/TOOLS.md`](nf/TOOLS.md).

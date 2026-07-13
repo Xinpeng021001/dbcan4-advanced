@@ -7,7 +7,7 @@
 //               run it natively (-f tsv -goterms -pa) for full member-DB + GO coverage.
 //   * FALLBACK: otherwise derive Analysis=Pfam signatures + GO terms from the Pfam
 //               domains the pipeline already computed (domains.tsv), joined against
-//               the vendored pfam2go map — offline, no tens-of-GB install. This keeps
+//               the bundled pfam2go map — offline, no tens-of-GB install. This keeps
 //               the "git clone and run" promise while still populating GO/InterPro.
 //
 // Output lands at funcscan/protein_annotation/interproscan/<sample>_interproscan_faa.tsv,

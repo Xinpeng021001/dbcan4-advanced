@@ -27,7 +27,7 @@ source $REPO/venv/bin/activate
 
 # a venv that has the web stack (FastAPI/uvicorn/sqlalchemy/alembic) + the dbcan4 CLI
 source /array1/xinpeng/scratch/biodb_venv/bin/activate   # or any venv with `pip install -e .`
-pip install -e $REPO/repo_clone      # -> `dbcan4` CLI + the vendored bioforge web layer
+pip install -e $REPO/repo_clone      # -> `dbcan4` CLI + the bioforge web layer
                                      #    (bioforge-ingest, bioforge-ingest-advanced, web app)
 
 dbcan4 info                          # resolves pipeline dir, ref index, heads.pt
@@ -50,7 +50,7 @@ dbcan4 run --fasta demo_fungal.faa --sample demo --outdir cli_results --profile 
 
 # ingest + verify the web serves (stub uses self-consistent demo_p01/p02/p03 ids)
 DB=$PWD/cli_serve.db; rm -f $DB; export DATABASE_URL=sqlite:///$DB
-( cd $REPO/repo_clone && alembic upgrade head )   # alembic.ini + db/alembic are vendored at the checkout root
+( cd $REPO/repo_clone && alembic upgrade head )   # alembic.ini + db/alembic live at the checkout root
 bioforge-ingest          cli_results/funcscan
 bioforge-ingest-advanced cli_results/cazyme_advanced/manifest.json
 uvicorn bioforge.api.main:app --host 127.0.0.1 --port 8000   # browse http://127.0.0.1:8000
