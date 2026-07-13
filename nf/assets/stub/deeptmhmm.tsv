@@ -1,11 +1,11 @@
 protein_id	prediction	n_tm	topology	extra
-demo_p01	TM	1	i5-27o...	"{""helices"": [[5, 27]]}"
+demo_p01	TM	1	inside:1-4|TMhelix:5-27|outside:28-350	"{""helices"": [[5, 27]]}"
 demo_p02	Globular	0	-	{}
 demo_p03	Globular	0	-	{}
 demo_p04	Globular	0	-	{}
-demo_p05	SP+TM	3	i5-27o...	"{""helices"": [[5, 27]]}"
+demo_p05	SP+TM	3	signal:1-18|inside:19-22|TMhelix:23-45|outside:46-460	"{""helices"": [[5, 27]]}"
 demo_p06	Globular	0	-	{}
 demo_p07	Globular	0	-	{}
 demo_p08	Globular	0	-	{}
-demo_p09	SP+TM	1	i5-27o...	"{""helices"": [[5, 27]]}"
+demo_p09	SP+TM	1	signal:1-18|TMhelix:19-41|outside:42-120	"{""helices"": [[5, 27]]}"
 demo_p10	Globular	0	-	{}

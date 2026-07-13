@@ -87,23 +87,35 @@ most tool comparisons skip. Full detail: [`docs/benchmark_report.md`](docs/bench
 | `run_dbcan` | V5 (dev 5.0.7 on the reference host) | baseline HMMER/dbCAN_sub/DIAMOND |
 | Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` |
 | foldseek, diamond, hmmscan | on `PATH` | structure/baseline tiers |
-| FastAPI/uvicorn/SQLAlchemy/Alembic | via `biodb` | web stack |
+| FastAPI/uvicorn/SQLAlchemy/Alembic | **vendored** (`src/bioforge`) | web stack — installed by `pip install -e .`, no second repo |
+| InterProScan | optional (tens of GB) | GO/InterPro; if absent, GO is derived offline from Pfam via the bundled `pfam2go` map |
 
 License-gated (optional, handled as honest fallbacks if absent): **SignalP-6.0**, **DeepLoc-2.0**
 (DTU academic download). **CLEAN** and **DeepTMHMM** run in isolated environments (see below).
 
+> **The web UI + ingest layer (BioForge) is vendored into this repo** (`src/bioforge`,
+> `db/alembic`, `alembic.ini`) — a single `git clone` + `pip install -e .` gives you the whole
+> product. It is a snapshot of the [biodb](https://github.com/Xinpeng021001/biodb) repo; refresh
+> it with `scripts/vendor_bioforge.sh`.
+
 ### 3. Data assets
 
-These are **not** in the git repo (`.gitignore` excludes all `*.npz/*.pt/*.hmm/*.dmnd` and `data/`).
-On a fresh machine you must **copy them from the reference host or rebuild them**:
+These are **not** in the git repo (`.gitignore` excludes all `*.npz/*.pt/*.hmm/*.dmnd` and `data/`) —
+they are too large to vendor. On a fresh machine you **copy them from the reference host or rebuild
+them**, then point the pipeline at them with the environment variables in the last column (see
+[Environment variables & portability](#environment-variables--portability)):
 
-| Asset | Path (reference host) | How to obtain |
-|---|---|---|
-| ESM-C reference index | `emb/ref2024.shard{0..7}.npz` | copy, or rebuild: `build_reference.py` → `embed_esmc.py` |
-| Trained heads | `results/heads/{heads.pt,proj_ref.npz}` | copy, or rebuild: `train_heads.py` |
-| dbCAN database (~7.4 GB) | `/array1/xinpeng/dbcan_db` | `run_dbcan database --db_dir dbcan_db` |
-| Pfam-A (~2.2 GB, pressed) | `/array1/xinpeng/pfam/Pfam-A.hmm` | download + `hmmpress` |
-| ESM-C / ESMFold weights (~16 GB) | `hf_cache/` | auto-download to `HF_HOME` on first use |
+| Asset | Default location | Override var | How to obtain |
+|---|---|---|---|
+| ESM-C reference index | `$DBCAN4_ROOT/emb/ref2024.shard{0..7}.npz` | `DBCAN4_REF_EMB` | copy, or rebuild: `build_reference.py` → `embed_esmc.py` |
+| Trained heads | `$DBCAN4_ROOT/results/heads/{heads.pt,proj_ref.npz}` | `DBCAN4_HEADS`, `DBCAN4_PROJ_REF` | copy, or rebuild: `train_heads.py` |
+| dbCAN database (~7.4 GB) | `/array1/xinpeng/dbcan_db` | `DBCAN_DB` | `run_dbcan database --db_dir dbcan_db` |
+| Pfam-A (~2.2 GB, pressed) | `/array1/xinpeng/pfam/Pfam-A.hmm` | `PFAM_HMM` | download + `hmmpress` |
+| ESM-C / ESMFold weights (~16 GB) | `$DBCAN4_ROOT/hf_cache/` | `HF_HOME` | auto-download on first use |
+| GO/InterPro mapping (`pfam2go`) | `nf/assets/mappings/pfam2go.txt` | `PFAM2GO` | **bundled in the repo** (no download) |
+
+`$DBCAN4_ROOT` defaults to the parent of the checkout (where the reference host keeps `emb/`,
+`results/heads/`, `hf_cache/`); set it to wherever you unpacked these assets.
 
 > **On the reference host (`met.unl.edu`) everything above is already installed** — skip straight to [Quick start](#quick-start).
 
@@ -113,39 +125,82 @@ On a fresh machine you must **copy them from the reference host or rebuild them*
 
 ### On the reference host (met) — nothing to install
 
-All assets live under `$REPO=/array1/xinpeng/dbcan4-advanced`. Verify with:
+All assets live under `DBCAN4_ROOT=/array1/xinpeng/dbcan4-advanced`. Verify with:
 
 ```bash
-source /array1/xinpeng/scratch/biodb_venv/bin/activate
+source /array1/xinpeng/scratch/biodb_venv/bin/activate   # or any venv with `pip install -e .`
 dbcan4 info      # prints resolved pipeline / reference-index / heads paths
 ```
 
 ### From scratch on a new GPU machine
 
+The web UI is **vendored** — a single clone gives you both the pipeline and the web app.
+
 ```bash
-# 1. code
+# 1. code (ONE repo — the web layer is vendored inside it)
 git clone https://github.com/Xinpeng021001/dbcan4-advanced.git
 cd dbcan4-advanced
-git clone -b feature/advanced-cazyme-integration https://github.com/Xinpeng021001/biodb.git
 
-# 2. engine venv (torch + EvolutionaryScale esm 3.2.1 = ESM-C). Do NOT install fair-esm.
+# 2. venv (torch + EvolutionaryScale esm 3.2.1 = ESM-C). Do NOT install fair-esm.
 python -m venv venv && source venv/bin/activate
 pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
 pip install "esm==3.2.1" faiss-cpu scikit-learn biopython h5py pandas numpy
-pip install -e .            # installs the `dbcan4` console script
-pip install -e biodb        # installs bioforge-ingest, bioforge-ingest-advanced, web app
+pip install -e .            # installs `dbcan4` AND the vendored `bioforge-ingest*` + web app
+# (add ".[dev]" to also get pytest; ".[web-postgres]" only if you use Postgres instead of SQLite)
 
-# 3. data assets — copy from the reference host (fastest) or rebuild (see table above)
-#    scp -r met:/array1/xinpeng/dbcan4-advanced/emb ./emb
-#    scp -r met:/array1/xinpeng/dbcan4-advanced/results/heads ./results/heads
-#    run_dbcan database --db_dir dbcan_db          # ~7.4 GB
+# 3. data assets — copy from the reference host (fastest) or rebuild (see table above),
+#    then point the env vars at them (defaults assume they live under DBCAN4_ROOT):
+#    export DBCAN4_ROOT=/path/to/assets        # emb/, results/heads/, hf_cache/
+#    export DBCAN_DB=/path/to/dbcan_db  PFAM_HMM=/path/to/Pfam-A.hmm
+#    scp -r met:/array1/xinpeng/dbcan4-advanced/emb          "$DBCAN4_ROOT/emb"
+#    scp -r met:/array1/xinpeng/dbcan4-advanced/results/heads "$DBCAN4_ROOT/results/heads"
+#    run_dbcan database --db_dir "$DBCAN_DB"    # ~7.4 GB
 
 # 4. verify
 dbcan4 info
+pytest            # optional: 47 web-layer tests (needs the ".[dev]" extra)
 ```
 
-Point the engine at non-default asset locations with `DBCAN4_REF_EMB`, `DBCAN4_HEADS`,
-`DBCAN4_PROJ_REF`, `DBCAN4_ENGINE_PYTHON`, or `--assets`.
+Point the engine at non-default asset locations with `DBCAN4_ROOT`, `DBCAN4_REF_EMB`,
+`DBCAN4_HEADS`, `DBCAN4_PROJ_REF`, `DBCAN4_ENGINE_PYTHON`, or `--assets` — see
+[Environment variables & portability](#environment-variables--portability).
+
+---
+
+## Environment variables & portability
+
+`dbcan4_workup.sh` and the Nextflow config contain **no machine-specific paths of their own** —
+the script finds its own checkout via `BASH_SOURCE`, and every asset/tool/venv path is an
+environment variable with a met-host default. Set only what differs on your machine; a fresh
+`git clone` runs unchanged once the [data assets](#3-data-assets) are in place.
+
+| Variable | What it points at | Default |
+|---|---|---|
+| `DBCAN4_ROOT` | asset root: `emb/`, `results/heads/`, `hf_cache/` | parent of the checkout |
+| `DBCAN4_ENGINE_VENV` | venv with torch + esm + `run_dbcan` | `$DBCAN4_ROOT/venv` |
+| `DBCAN_DB` | run_dbcan V5 database | `/array1/xinpeng/dbcan_db` |
+| `PFAM_HMM` | pressed Pfam-A HMM | `/array1/xinpeng/pfam/Pfam-A.hmm` |
+| `DBCAN4_REF_EMB` | ESM-C reference index prefix | `$DBCAN4_ROOT/emb/ref2024` |
+| `DBCAN4_HEADS`, `DBCAN4_PROJ_REF` | trained heads | `$DBCAN4_ROOT/results/heads/…` |
+| `HF_HOME` | HuggingFace cache (ESM-C/ESMFold weights) | `$DBCAN4_ROOT/hf_cache` |
+| `BIODB_VENV` | venv where `bioforge` is installed (web UI) | the engine venv |
+| `BIODB_SRC` | dir with `alembic.ini` + `db/alembic` | the checkout (vendored) |
+| `BIOLIB_BIN` | BioLib CLI (DeepTMHMM) | `/array1/xinpeng/scratch/venv_biolib/bin/biolib` |
+| `INTERPROSCAN_SH` | real `interproscan.sh` (optional) | unset → offline Pfam→GO fallback |
+| `PFAM2GO` | Pfam→GO mapping | `nf/assets/mappings/pfam2go.txt` (bundled) |
+| `PFAM2INTERPRO` | optional Pfam→InterPro map (fills the InterPro accession column) | unset |
+
+The Nextflow pipeline reads the same variables (`DBCAN_DB`, `PFAM_HMM`, `INTERPROSCAN_SH`,
+`ESMC_ENV`, `DBCAN_ENV`, `ESMFOLD_ENV`, …) as `params` defaults, so `nextflow run` / `dbcan4 run`
+also work with just the env vars set — or override per run with `--dbcan_db …` / `-params-file`.
+
+Example (fresh machine):
+
+```bash
+export DBCAN4_ROOT=/data/dbcan4_assets
+export DBCAN_DB=/data/dbcan_db  PFAM_HMM=/data/pfam/Pfam-A.hmm
+bash dbcan4_workup.sh my_proteins.faa --serve --gpu 0
+```
 
 ---
 
@@ -201,6 +256,8 @@ It runs, in order:
 2. **Advanced ESM-C** embed + label-free infer (kNN / centroid / contrastive)
 3. **Fusion** consensus
 4. **Pfam domains** (hmmscan vs Pfam-A, `--cut_ga`)
+   4b. **InterPro domains + GO terms** (real InterProScan if `INTERPROSCAN_SH` is set, else GO
+   derived offline from the Pfam domains via the bundled `pfam2go` map)
 5. **Physicochemistry** (Biopython: MW, pI, GRAVY, N-glyc sequons)
 6. **DeepTMHMM** TM topology + signal peptide (+ derived localization)
 7. **CLEAN** EC number
@@ -218,6 +275,8 @@ It runs, in order:
 | `--no-deeptmhmm` | skip DeepTMHMM (e.g. offline — it uses the BioLib cloud) |
 | `--no-clean` | skip CLEAN EC (CPU-slow, ~2 min/protein) |
 | `--no-structure` | skip ESMFold folding (e.g. no GPU) |
+| `--no-interpro` | skip the InterPro/GO stage |
+| `--host H` | web UI bind address (default `127.0.0.1`) |
 
 > **dbCAN4 is fungal + protein-input**: genes are built straight from the protein FASTA — **no
 > genome, no Prokka, no GFF**. Each protein becomes its own gene with residue coordinates `1–L`.

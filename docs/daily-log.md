@@ -539,3 +539,85 @@ and novel-family reports.
 - `docs/design_dbcan4_advanced.md` §10 added: gate + domain-retrieval results, audit outcome,
   sequenced roadmap. **Deferred:** cross-kingdom held-out-family benchmark (n≈6 novelty problem);
   substrate/EC Phase-2.
+
+## 2026-07-13 — Product hardening: self-contained web layer, InterPro/GO, portability
+
+Focus: make the whole product runnable from a single `git clone`, add the missing GO/InterPro
+tier, and confirm the 3D-structure fix — no science changes, all product/reproducibility.
+
+### 1. Vendored the BioForge web layer (was a separate private repo)
+- Copied the `bioforge` package → `src/bioforge/`, its Alembic migrations → `db/alembic/`, and
+  `alembic.ini` → repo root. Because `bioforge.config.REPO_ROOT` is `parents[2]` of its own file,
+  it now resolves to the dbCAN4-advanced repo root automatically (SQLite dev DB + tracks dir).
+- Merged its deps + console scripts (`bioforge-ingest`, `bioforge-ingest-advanced`) into
+  `pyproject.toml`. **Fixed upstream packaging gaps**: added `[tool.setuptools.package-data]` for
+  `api/templates/**` + `api/static/**` (a wheel previously dropped the UI), and brought the
+  `db/alembic` tree in-repo (it lived outside the package upstream, so non-editable installs broke
+  `alembic upgrade head`). `psycopg2` moved to an optional `web-postgres` extra (SQLite is default).
+- Vendored the web-layer test suite (`tests/bioforge/`) + `sample_data/`. **47/47 pass** from a
+  clean `python -m venv` + `pip install -e ".[dev]"` (Py 3.13). Added a `scripts/vendor_bioforge.sh`
+  refresh helper + `src/bioforge/VENDORED.md` provenance stamp (upstream commit `1f5d2cd`).
+- Net: users no longer clone/`pip install -e` a second repo. `dbcan4_workup.sh --serve` and
+  `dbcan4 run --serve` both run alembic from the vendored repo root.
+
+### 2. InterPro domains + GO terms (the cards were empty, not hidden)
+- Root cause: the web already renders a **Gene Ontology** card + **InterPro domains** table
+  (`gene_detail.html`), the parser + `InterproDomain`/`GoAnnotation` models + `bioforge-ingest`
+  path all exist — but nothing ever wrote
+  `funcscan/protein_annotation/interproscan/<sample>_interproscan_faa.tsv`, so the data-gated cards
+  never showed. There was no "hidden" tab.
+- Added it two ways (real InterProScan is a tens-of-GB install, which fights "clone and run"):
+  - **Default, offline**: `nf/bin/pfam_to_interproscan.py` joins the Pfam domains the pipeline
+    already computes against a vendored `pfam2go` map (`nf/assets/mappings/pfam2go.txt`, 5,224
+    families) → the exact headerless InterProScan v5 TSV that `parse_interpro.py` reads.
+  - **Optional, real**: if `INTERPROSCAN_SH` / `params.interproscan_sh` points at an install,
+    run `interproscan.sh -f tsv -goterms -pa` (falls back to Pfam→GO on failure).
+- Wired into Nextflow (`nf/modules/interproscan.nf`, `main.nf`, config params, stub
+  `nf/assets/stub/interproscan.tsv`) and `dbcan4_workup.sh` (step 4b). Output contract §2.10 added.
+- **Verified end-to-end**: fresh ingest → gene page for hero 267317 renders GO:0004650 +
+  GO:0005975 (from Glyco_hydro_28), the InterPro table (PF00295/PF17389), and the served page
+  returns them. Stub DAG: 17/17 processes, INTERPROSCAN publishes GO+IPR.
+
+### 3. 3D structure — confirmed fixed
+- Traced PDB → `structures_to_tsv.py` (gates on the PDB existing, not manifest `status`; pLDDT read
+  from CA B-factors) → manifest → advanced ingest (`--structures-dir`) → `/structures/*` static
+  mount → 3Dmol viewer. Live: the gene page renders the structure card and the PDB serves HTTP 200.
+- Fixed the stub self-consistency gap that produced "unmatched to a gene" warnings: extended the
+  `baseline.nf` stub to `demo_p01..demo_p10` so every advanced/feature stub id has a gene.
+
+### 4. Portability — every run-path path is now an env var
+- `dbcan4_workup.sh` derives its own checkout via `BASH_SOURCE`; the former hardcoded `/array1`
+  literals (`REPO`, `VENV`, `DBCAN_DB`, `PFAM`, biolib, biodb) are now
+  `${VAR:-default}` overrides (`DBCAN4_ROOT`, `DBCAN4_ENGINE_VENV`, `DBCAN_DB`, `PFAM_HMM`,
+  `BIODB_VENV`, `BIODB_SRC`, `BIOLIB_BIN`, `INTERPROSCAN_SH`, `PFAM2GO`, …). Stage scripts now
+  resolve from the checkout, not the asset root.
+- `nextflow.config` param defaults read `System.getenv(...)` first (`DBCAN_DB`, `PFAM_HMM`,
+  `*_ENV`, `INTERPROSCAN_SH`, …). Heavy data assets (dbCAN DB, Pfam, ESM-C index, heads) remain a
+  documented download — they can't live in the repo — via `DBCAN4_ROOT` + per-asset vars.
+- README gains an "Environment variables & portability" section; stale "clone biodb / pip install
+  -e /array1/xinpeng/biodb" instructions replaced by the vendored flow.
+
+### 5. Adversarial audit (4 lenses × verify) — 17 confirmed findings, all triaged
+A multi-agent audit (correctness / web-display / portability / integration, each finding
+adversarially verified) surfaced 17 confirmed issues; fixed:
+- **Web-display completeness** (the priority): gene page no longer shows Pfam domains twice — the
+  InterPro table is suppressed when rows carry no real InterPro accession (Pfam→GO fallback), so
+  the GO card + "Domain architecture" card cover it; when real InterProScan (or a `PFAM2INTERPRO`
+  map) supplies accessions the table returns. Dashboard/sample "CGC clusters" + "Resistance genes"
+  tiles now hide when zero (protein-input dbCAN4 has none). Browse/sample "Location" shows
+  `protein · N aa` instead of a fake `protein:1–N` genomic locus.
+- **Fixed a pre-existing 500** on gene pages whose DeepTMHMM topology wasn't the segmented
+  `label:start-end|…` form: the per-residue topology track now requires that shape (guards
+  `segs[-1].split(':')[1]`), and the stub `deeptmhmm.tsv` placeholder was corrected to real
+  segmented topology. Swept every gene page (10 stub + 3 real) → all HTTP 200.
+- **Robustness/correctness**: `dbcan4_workup.sh` resolves symlinks (`readlink -f`) so it works when
+  symlinked onto PATH; InterProScan stub extended to demo_p01..p10 (matches the baseline stub);
+  `pyproject.toml` package-data comment corrected (the pipeline `nf/` + migrations are resolved
+  repo-relative → editable install is the documented path; a wheel still ships the Python packages
+  + web UI via the `bioforge` package-data).
+- **Stale docs**: removed the "clone biodb / `pip install -e biodb` / `cd /array1/xinpeng/biodb`"
+  steps from `docs/installation.md`, `docs/quickstart.md`, `docs/cli.md`, `PRODUCT.md`,
+  `REPRODUCE_PRODUCT.md` (a one-line historical attribution to the biodb repo is kept).
+
+Verification: 47/47 vendored web-layer tests pass from a clean venv; the stub DAG is 17/17; a live
+ingest+serve renders GO/InterPro/structure and serves PDBs (HTTP 200).

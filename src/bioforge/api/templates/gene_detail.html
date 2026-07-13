@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+{% from "_macros.html" import strand, track_legend, xref_tag %}
+{% set nav = 'browse' %}
+{% block title %}{{ gene.gene_key }} — BioForge{% endblock %}
+{% block head %}
+<style>
+  /* --- advanced-vs-baseline comparison --- */
+  table.cmp td { vertical-align: top; }
+  .cmp .adv-only-row { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+  .cmp .adv-only-row td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+  .tag.adv {
+    display: inline-block; margin: 1px 2px; padding: 1px 7px; border-radius: 999px;
+    font-size: .78rem; color: #fff; background: var(--c, var(--muted));
+    white-space: nowrap;
+  }
+  .tag.adv b { font-weight: 700; }
+  .flag-adv, .flag-adv-inline {
+    background: var(--warn); color: #fff; font-weight: 600;
+    border-radius: 999px; padding: 1px 9px; font-size: .76rem; white-space: nowrap;
+  }
+  .flag-adv-inline { display: inline-block; }
+  .miss { color: var(--muted); font-style: italic; font-size: .85rem; }
+  .micro { font-size: .76rem; }
+  .confbar { width: 72px; height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .confbar span { display: block; height: 100%; background: var(--accent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .row-gap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  #viewer3d {
+    position: relative; width: 100%; height: 420px; border-radius: var(--radius-sm);
+    border: 1px solid var(--line); background: var(--bg); margin-top: 6px;
+  }
+  .struct-ctl { display: flex; align-items: center; gap: 8px; margin: 6px 0 2px; flex-wrap: wrap; }
+  .struct-ctl label { font-weight: 600; font-size: .82rem; }
+  .struct-ctl select { font-size: .82rem; padding: 4px 8px; border: 1px solid var(--line);
+    border-radius: var(--radius-sm); background: #fff; cursor: pointer; }
+  #struct-legend { margin-top: 6px; line-height: 1.8; }
+  /* --- per-residue topology / signal-peptide track --- */
+  .topo-track { margin-top: 8px; }
+  .topo-track svg { display: block; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--bg); }
+  .topo-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; font-size: .74rem; color: var(--muted); }
+  .topo-key { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .topo-sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; }
+</style>
+{# Load 3Dmol from the app's own static mount first so the viewer works with no
+   external network; fall back to the CDN only if the vendored copy is missing. #}
+<script src="/static/3Dmol-min.js"></script>
+<script>
+  if (typeof $3Dmol === 'undefined') {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.1.0/3Dmol-min.js"><\/script>');
+  }
+</script>
+{% endblock %}
+{% block content %}
+
+<div class="breadcrumb">
+  <a href="/">Overview</a> · <a href="/browse">Browse</a> ·
+  <a href="/samples/{{ gene.sample_id }}">{{ gene.sample.sample_key }}</a> · {{ gene.gene_key }}
+</div>
+<div class="page-head">
+  <h1 class="mono">{{ gene.gene_key }}</h1>
+  <p class="sub">{{ gene.product or 'No product annotation' }}</p>
+  <div class="page-actions">
+    <a class="btn ghost sm" href="/genes/{{ gene.id }}/ai_report.json" download
+       title="Grounded evidence + prompt pack — paste into Claude/ChatGPT to describe this protein and answer questions">⭳ AI report (JSON)</a>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h2>{% if gene.contig == 'protein' %}Protein{% else %}Feature{% endif %}</h2>
+    {% set protein_mode = (gene.contig == 'protein') %}
+    <dl class="kv">
+      <dt>Sample</dt><dd><a href="/samples/{{ gene.sample_id }}">{{ gene.sample.sample_key }}</a></dd>
+      <dt>Type</dt><dd><span class="tag plain">{{ gene.feature_type }}</span></dd>
+      {% if protein_mode %}
+      <dt>Length</dt><dd class="mono">{{ '{:,}'.format(gene.length) }} aa</dd>
+      <dt class="muted">Coordinates</dt><dd class="muted micro">protein input — no genomic coordinates (supply a GFF to add them)</dd>
+      {% else %}
+      <dt>Contig</dt><dd class="mono">{{ gene.contig }}</dd>
+      <dt>Location</dt><dd class="mono">{{ '{:,}'.format(gene.start) }}–{{ '{:,}'.format(gene.end) }} {{ strand(gene.strand) }}</dd>
+      <dt>Length</dt><dd class="mono">{{ '{:,}'.format(gene.length) }} bp</dd>
+      {% endif %}
+      {% if gene.cluster %}
+      <dt>CGC cluster</dt><dd><a href="/samples/{{ gene.sample_id }}#clusters">{{ gene.cluster.cluster_key }}</a>{% if gene.cluster.substrate %} <span class="tag" style="background:var(--surface-2);color:var(--warn)">{{ gene.cluster.substrate }}</span>{% endif %}</dd>
+      {% endif %}
+    </dl>
+  </div>
+  <div class="card">
+    <h2>{% if protein_mode %}Provenance{% else %}Raw GFF attributes{% endif %}</h2>
+    {% if protein_mode %}
+    <dl class="kv">
+      <dt>Input</dt><dd>protein FASTA</dd>
+      <dt>Family calls</dt><dd>dbCAN4 (baseline) + ESM-C advanced</dd>
+    </dl>
+    {% elif gene.attributes %}
+    <dl class="kv">
+      {% for k, v in gene.attributes.items() %}
+      <dt class="mono">{{ k }}</dt><dd class="mono" style="word-break:break-word">{{ v }}</dd>
+      {% endfor %}
+    </dl>
+    {% else %}<p class="muted">No attributes recorded.</p>{% endif %}
+  </div>
+</div>
+
+{% if gene.protein_seq %}
+<div class="card">
+  <div class="card-head">
+    <h2>Protein sequence <span class="muted" style="font-weight:400">({{ '{:,}'.format(gene.protein_seq|length) }} aa)</span></h2>
+    <a class="btn ghost sm" href="/genes/{{ gene.id }}/protein.faa">⭳ FASTA</a>
+  </div>
+  <pre class="seqblock">{% for i in range(0, gene.protein_seq|length, 60) %}{{ gene.protein_seq[i:i+60] }}
+{% endfor %}</pre>
+</div>
+{% endif %}
+
+{% if not protein_mode %}
+<div class="card">
+  <div class="card-head">
+    <h2>Genomic context</h2>
+    {% if n_neighbors %}<span class="pill">{{ n_neighbors }} neighbour gene(s)</span>{% endif %}
+  </div>
+  {% if context_track %}
+    <div class="track-wrap">{{ context_track | safe }}</div>
+    {{ track_legend(focal=true) }}
+  {% else %}
+    <p class="muted">No neighbouring features on this contig.</p>
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-head">
+    <h2>CAZyme annotations — advanced vs baseline</h2>
+    {% if comparison.n_advanced_only %}
+      <span class="pill flag-adv">{{ comparison.n_advanced_only }} advanced-only</span>
+    {% endif %}
+  </div>
+  {% if comparison.rows %}
+  <p class="muted" style="margin-top:-.3rem">
+    Baseline = HMMER / dbCAN_sub / DIAMOND · Advanced = ESM-C (kNN, centroid, contrastive),
+    Foldseek-CAZyme3D, SaProt, fusion. Families <strong>only</strong> called by the
+    advanced methods — missed by the baseline — are flagged
+    <span class="flag-adv-inline">advanced-only</span>.
+  </p>
+  <div class="table-wrap"><table class="cmp">
+    <thead><tr>
+      <th>Family</th>
+      <th>Baseline call</th>
+      <th>Advanced call(s)</th>
+      <th>Best conf.</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+    {% for r in comparison.rows %}
+      <tr class="{{ 'adv-only-row' if r.advanced_only else '' }}">
+        <td>{{ xref_tag(r.family, '', '/browse?family=' ~ r.family, xref('cazy', r.family), 'CAZy') }}</td>
+        <td>
+          {% if r.baseline_tools %}
+            {% for sf in r.baseline_subfamilies %}<span class="tag plain mono">{{ sf }}</span>{% endfor %}
+            <div class="muted micro">{{ r.baseline_tools|join(', ') }}</div>
+          {% else %}
+            <span class="miss">— not called —</span>
+          {% endif %}
+        </td>
+        <td>
+          {% for a in r.advanced_calls %}
+            <span class="tag adv" style="--c:{{ a.colour }}" title="{{ a.display }}{% if a.subfamily != r.family %} → {{ a.subfamily }}{% endif %}">
+              {{ a.display }}{% if a.confidence is not none %} <b>{{ '%.2f'|format(a.confidence) }}</b>{% endif %}
+            </span>
+          {% else %}
+            <span class="muted">—</span>
+          {% endfor %}
+        </td>
+        <td class="mono">
+          {% if r.advanced_best_conf is not none %}
+            <div class="confbar" title="{{ '%.3f'|format(r.advanced_best_conf) }}">
+              <span style="width:{{ (r.advanced_best_conf*100)|round(0,'floor')|int }}%"></span>
+            </div>
+          {% else %}—{% endif %}
+        </td>
+        <td>{% if r.advanced_only %}<span class="flag-adv-inline">advanced-only</span>{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="muted">No CAZyme calls for this gene.</p>{% endif %}
+</div>
+
+{# ---------------- Deep-dive: per-protein functional/structural features ---------------- #}
+<div class="two-col">
+  <div class="card">
+    <h2>Secretion &amp; membrane topology</h2>
+    <p class="muted micro" style="margin-top:-.3rem">Signal peptide (SignalP6) and transmembrane topology (DeepTMHMM) — key for whether a fungal CAZyme is secreted.</p>
+    <dl class="kv">
+      {% set sp = features.signal_peptide|first %}
+      <dt>Signal peptide</dt>
+      <dd>
+        {% if sp %}
+          {% if sp.label and sp.label != 'NO_SP' %}
+            <span class="tag" style="background:var(--accent-weak);color:var(--accent)">{{ sp.label }}</span>
+            {% if sp.score is not none %}<span class="mono muted">p={{ '%.2f'|format(sp.score) }}</span>{% endif %}
+            {% if sp.end %}<span class="muted micro">cleavage after residue {{ sp.end }}</span>{% endif %}
+          {% else %}
+            <span class="tag plain">no signal peptide</span>
+          {% endif %}
+          <div class="muted micro">{{ sp.tool }}</div>
+        {% else %}<span class="muted">not analysed</span>{% endif %}
+      </dd>
+      {% set tm = features.tm_topology|first %}
+      <dt>TM topology</dt>
+      <dd>
+        {% if tm %}
+          <span class="tag plain">{{ tm.label or '—' }}</span>
+          {% if tm.score %}<span class="mono muted">{{ tm.score|int }} TM helix(es)</span>{% endif %}
+          {% if tm.attributes and tm.attributes.topology and tm.attributes.topology != '-' %}
+            <div class="mono micro muted" style="word-break:break-all">{{ tm.attributes.topology }}</div>
+          {% endif %}
+          <div class="muted micro">{{ tm.tool }}</div>
+        {% else %}<span class="muted">not analysed</span>{% endif %}
+      </dd>
+    </dl>
+    {# --- per-residue topology / signal-peptide track (real DeepTMHMM Viterbi path) --- #}
+    {# Require the segmented "label:start-end|..." form; a raw/other topology string
+       (no ':') is skipped rather than crashing the page on segs[-1].split(':')[1]. #}
+    {% if tm and tm.attributes and tm.attributes.topology and ':' in tm.attributes.topology and '-' in tm.attributes.topology %}
+      {% set segs = tm.attributes.topology.split('|') %}
+      {% set total = segs[-1].split(':')[1].split('-')[1]|int %}
+      {% set topo_colors = {'signal':'#d98c00','outside':'#2e7d32','inside':'#8e24aa','TMhelix':'#1565c0','TMbeta':'#1565c0','periplasm':'#00838f'} %}
+      {% set topo_names = {'signal':'Signal peptide','outside':'Outside (extracellular)','inside':'Inside (cytoplasmic)','TMhelix':'TM helix','TMbeta':'TM β-strand','periplasm':'Periplasm'} %}
+      {% set seen = [] %}
+      {% if total > 0 %}
+      <div class="topo-track">
+        <svg viewBox="0 0 1000 26" preserveAspectRatio="none" width="100%" height="26" role="img"
+             aria-label="Per-residue topology track">
+          {% for seg in segs %}
+            {% set label = seg.split(':')[0] %}
+            {% set rng = seg.split(':')[1].split('-') %}
+            {% set s = rng[0]|int %}{% set e = rng[1]|int %}
+            {% if seen.append(label) %}{% endif %}
+            <rect x="{{ '%.2f'|format((s-1)/total*1000) }}" y="0"
+                  width="{{ '%.2f'|format((e-s+1)/total*1000) }}" height="26"
+                  fill="{{ topo_colors.get(label,'#999') }}" stroke="#fff" stroke-width="0.5">
+              <title>{{ topo_names.get(label,label) }}: residues {{ s }}–{{ e }}</title></rect>
+          {% endfor %}
+        </svg>
+        <div class="topo-legend">
+          <span class="micro">1</span>
+          {% for k in ['signal','outside','inside','TMhelix','TMbeta','periplasm'] %}
+            {% if k in seen %}<span class="topo-key"><span class="topo-sw" style="background:{{ topo_colors[k] }}"></span>{{ topo_names[k] }}</span>{% endif %}
+          {% endfor %}
+          <span class="micro" style="margin-left:auto">{{ total }} aa · DeepTMHMM per-residue path</span>
+        </div>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% if gene.go_annotations %}
+  <div class="card">
+    <h2>Gene Ontology</h2>
+    <p class="muted micro" style="margin-top:-.3rem">GO terms assigned via InterProScan.</p>
+      <div class="chips">
+      {% for g in gene.go_annotations %}
+        {% set gu = xref('go', g.go_id) %}
+        {% if gu %}<a class="tag plain" href="{{ gu }}" target="_blank" rel="noopener">{{ g.go_id }} ↗</a>
+        {% else %}<span class="tag plain">{{ g.go_id }}</span>{% endif %}
+      {% endfor %}
+      </div>
+  </div>
+  {% endif %}
+</div>
+
+{% set st = features.structure|first %}
+{% if st and st.structure_path %}
+<div class="card">
+  <div class="card-head">
+    <h2>Predicted 3D structure</h2>
+    <div class="row-gap">
+      {% if st.score is not none %}<span class="pill">pLDDT {{ '%.1f'|format(st.score) }}</span>{% endif %}
+      {% if st.label %}<span class="pill">{{ st.label }}</span>{% endif %}
+      <a class="btn ghost sm" href="/structures/{{ st.structure_path.split('structures/')[-1] }}" download>⭳ PDB</a>
+    </div>
+  </div>
+  <p class="muted micro" style="margin-top:-.3rem">
+    Structure feeds the structure-tier annotation (Foldseek vs CAZyme3D, SaProt). Drag to rotate · scroll to zoom.
+    {% if st.attributes and st.attributes.note %}<em>{{ st.attributes.note }}</em>{% endif %}
+  </p>
+  <div class="struct-ctl">
+    <label for="colormode">Colour by:</label>
+    <select id="colormode">
+      {% if structure_domains %}<option value="domain">Pfam / CAZyme domains</option>{% endif %}
+      <option value="plddt"{% if not structure_domains %} selected{% endif %}>pLDDT confidence</option>
+      <option value="spectrum">Sequence position (N→C)</option>
+      <option value="sstruc">Secondary structure</option>
+    </select>
+  </div>
+  <div id="viewer3d" data-pdb="/structures/{{ st.structure_path.split('structures/')[-1] }}"></div>
+  <div id="struct-legend" class="micro muted"></div>
+  {#- domain spec (Pfam/CAZyme spans + signal peptide) built server-side in the route as
+      `structure_domains`; tojson emits a properly-escaped JS literal the viewer JS reads. -#}
+  <script id="domainspec" type="application/json">{{ structure_domains | tojson }}</script>
+</div>
+{% endif %}
+
+{# ---------------- Domain architecture (Pfam / hmmscan) ---------------- #}
+{% if features.domain %}
+<div class="card">
+  <h2>Domain architecture <span class="muted" style="font-weight:400">· Pfam / hmmscan</span></h2>
+  <p class="muted micro" style="margin-top:-.3rem">Full domain layout from hmmscan vs Pfam-A (gathering thresholds). Multi-domain architecture explains why different tools give different family calls.</p>
+  <table class="tbl">
+    <thead><tr><th>Domain</th><th>Pfam</th><th>Residues</th><th>i-E-value</th><th>Bitscore</th></tr></thead>
+    <tbody>
+    {% for d in features.domain %}
+      {# Coords/label/score sit in top-level columns in some ingests and nested
+         under `attributes` (as strings) in others — resolve from whichever has them. #}
+      {% set dname = d.label or d.attributes.name or d.attributes.acc or '—' %}
+      {% set dstart = d.start if d.start is not none else d.attributes.start %}
+      {% set dend = d.end if d.end is not none else d.attributes.end %}
+      {% set dscore = d.score if d.score is not none else d.attributes.score %}
+      <tr>
+        <td><b>{{ dname }}</b></td>
+        <td class="mono">{{ d.attributes.acc or '—' }}</td>
+        <td class="mono">{% if dstart not in (none, '') and dend not in (none, '') %}{{ dstart }}–{{ dend }}{% else %}—{% endif %}</td>
+        <td class="mono">{{ d.attributes.evalue or '—' }}</td>
+        <td class="mono">{% if dscore not in (none, '') %}{{ '%.1f'|format(dscore|float) }}{% else %}—{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{# ---------------- Function · EC · substrate ---------------- #}
+{% set ecp = features.ec_prediction|first %}
+{% set cazyme_ec = gene.cazymes|selectattr('ec_number')|map(attribute='ec_number')|list %}
+{% if ecp or cazyme_ec %}
+<div class="two-col">
+  <div class="card">
+    <h2>Function · EC · substrate</h2>
+    <p class="muted micro" style="margin-top:-.3rem">Family-inherited EC plus an independent sequence-based predictor (CLEAN).</p>
+    <dl class="kv">
+      {% if cazyme_ec %}<dt>EC (family)</dt><dd class="mono">{{ cazyme_ec|join(', ') }}</dd>{% endif %}
+      {% if ecp %}
+        <dt>EC (CLEAN)</dt>
+        <dd><span class="tag" style="background:var(--accent-weak);color:var(--accent)">{{ ecp.label }}</span>
+          {% if ecp.score is not none %}<span class="mono muted">conf {{ '%.3f'|format(ecp.score) }}</span>{% endif %}
+          <div class="muted micro">{{ ecp.tool }} — independent seq→EC prediction</div>
+        </dd>
+      {% endif %}
+    </dl>
+  </div>
+  {% set loc = features.localization|first %}
+  <div class="card">
+    <h2>Subcellular localization</h2>
+    <p class="muted micro" style="margin-top:-.3rem">DeepLoc-2.0 where available, otherwise derived from signal peptide + GO cellular component.</p>
+    <dl class="kv">
+      {% if loc %}
+        <dt>Call</dt><dd><b>{{ loc.label }}</b>{% if loc.score is not none %} <span class="mono muted">{{ '%.2f'|format(loc.score) }}</span>{% endif %}</dd>
+        <dt>Basis</dt><dd class="micro">{{ loc.attributes.basis or loc.attributes.method or loc.tool }}</dd>
+      {% else %}<dt>Call</dt><dd class="muted">not analysed</dd>{% endif %}
+    </dl>
+  </div>
+</div>
+{% endif %}
+
+{# ---------------- Structural homologs (Foldseek vs CAZyme3D) ---------------- #}
+{% if features.structure_hit %}
+<div class="card">
+  <h2>Structural homologs <span class="muted" style="font-weight:400">· Foldseek vs CAZyme3D</span></h2>
+  <p class="muted micro" style="margin-top:-.3rem">Top structural matches of the predicted fold. High TM-score at low sequence identity indicates remote structural homology.</p>
+  <table class="tbl">
+    <thead><tr><th>Target</th><th>Family</th><th>TM-score</th><th>prob</th><th>LDDT</th></tr></thead>
+    <tbody>
+    {% for h in features.structure_hit[:10] %}
+      <tr>
+        <td class="mono">{{ h.attributes.target or '—' }}</td>
+        <td><b>{{ h.label or '—' }}</b></td>
+        <td class="mono">{{ '%.2f'|format(h.score) if h.score is not none else '—' }}</td>
+        <td class="mono">{{ h.attributes.prob or '—' }}</td>
+        <td class="mono">{{ h.attributes.lddt or '—' }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{# ---------------- Physicochemistry (Biopython) ---------------- #}
+{% set pc = features.physicochem|first %}
+{% if pc %}
+<div class="card">
+  <h2>Physicochemistry <span class="muted" style="font-weight:400">· Biopython</span></h2>
+  <dl class="kv kv-grid">
+    {% if pc.score is not none %}<dt>Molecular weight</dt><dd class="mono">{{ '{:,.0f}'.format(pc.score) }} Da</dd>{% endif %}
+    {% if pc.attributes.pi is not none %}<dt>Theoretical pI</dt><dd class="mono">{{ pc.attributes.pi }}</dd>{% endif %}
+    {% if pc.attributes.instability is not none %}<dt>Instability</dt><dd class="mono">{{ pc.attributes.instability }}</dd>{% endif %}
+    {% if pc.attributes.gravy is not none %}<dt>GRAVY</dt><dd class="mono">{{ pc.attributes.gravy }}</dd>{% endif %}
+    {% if pc.attributes.aromaticity is not none %}<dt>Aromaticity</dt><dd class="mono">{{ pc.attributes.aromaticity }}</dd>{% endif %}
+    {% if pc.attributes.n_glyc_sequons is not none %}<dt>N-glyc sequons</dt><dd class="mono">{{ pc.attributes.n_glyc_sequons }}</dd>{% endif %}
+  </dl>
+</div>
+{% endif %}
+
+{% if gene.args %}
+<div class="card">
+  <h2>Antimicrobial resistance <span class="muted" style="font-weight:400">({{ gene.args|length }})</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Gene</th><th>Drug class</th><th>Mechanism</th><th>% identity</th><th>% coverage</th><th>Tool / DB</th><th>Accession</th></tr></thead>
+    <tbody>
+    {% for a in gene.args %}
+      <tr>
+        <td><span class="tag" style="background:var(--surface-2);color:var(--warn)">{{ a.gene_symbol or '—' }}</span>
+            {% if a.gene_name %}<div class="muted" style="font-size:.8rem">{{ a.gene_name }}</div>{% endif %}</td>
+        <td>{{ a.drug_class or '—' }}</td>
+        <td class="muted">{{ a.resistance_mechanism or '—' }}</td>
+        <td class="mono">{{ a.identity if a.identity is not none else '—' }}</td>
+        <td class="mono">{{ a.coverage if a.coverage is not none else '—' }}</td>
+        <td>{{ a.tool or '—' }}{% if a.reference_db %} <span class="muted">/ {{ a.reference_db }}</span>{% endif %}</td>
+        <td class="mono">{% set au = xref('arg', a.accession) %}{% if au %}<a href="{{ au }}" target="_blank" rel="noopener">{{ a.accession }} ↗</a>{% else %}{{ a.accession or '—' }}{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endif %}
+
+{# Only surface the InterPro table when at least one row carries a real InterPro
+   accession (real InterProScan or a Pfam->InterPro map). In the offline Pfam->GO
+   fallback the domains are Pfam-only — the GO card + "Domain architecture" card
+   already show that evidence, so this table would just duplicate them. #}
+{% set ipr_domains = gene.domains|selectattr('interpro_acc')|list if gene.domains else [] %}
+{% if ipr_domains %}
+<div class="card">
+  <h2>InterPro domains <span class="muted" style="font-weight:400">({{ ipr_domains|length }})</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Analysis</th><th>Signature</th><th>InterPro</th><th>Position</th><th>E-value</th><th>GO</th></tr></thead>
+    <tbody>
+    {% for d in ipr_domains %}
+      <tr>
+        <td>{{ d.analysis or '—' }}</td>
+        <td>{% set su = xref('signature', d.signature_acc, d.analysis) %}
+            <span class="mono">{% if su %}<a href="{{ su }}" target="_blank" rel="noopener">{{ d.signature_acc }}</a>{% else %}{{ d.signature_acc or '—' }}{% endif %}</span>
+            {% if d.signature_desc %}<div class="muted" style="font-size:.8rem">{{ d.signature_desc }}</div>{% endif %}</td>
+        <td>{% if d.interpro_acc %}{{ xref_tag(d.interpro_acc, 'ipr', '/browse?q=' ~ d.interpro_acc, xref('interpro', d.interpro_acc), 'InterPro') }}
+            {% if d.interpro_desc %}<div class="muted" style="font-size:.8rem">{{ d.interpro_desc }}</div>{% endif %}
+            {% else %}<span class="muted">—</span>{% endif %}</td>
+        <td class="mono muted">{% if d.start %}{{ d.start }}–{{ d.end }}{% else %}—{% endif %}</td>
+        <td class="mono muted">{{ '%.1e'|format(d.evalue) if d.evalue is not none else '—' }}</td>
+        <td>{% for go in d.go_terms %}{% set gu = xref('go', go) %}{% if gu %}<a class="tag plain" href="{{ gu }}" target="_blank" rel="noopener">{{ go }} ↗</a>{% else %}<span class="tag plain">{{ go }}</span>{% endif %}{% else %}<span class="muted">—</span>{% endfor %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Provenance</h2>
+  <p class="muted" style="margin-top:-.4rem">Source files (with sha256 checksums) that produced this gene's sample.</p>
+  {% if provenance %}
+  <div class="table-wrap"><table>
+    <thead><tr><th>Entity</th><th>Tool</th><th>Version</th><th>Source file</th><th>Checksum</th></tr></thead>
+    <tbody>
+    {% for p in provenance %}
+      <tr>
+        <td><span class="tag plain">{{ p.entity_type }}</span></td>
+        <td>{{ p.tool_name or '—' }}</td>
+        <td class="mono">{{ p.tool_version or '—' }}</td>
+        <td class="mono muted" style="max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+            title="{{ p.source_file }}">{{ p.source_file.split('/')[-1] }}</td>
+        <td class="mono muted" title="{{ p.file_checksum }}">{{ p.file_checksum[:12] }}…</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="muted">No provenance rows found.</p>{% endif %}
+</div>
+
+<script>
+(function () {
+  var el = document.getElementById('viewer3d');
+  if (!el || typeof $3Dmol === 'undefined') return;
+  var url = el.dataset.pdb;
+  var viewer = $3Dmol.createViewer(el, { backgroundColor: 'white' });
+  var BASE = '#9ca3af', DOMAINS = [];
+  try { DOMAINS = JSON.parse((document.getElementById('domainspec') || {}).textContent || '[]'); } catch (e) {}
+  var sel = document.getElementById('colormode');
+  var lg = document.getElementById('struct-legend');
+  function sw(c){ return '<span style="display:inline-block;width:12px;height:12px;border-radius:3px;'
+                      + 'vertical-align:-1px;margin:0 4px 0 10px;background:'+c+'"></span>'; }
+  function applyMode(mode) {
+    if (mode === 'plddt') {
+      viewer.setStyle({}, { cartoon: { colorscheme: { prop: 'b', gradient: 'roygb', min: 50, max: 90 } } });
+      if (lg) lg.innerHTML = 'Per-residue ESMFold pLDDT:' + sw('#2166ac') + 'confident (≥90) →' + sw('#b2182b') + 'low (≤50)';
+    } else if (mode === 'spectrum') {
+      viewer.setStyle({}, { cartoon: { color: 'spectrum' } });
+      if (lg) lg.innerHTML = 'Sequence position:' + sw('#2166ac') + 'N-terminus →' + sw('#b2182b') + 'C-terminus';
+    } else if (mode === 'sstruc') {
+      viewer.setStyle({}, { cartoon: { colorscheme: 'ssJmol' } });
+      if (lg) lg.innerHTML = 'Secondary structure:' + sw('#c8102e') + 'helix' + sw('#ffd700') + 'sheet' + sw('#e2e8f0') + 'coil';
+    } else { // domain
+      viewer.setStyle({}, { cartoon: { color: BASE } });
+      var html = '';
+      for (var i = 0; i < DOMAINS.length; i++) {
+        var d = DOMAINS[i];
+        viewer.setStyle({ resi: d.start + '-' + d.end }, { cartoon: { color: d.color } });
+        html += sw(d.color) + d.family + ' · ' + d.start + '–' + d.end;
+      }
+      html += sw(BASE) + 'inter-domain / linker';
+      if (lg) lg.innerHTML = html;
+    }
+    // Some stand-in models are CA-only traces — show a backbone so they're visible.
+    viewer.addStyle({}, { stick: { radius: 0.12, colorscheme: 'whiteCarbon' } });
+    viewer.render();
+  }
+  fetch(url).then(function (r) { return r.text(); }).then(function (pdb) {
+    viewer.addModel(pdb, 'pdb');
+    // default to the domain view when domains are available, else pLDDT
+    applyMode(sel ? sel.value : ((DOMAINS.length) ? 'domain' : 'plddt'));
+    viewer.zoomTo();
+    viewer.render();
+    if (sel) sel.addEventListener('change', function (e) { applyMode(e.target.value); });
+  }).catch(function () {
+    el.innerHTML = '<p class="muted" style="padding:1rem">Structure could not be loaded.</p>';
+  });
+})();
+</script>
+{% endblock %}

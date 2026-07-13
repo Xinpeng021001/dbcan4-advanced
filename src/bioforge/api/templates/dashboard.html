@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_macros.html" import barchart %}
+{% set nav = 'home' %}
+{% block title %}BioForge — overview{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Dataset overview</h1>
+  <p class="sub">A searchable SQL + genome-browser layer over a completed
+    nf-core/funcscan run. Everything below reflects the <b>current</b> version of
+    each sample; older versions stay queryable under Releases.</p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat"><div class="n">{{ '{:,}'.format(stats.n_samples) }}</div><div class="k">Samples</div></div>
+  <div class="stat"><div class="n">{{ '{:,}'.format(stats.n_genes) }}</div><div class="k">Features</div></div>
+  <div class="stat"><div class="n">{{ '{:,}'.format(stats.n_cazymes) }}</div><div class="k">CAZyme calls</div></div>
+  <div class="stat ipr"><div class="n">{{ '{:,}'.format(stats.n_domains) }}</div><div class="k">InterPro domains</div></div>
+  <div class="stat"><div class="n">{{ '{:,}'.format(stats.n_families) }}</div><div class="k">CAZy families</div></div>
+  {# CGC clusters + ARGs come from genome/funcscan runs; hide when absent (e.g. protein-input dbCAN4). #}
+  {% if stats.n_clusters %}<div class="stat warn"><div class="n">{{ '{:,}'.format(stats.n_clusters) }}</div><div class="k">CGC clusters</div></div>{% endif %}
+  {% if stats.n_args %}<div class="stat warn"><div class="n">{{ '{:,}'.format(stats.n_args) }}</div><div class="k">Resistance genes</div></div>{% endif %}
+  <div class="stat warn"><div class="n">{{ '{:,}'.format(stats.n_releases) }}</div><div class="k">Releases</div></div>
+</div>
+
+{% if stats.n_genes == 0 %}
+  <div class="card empty">
+    <div class="big">📭</div>
+    <p>No data ingested yet. Run <span class="mono">bioforge-ingest &lt;funcscan-results&gt;</span> to populate the database.</p>
+  </div>
+{% else %}
+
+<div class="two-col">
+  <div class="card">
+    <h2>Top CAZyme families</h2>
+    {% if top_families %}{{ barchart(top_families) }}
+    {% else %}<p class="muted">No CAZyme annotations.</p>{% endif %}
+  </div>
+  <div class="card">
+    <h2>Feature types</h2>
+    {% if feature_types %}{{ barchart(feature_types, klass='ipr') }}
+    {% else %}<p class="muted">No features.</p>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>Samples</h2>
+    <a class="btn ghost sm" href="/browse">Browse all genes →</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Sample</th><th>Tool</th><th>Contigs</th><th>Features</th>
+        <th>Metadata</th><th>Release</th>
+      </tr></thead>
+      <tbody>
+      {% for s in samples %}
+        <tr>
+          <td><a href="/samples/{{ s.id }}"><b>{{ s.sample_key }}</b></a></td>
+          <td><span class="pill tool">{{ s.annotation_tool }}</span></td>
+          <td class="mono">{{ '{:,}'.format(s.n_contigs) }}</td>
+          <td class="mono">{{ '{:,}'.format(s.n_genes) }}</td>
+          <td class="muted">
+            {%- for k, v in (s.sample_metadata or {}).items() -%}
+              <span class="tag plain">{{ k }}: {{ v }}</span>
+            {%- else -%}—{%- endfor -%}
+          </td>
+          <td><span class="pill">#{{ s.release_id }}</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if releases %}
+<div class="card">
+  <div class="card-head">
+    <h2>Recent releases</h2>
+    <a class="btn ghost sm" href="/releases">All releases →</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Label</th><th>funcscan</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+      {% for r in releases %}
+        <tr>
+          <td class="mono">{{ r.id }}</td>
+          <td>{{ r.label }}</td>
+          <td class="muted">{{ r.funcscan_version or '—' }}</td>
+          <td class="muted mono">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else '' }}</td>
+          <td>{% if r.is_current %}<span class="pill current">current</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

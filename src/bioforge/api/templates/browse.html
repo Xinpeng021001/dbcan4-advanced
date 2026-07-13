@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% from "_macros.html" import strand, cazyme_tags, cazyme_tags_flagged, ipr_tags %}
+{% set nav = 'browse' %}
+{% block title %}Browse genes — BioForge{% endblock %}
+
+{# preserve current query string when re-sorting / paging #}
+{% macro qs(sort=None, page=None) -%}
+  ?q={{ q|urlencode }}&family={{ family|urlencode }}&sample={{ sample|urlencode }}&ec={{ ec|urlencode }}&drug_class={{ drug_class|urlencode }}&go={{ go|urlencode }}&advanced_only={{ advanced_only }}&sort={{ sort or sort_cur }}&page={{ page or 1 }}
+{%- endmacro %}
+{% set sort_cur = sort %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Browse &amp; search genes</h1>
+  <p class="sub">Filter the current sample set by gene name / product, CAZyme family,
+    or sample. Results are paginated and exportable.</p>
+</div>
+
+<div class="card">
+  <form class="search" method="get" action="/browse">
+    <div class="field grow">
+      <label>Gene name / product</label>
+      <input type="text" name="q" value="{{ q }}" placeholder="e.g. amylase, cellulase, PROKKA_00001">
+    </div>
+    <div class="field">
+      <label>CAZyme family</label>
+      <select name="family">
+        <option value="">any</option>
+        {% for fam, n in families %}
+        <option value="{{ fam }}" {% if fam==family %}selected{% endif %}>{{ fam }} ({{ n }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>EC number</label>
+      <select name="ec">
+        <option value="">any</option>
+        {% for e, n in ecs %}
+        <option value="{{ e }}" {% if e==ec %}selected{% endif %}>{{ e }} ({{ n }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Resistance drug class</label>
+      <select name="drug_class">
+        <option value="">any</option>
+        {% for dc, n in drug_classes %}
+        <option value="{{ dc }}" {% if dc==drug_class %}selected{% endif %}>{{ dc }} ({{ n }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>GO term</label>
+      <select name="go">
+        <option value="">any</option>
+        {% for g, n in gos %}
+        <option value="{{ g }}" {% if g==go %}selected{% endif %}>{{ g }} ({{ n }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Sample</label>
+      <select name="sample">
+        <option value="">any</option>
+        {% for s in samples %}
+        <option value="{{ s.sample_key }}" {% if s.sample_key==sample %}selected{% endif %}>{{ s.sample_key }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label>Advanced calls</label>
+      <label class="chk" title="Show only genes with a CAZyme family called by the advanced methods but missed by the HMMER/dbCAN_sub/DIAMOND baseline">
+        <input type="checkbox" name="advanced_only" value="1" {% if advanced_only %}checked{% endif %}>
+        advanced-only
+      </label>
+    </div>
+    <input type="hidden" name="sort" value="{{ sort }}">
+    <button class="btn" type="submit">Search</button>
+    {% if searched %}<a class="btn ghost" href="/browse">Clear</a>{% endif %}
+  </form>
+</div>
+
+<div class="toolbar">
+  <div class="chips">
+    <span class="chip">Matches <b>{{ '{:,}'.format(total) }}</b></span>
+    {% if q %}<span class="chip">name/product “{{ q }}”</span>{% endif %}
+    {% if family %}<span class="chip">family {{ family }}</span>{% endif %}
+    {% if ec %}<span class="chip">EC {{ ec }}</span>{% endif %}
+    {% if drug_class %}<span class="chip">resistance {{ drug_class }}</span>{% endif %}
+    {% if go %}<span class="chip">{{ go }}</span>{% endif %}
+    {% if sample %}<span class="chip">sample {{ sample }}</span>{% endif %}
+    {% if advanced_only %}<span class="chip" style="background:var(--warn);color:#fff">advanced-only</span>{% endif %}
+  </div>
+  {% if total %}
+  <span style="display:flex;gap:.4rem">
+    <a class="btn ghost sm" href="/browse.csv{{ qs() }}">⭳ CSV</a>
+    <a class="btn ghost sm" href="/browse.faa{{ qs() }}">⭳ FASTA</a>
+  </span>
+  {% endif %}
+</div>
+
+{% if not genes %}
+  <div class="card empty">
+    <div class="big">🔍</div>
+    <p>{% if searched %}No genes match these filters.{% else %}Enter a search above, or pick a CAZyme family / sample to list genes.{% endif %}</p>
+  </div>
+{% else %}
+  <div class="card" style="padding:0">
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th><a href="/browse{{ qs(sort='name') }}" class="{{ 'sorted' if sort=='name' }}">Gene</a></th>
+          <th>Sample</th>
+          <th><a href="/browse{{ qs(sort='location') }}" class="{{ 'sorted' if sort=='location' }}">Location</a></th>
+          <th><a href="/browse{{ qs(sort='length') }}" class="{{ 'sorted' if sort=='length' }}">Length</a></th>
+          <th><a href="/browse{{ qs(sort='product') }}" class="{{ 'sorted' if sort=='product' }}">Product</a></th>
+          <th>CAZyme</th><th>InterPro</th>
+        </tr></thead>
+        <tbody>
+        {% for g in genes %}
+          <tr>
+            <td><a href="/genes/{{ g.id }}" class="mono">{{ g.gene_key }}</a></td>
+            <td><a href="/samples/{{ g.sample_id }}">{{ g.sample.sample_key }}</a></td>
+            <td class="mono muted">{% if g.contig == 'protein' %}protein · {{ '{:,}'.format(g.length) }} aa{% else %}{{ g.contig }}:{{ '{:,}'.format(g.start) }}–{{ '{:,}'.format(g.end) }} {{ strand(g.strand) }}{% endif %}</td>
+            <td class="mono muted">{{ '{:,}'.format(g.length) }}</td>
+            <td>{{ g.product or '—' }}</td>
+            <td>{{ cazyme_tags_flagged(g, advonly_map.get(g.id)) }}</td>
+            <td>{{ ipr_tags(g) }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if pages > 1 %}
+  <div class="pager">
+    {% if page > 1 %}<a class="btn ghost sm" href="/browse{{ qs(page=page-1) }}">← Prev</a>{% endif %}
+    <span class="pill">Page {{ page }} / {{ pages }}</span>
+    {% if page < pages %}<a class="btn ghost sm" href="/browse{{ qs(page=page+1) }}">Next →</a>{% endif %}
+  </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

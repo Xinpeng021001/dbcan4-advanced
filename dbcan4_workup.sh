@@ -9,34 +9,62 @@
 #   + Pfam domains (hmmscan)          + physicochemistry (Biopython)
 #   + EC number (CLEAN)               + TM topology & signal peptide (DeepTMHMM)
 #   + 3D structure (ESMFold, local GPU) + subcellular localization (derived)
+#   + InterPro domains + GO terms (real InterProScan if configured, else Pfam->GO)
 #   -> v1.1 output contract -> BioForge SQLite -> FastAPI web UI
 #
 # dbCAN4 is fungal + protein-input: no genome, no Prokka, no GFF. Genes are built
 # straight from the protein FASTA. A GFF is OPTIONAL — pass --gff only if you have
 # genuine genomic coordinates for these proteins.
 #
+# The web UI (BioForge) is VENDORED into this repo (src/bioforge) — no second repo
+# to clone. Every path below is overridable via an env var; see the README section
+# "Environment variables & portability".
+#
 # Usage:
 #     dbcan4_workup.sh <proteins.faa> [--outdir DIR] [--sample NAME] [--gff FILE]
-#                      [--serve] [--port N] [--gpu N]
-#                      [--no-deeptmhmm] [--no-clean] [--no-structure] [--no-ai-report]
+#                      [--serve] [--port N] [--gpu N] [--host H]
+#                      [--no-deeptmhmm] [--no-clean] [--no-structure]
+#                      [--no-ai-report] [--no-interpro]
 #
 # Example (the whole product in one line):
 #     dbcan4_workup.sh my_proteins.faa --serve
 # =============================================================================
 set -euo pipefail
 
-# ---- defaults (met paths; all overridable) ----
-REPO=/array1/xinpeng/dbcan4-advanced
-NF=$REPO/repo_clone/nf
-VENV=$REPO/venv                                   # engine venv (torch + esm)
-BIODB_VENV=/array1/xinpeng/scratch/biodb_venv     # web stack + dbcan4 CLI
-BIODB_SRC=/array1/xinpeng/biodb
-BIOLIB_BIN=/array1/xinpeng/scratch/venv_biolib/bin/biolib
-DBCAN_DB=/array1/xinpeng/dbcan_db
-PFAM=/array1/xinpeng/pfam/Pfam-A.hmm
+# =============================================================================
+# Paths — every one is overridable via an environment variable, so this script
+# runs unchanged after a fresh `git clone` on any machine. Defaults point at the
+# reference host (met). See README "Environment variables & portability".
+# =============================================================================
+# SELF_DIR = the checkout this script lives in (portable; via BASH_SOURCE).
+# Resolve symlinks first so it works even when the script is symlinked onto PATH.
+_SELF_SRC="${BASH_SOURCE[0]}"
+_SELF_SRC="$(readlink -f "$_SELF_SRC" 2>/dev/null || echo "$_SELF_SRC")"
+SELF_DIR="$(cd "$(dirname "$_SELF_SRC")" && pwd)"
+# DBCAN4_ROOT = where the heavy data assets live (engine venv, ESM-C reference
+# index, trained heads, HF cache). On met these sit one level ABOVE the checkout;
+# set DBCAN4_ROOT to wherever you unpacked/downloaded them on another machine.
+DBCAN4_ROOT="${DBCAN4_ROOT:-$(cd "$SELF_DIR/.." && pwd)}"
+
+REPO="$DBCAN4_ROOT"                                          # asset root (emb/, results/heads/, hf_cache/)
+NF="$SELF_DIR/nf"                                            # Nextflow pipeline + bin/ (in the checkout)
+SCRIPTS="$SELF_DIR/scripts"                                  # stage scripts (in the checkout)
+VENV="${DBCAN4_ENGINE_VENV:-$DBCAN4_ROOT/venv}"             # engine venv (torch + esm + run_dbcan)
+# Web layer: bioforge is VENDORED into this checkout (src/bioforge), so the web
+# venv just needs `pip install -e .` in the checkout. Defaults to the engine venv.
+BIODB_VENV="${BIODB_VENV:-$VENV}"                           # venv where `bioforge` is importable
+BIODB_SRC="${BIODB_SRC:-$SELF_DIR}"                         # dir with alembic.ini + db/alembic (this checkout)
+BIOLIB_BIN="${BIOLIB_BIN:-/array1/xinpeng/scratch/venv_biolib/bin/biolib}"   # DeepTMHMM / BioLib CLI
+DBCAN_DB="${DBCAN_DB:-/array1/xinpeng/dbcan_db}"           # run_dbcan V5 database (~7.4 GB)
+PFAM="${PFAM_HMM:-/array1/xinpeng/pfam/Pfam-A.hmm}"        # Pfam-A HMM (§2.5 domains + GO fallback)
+# InterProScan / GO. Real InterProScan is optional (tens of GB); if INTERPROSCAN_SH
+# is unset or not executable we derive GO + InterPro from the Pfam domains offline.
+INTERPROSCAN_SH="${INTERPROSCAN_SH:-}"
+PFAM2GO="${PFAM2GO:-$NF/assets/mappings/pfam2go.txt}"
+PFAM2INTERPRO="${PFAM2INTERPRO:-}"                          # optional PF->IPR map (fills InterPro accession col)
 
 FAA=""; OUTDIR=""; SAMPLE=""; SERVE=0; PORT=8000; GPU=0
-DO_DEEPTMHMM=1; DO_CLEAN=1; DO_STRUCTURE=1; DO_AI_REPORT=1
+DO_DEEPTMHMM=1; DO_CLEAN=1; DO_STRUCTURE=1; DO_AI_REPORT=1; DO_INTERPRO=1
 GFF=""                                            # OPTIONAL user-provided genomic GFF
 HOST=127.0.0.1
 
@@ -53,8 +81,9 @@ while [ $# -gt 0 ]; do
     --no-clean) DO_CLEAN=0; shift;;
     --no-structure) DO_STRUCTURE=0; shift;;
     --no-ai-report) DO_AI_REPORT=0; shift;;
+    --no-interpro) DO_INTERPRO=0; shift;;
     --gff) GFF="$2"; shift 2;;
-    -h|--help) sed -n '2,25p' "$0"; exit 0;;
+    -h|--help) sed -n '2,30p' "$0"; exit 0;;
     -*) echo "unknown option: $1" >&2; exit 2;;
     *) FAA="$1"; shift;;
   esac
@@ -70,7 +99,7 @@ FEAT="$OUT/cazyme_advanced/features/$SAMPLE"
 PRED="$OUT/cazyme_advanced/predictions/$SAMPLE"
 mkdir -p "$FEAT" "$PRED"
 
-export PATH="$NF/bin:$REPO/scripts:$PATH"
+export PATH="$NF/bin:$SCRIPTS:$PATH"
 export HF_HOME=$REPO/hf_cache
 export CUDA_VISIBLE_DEVICES=$GPU
 NPROT=$(grep -c '^>' "$FAA" || echo 0)
@@ -85,10 +114,10 @@ GFF_ARG=""; [ -n "$GFF" ] && GFF_ARG="--gff $GFF"
     --overview rundbcan/overview.tsv --faa "$FAA" --sample "$SAMPLE" --outdir "$OUT/funcscan" $GFF_ARG
 
 echo "=== 2/8 advanced ESM-C embed + label-free infer ==="
-"$VENV/bin/python" "$REPO/scripts/embed_esmc.py" --fasta "$FAA" \
+"$VENV/bin/python" "$SCRIPTS/embed_esmc.py" --fasta "$FAA" \
     --out-prefix query.esmc --model esmc_600m --nshards 1 --shard 0
 [ -f query.esmc.shard0.npz ] && mv -f query.esmc.shard0.npz query.esmc.npz || true
-"$VENV/bin/python" "$REPO/scripts/infer_esmc.py" --emb query.esmc.npz \
+"$VENV/bin/python" "$SCRIPTS/infer_esmc.py" --emb query.esmc.npz \
     --ref-prefix "$REPO/emb/ref2024" --heads "$REPO/results/heads/heads.pt" \
     --proj-ref "$REPO/results/heads/proj_ref.npz" --k 15 \
     --out-knn raw_knn.tsv --out-centroid raw_centroid.tsv --out-contrastive raw_contrastive.tsv
@@ -104,6 +133,30 @@ echo "=== 3/8 fusion consensus ==="
 echo "=== 4/8 Pfam domains (hmmscan) ==="
 hmmscan --domtblout domains.domtbl --cut_ga -o /dev/null "$PFAM" "$FAA"
 "$VENV/bin/python" "$NF/bin/feature_converters.py" domains --domtbl domains.domtbl --out "$FEAT/domains.tsv"
+
+if [ "$DO_INTERPRO" = 1 ]; then
+  echo "=== 4b/8 InterPro domains + GO terms ==="
+  # Lands in the funcscan tree so `bioforge-ingest` populates the Gene Ontology
+  # card + InterPro-domains table on the gene page. Real InterProScan if configured,
+  # else GO derived from the Pfam domains above (offline, self-contained).
+  IPR_DIR="$OUT/funcscan/protein_annotation/interproscan"; mkdir -p "$IPR_DIR"
+  IPR_OUT="$IPR_DIR/${SAMPLE}_interproscan_faa.tsv"
+  P2IPR_ARG=""; [ -n "$PFAM2INTERPRO" ] && P2IPR_ARG="--pfam2interpro $PFAM2INTERPRO"
+  if [ -n "$INTERPROSCAN_SH" ] && [ -x "$INTERPROSCAN_SH" ]; then
+    echo "  real InterProScan: $INTERPROSCAN_SH"
+    "$INTERPROSCAN_SH" -i "$FAA" -f tsv -goterms -pa -o "$IPR_OUT" -T "$OUTDIR/ips_tmp" \
+      || { echo "  real InterProScan failed -> Pfam->GO fallback" >&2
+           "$VENV/bin/python" "$NF/bin/pfam_to_interproscan.py" --domains-tsv "$FEAT/domains.tsv" \
+               --pfam2go "$PFAM2GO" $P2IPR_ARG --faa "$FAA" --out "$IPR_OUT"; }
+  else
+    echo "  interproscan.sh not set -> deriving GO from Pfam domains (offline)"
+    "$VENV/bin/python" "$NF/bin/pfam_to_interproscan.py" --domains-tsv "$FEAT/domains.tsv" \
+        --pfam2go "$PFAM2GO" $P2IPR_ARG --faa "$FAA" --out "$IPR_OUT"
+  fi
+  echo "  interpro/GO -> $IPR_OUT"
+else
+  echo "=== 4b/8 InterPro/GO SKIPPED (--no-interpro) ==="
+fi
 
 echo "=== 5/8 physicochemistry (Biopython) ==="
 "$VENV/bin/python" "$NF/bin/feature_converters.py" physicochem --faa "$FAA" --out "$FEAT/physicochem.tsv"
@@ -134,7 +187,7 @@ if [ "$DO_STRUCTURE" = 1 ]; then
   # Folds every protein on the local GPU (facebook/esmfold_v1 via transformers).
   # No hosted service, no length cap beyond GPU memory — runs anywhere with CUDA,
   # so users can reproduce on their own server. Writes one PDB + a pLDDT manifest.
-  "$VENV/bin/python" "$REPO/scripts/fold_esmfold.py" \
+  "$VENV/bin/python" "$SCRIPTS/fold_esmfold.py" \
       --fasta "$FAA" --outdir esmfold_out --manifest esmfold_out/fold_manifest.tsv \
       --max-len 1100 --min-len 20
   # -> structures.tsv (+ structures/<id>.pdb, B-factors rescaled to 0-100 pLDDT)
@@ -168,7 +221,7 @@ if [ "$DO_AI_REPORT" = 1 ]; then
   cp "$FEAT/"*.tsv "$AIA/" 2>/dev/null || true
   cp "$OUT/cazyme_advanced/manifest.json" "$AIA/" 2>/dev/null || true
   AIOUT="$OUT/cazyme_advanced/ai_reports"
-  "$VENV/bin/python" "$REPO/scripts/build_ai_report.py" --assets "$AIA" --all --outdir "$AIOUT" \
+  "$VENV/bin/python" "$SCRIPTS/build_ai_report.py" --assets "$AIA" --all --outdir "$AIOUT" \
     && echo "AI reports -> $AIOUT/<protein_id>_ai_report.json" \
     || echo "WARN: AI-report generation failed (non-fatal); continuing."
 else
@@ -178,9 +231,17 @@ fi
 if [ "$SERVE" = 1 ]; then
   echo "=== ingest + serve ==="
   source "$BIODB_VENV/bin/activate"
+  # Preflight: the vendored web layer must be installed in this venv.
+  if ! command -v bioforge-ingest >/dev/null 2>&1; then
+    echo "ERROR: 'bioforge-ingest' not found in \$BIODB_VENV ($BIODB_VENV)." >&2
+    echo "       The web UI is vendored in this repo — install it once with:" >&2
+    echo "         pip install -e \"$SELF_DIR\"" >&2
+    echo "       or point BIODB_VENV at a venv that already has it." >&2
+    exit 3
+  fi
   DB="$OUTDIR/${SAMPLE}.db"; rm -f "$DB"; export DATABASE_URL="sqlite:///$DB"
   export BIOFORGE_TRACKS_DIR="$OUTDIR/web_static/tracks"
-  ( cd "$BIODB_SRC" && alembic upgrade head >/dev/null 2>&1 )
+  ( cd "$BIODB_SRC" && alembic upgrade head )
   bioforge-ingest          "$OUT/funcscan"
   bioforge-ingest-advanced "$OUT/cazyme_advanced/manifest.json" \
       --structures-dir "$OUTDIR/web_static/structures"

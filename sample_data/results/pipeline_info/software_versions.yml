@@ -1,0 +1,9 @@
+Workflow:
+  nf-core/funcscan: 4.0.0
+  Nextflow: 24.10.0
+PROKKA:
+  prokka: 1.14.6
+RUN_DBCAN:
+  run_dbcan: 4.1.4
+INTERPROSCAN:
+  interproscan: 5.72-103.0

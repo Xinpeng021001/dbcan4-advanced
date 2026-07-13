@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}BioForge{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2312925a'/></svg>">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="site">
+    <a class="brand" href="/"><span class="dot"></span>BioForge</a>
+    <nav>
+      <a href="/" class="{{ 'active' if nav=='home' else '' }}">Overview</a>
+      <a href="/browse" class="{{ 'active' if nav=='browse' else '' }}">Browse genes</a>
+      <a href="/compare" class="{{ 'active' if nav=='compare' else '' }}">Compare</a>
+      <a href="/search" class="{{ 'active' if nav=='search' else '' }}">Search</a>
+      <a href="/releases" class="{{ 'active' if nav=='releases' else '' }}">Releases</a>
+    </nav>
+    <a href="/docs" class="api-link">REST API ↗</a>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="site">
+    BioForge · SQL + web/JBrowse layer over nf-core/funcscan output · read-only browsing
+  </footer>
+</body>
+</html>

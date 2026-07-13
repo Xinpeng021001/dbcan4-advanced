@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% set nav = 'releases' %}
+{% block title %}Releases — BioForge{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Releases &amp; changelog</h1>
+  <p class="sub">Each <span class="mono">bioforge-ingest</span> run is a versioned release.
+    Re-running the pipeline and re-ingesting appends a new release; older sample
+    versions are retained and stay queryable via the API.</p>
+</div>
+
+<div class="card" style="padding:0">
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>#</th><th>Label</th><th>funcscan</th><th>Pipeline</th>
+        <th>Created</th><th>Notes</th><th></th>
+      </tr></thead>
+      <tbody>
+      {% for r in releases %}
+        <tr>
+          <td class="mono">{{ r.id }}</td>
+          <td><b>{{ r.label }}</b></td>
+          <td class="muted">{{ r.funcscan_version or '—' }}</td>
+          <td class="muted mono">{{ r.pipeline_version or '—' }}</td>
+          <td class="muted mono">{{ r.created_at.strftime('%Y-%m-%d %H:%M') if r.created_at else '' }}</td>
+          <td>{{ r.notes or '—' }}</td>
+          <td>{% if r.is_current %}<span class="pill current">current</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      {% if not releases %}
+        <tr><td colspan="7"><div class="empty"><div class="big">🗂️</div>No releases yet.</div></td></tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+demo_p01	d41d8cd98f	350	Pfam	PF04616	Glycosyl hydrolase family 43	20	350	1.2E-40	T	01-01-2026	IPR006710	Glycoside hydrolase family 43	GO:0004553|GO:0005975	-
+demo_p02	e99a18c42	210	Pfam	PF00534	Glycosyl transferase family 1	15	198	3.4E-22	T	01-01-2026	IPR001296	Glycosyl transferase, family 1	GO:0016757	-
+demo_p03	ab56b4d92b	480	Pfam	PF01055	Glycosyl hydrolase family 31	30	470	5.1E-55	T	01-01-2026	IPR000322	Glycoside hydrolase, family 31	GO:0004553|GO:0005975	-
+demo_p04	f1a2b3c4d	410	Pfam	PF00150	Cellulase (glycosyl hydrolase family 5)	40	410	8.0E-52	T	01-01-2026	IPR001547	Glycoside hydrolase, family 5	GO:0004553|GO:0005975	-
+demo_p05	a1b2c3d4e	460	Pfam	PF00128	Alpha amylase, catalytic domain	15	460	2.1E-60	T	01-01-2026	IPR006047	Glycoside hydrolase, family 13, catalytic domain	GO:0004553|GO:0005975	-
+demo_p06	b2c3d4e5f	250	Pfam	PF00535	Glycosyl transferase family 2	20	210	4.4E-25	T	01-01-2026	IPR001173	Glycosyltransferase 2-like	GO:0016757	-
+demo_p07	c3d4e5f6a	330	Pfam	PF00331	Glycosyl hydrolase family 10	25	330	1.5E-45	T	01-01-2026	IPR001000	Glycoside hydrolase, family 10	GO:0004553|GO:0005975	-
+demo_p08	d4e5f6a7b	720	Pfam	PF00933	Glycosyl hydrolase family 3 N-terminal domain	30	720	3.3E-70	T	01-01-2026	IPR001764	Glycoside hydrolase, family 3	GO:0004553|GO:0005975	-
+demo_p09	e5f6a7b8c	120	Pfam	PF00734	Fungal cellulose binding domain	1	36	9.0E-15	T	01-01-2026	IPR000254	Cellulose-binding module, fungal	GO:0030248	-
+demo_p10	f6a7b8c9d	390	Pfam	PF01341	Glycosyl hydrolase family 6	28	390	6.6E-48	T	01-01-2026	IPR001524	Glycoside hydrolase, family 6	GO:0004553|GO:0005975	-

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set nav = 'search' %}
+{% block title %}Search — BioForge{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Search everything</h1>
+  <p class="sub">One box across genes, products, CAZy families, InterPro domains, and
+    resistance genes.</p>
+</div>
+
+<div class="card">
+  <form class="search" method="get" action="/search">
+    <div class="field grow">
+      <label>Query</label>
+      <input type="text" name="q" value="{{ q }}" autofocus
+             placeholder="e.g. amylase, GH13, IPR006047, macrolide, PROKKA_00001">
+    </div>
+    <button class="btn" type="submit">Search</button>
+  </form>
+</div>
+
+{% if q %}
+  <p class="muted">{{ hits|length }} result(s) for “{{ q }}”.</p>
+  {% if hits %}
+  <div class="card" style="padding:0">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Match</th><th>Detail</th></tr></thead>
+        <tbody>
+        {% for h in hits %}
+          <tr>
+            <td><span class="tag plain">{{ h.type }}</span></td>
+            <td><a href="{{ h.url }}" class="mono">{{ h.label }}</a></td>
+            <td class="muted">{{ h.sub }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="card empty"><div class="big">🔍</div><p>Nothing matched.</p></div>
+  {% endif %}
+{% endif %}
+{% endblock %}

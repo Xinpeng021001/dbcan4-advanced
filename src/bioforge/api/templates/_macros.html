@@ -1,0 +1,71 @@
+{# Reusable, pure server-rendered UI fragments (no JS). Imported by pages via
+   {% from "_macros.html" import barchart, strand %} #}
+
+{% macro barchart(rows, klass='') %}
+  {% set maxv = (rows | map(attribute=1) | max) or 1 %}
+  <div class="bars">
+    {% for label, val in rows %}
+    <div class="bar-row {{ klass }}">
+      <span class="label">{{ label }}</span>
+      <span class="track"><span class="fill" style="width: {{ (val / maxv * 100) | round(1) }}%"></span></span>
+      <span class="val">{{ '{:,}'.format(val) }}</span>
+    </div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro strand(s) %}
+  {%- if s == '+' -%}<span class="strand-plus mono">+</span>
+  {%- elif s == '-' -%}<span class="strand-minus mono">−</span>
+  {%- else -%}<span class="muted mono">.</span>{%- endif -%}
+{% endmacro %}
+
+{# A tag that filters internally, with a small outbound ↗ to the source DB. #}
+{% macro xref_tag(label, klass, filter_url, ext_url, title='') %}
+  <span class="tag {{ klass }}" title="{{ title }}"><a class="tag-in" href="{{ filter_url }}">{{ label }}</a>{% if ext_url %}<a class="tag-ext" href="{{ ext_url }}" target="_blank" rel="noopener" aria-label="open {{ label }} in source database">↗</a>{% endif %}</span>
+{% endmacro %}
+
+{% macro cazyme_tags(gene) %}
+  {%- for c in gene.cazymes | unique(attribute='cazy_family') -%}
+    {{ xref_tag(c.cazy_family, '', '/browse?family=' ~ c.cazy_family, xref('cazy', c.cazy_family), (c.tool or 'CAZyme') ~ (' · EC ' ~ c.ec_number if c.ec_number else '')) }}
+  {%- else -%}<span class="muted">—</span>{%- endfor -%}
+{% endmacro %}
+
+{# Browse-row CAZyme tags that mark which families are advanced-only (missed by
+   the HMMER/dbCAN_sub/DIAMOND baseline). Expects `advanced_only` = set/list of
+   family names for this gene (computed by gene_row_advanced_only). #}
+{% macro cazyme_tags_flagged(gene, advanced_only) %}
+  {%- set seen = [] -%}
+  {%- for c in gene.cazymes | unique(attribute='cazy_family') -%}
+    {%- set fam = c.cazy_family -%}
+    {{ xref_tag(fam, '', '/browse?family=' ~ fam, xref('cazy', fam), (c.tool or 'CAZyme')) }}
+  {%- else -%}<span class="muted">—</span>{%- endfor -%}
+  {%- if advanced_only -%}
+    <span class="flag-adv-inline" title="Families called only by the advanced methods — missed by the HMMER/dbCAN_sub/DIAMOND baseline: {{ advanced_only|join(', ') }}">+{{ advanced_only|length }} advanced-only</span>
+  {%- endif -%}
+{% endmacro %}
+
+{% macro ec_tags(gene) %}
+  {%- set ecs = gene.cazymes | selectattr('ec_number') | map(attribute='ec_number') | unique | list -%}
+  {%- for e in ecs -%}
+    {{ xref_tag('EC ' ~ e, 'plain', '/browse?ec=' ~ e, xref('ec', e), 'ExPASy ENZYME') }}
+  {%- else -%}<span class="muted">—</span>{%- endfor -%}
+{% endmacro %}
+
+{% macro track_legend(focal=false, clusters=false) %}
+  <div class="legend">
+    <span><i class="cds"></i> CDS / gene</span>
+    <span><i class="cazyme"></i> CAZyme</span>
+    <span><i class="rna"></i> RNA</span>
+    {% if clusters %}<span><i class="cluster"></i> CGC cluster</span>{% endif %}
+    {% if focal %}<span><i class="focal"></i> this gene</span>{% endif %}
+    <span class="muted">arrow points 5′→3′ · click a gene to open it</span>
+  </div>
+{% endmacro %}
+
+{% macro ipr_tags(gene) %}
+  {%- set accs = gene.domains | selectattr('interpro_acc') | list -%}
+  {%- for d in accs | unique(attribute='interpro_acc') -%}
+    {{ xref_tag(d.interpro_acc, 'ipr', '/browse?q=' ~ d.interpro_acc, xref('interpro', d.interpro_acc), d.interpro_desc or d.signature_desc or '') }}
+  {%- else -%}<span class="muted">—</span>{%- endfor -%}
+{% endmacro %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set nav = 'compare' %}
+{% block title %}Compare samples — BioForge{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Compare samples</h1>
+  <p class="sub">Presence and abundance of each {{ 'resistance drug class' if by=='drug_class' else 'CAZy family' }}
+    across the current samples — a pangenome / IMG-style matrix. Darker cells = more hits.</p>
+</div>
+
+<div class="toolbar">
+  <div class="chips">
+    <a class="chip" href="/compare?by=family" style="{{ 'font-weight:700;color:var(--accent)' if by=='family' }}">CAZy families</a>
+    <a class="chip" href="/compare?by=drug_class" style="{{ 'font-weight:700;color:var(--warn)' if by=='drug_class' }}">Resistance drug classes</a>
+  </div>
+  <a class="btn ghost sm" href="/api/matrix?by={{ by }}">JSON ↗</a>
+</div>
+
+{% if not rows %}
+  <div class="card empty"><div class="big">📊</div><p>No data to compare yet.</p></div>
+{% else %}
+  {% set maxv = rows | map(attribute=2) | max %}
+  <div class="card" style="padding:0">
+    <div class="table-wrap">
+      <table class="matrix">
+        <thead><tr>
+          <th>{{ 'Drug class' if by=='drug_class' else 'CAZy family' }}</th>
+          {% for s in samples %}<th class="mono">{{ s.sample_key }}</th>{% endfor %}
+          <th>Total</th>
+        </tr></thead>
+        <tbody>
+        {% for label, counts, total in rows %}
+          <tr>
+            <td>
+              {% if by=='drug_class' %}<a href="/browse?drug_class={{ label }}">{{ label }}</a>
+              {% else %}<a href="/browse?family={{ label }}">{{ label }}</a>{% endif %}
+            </td>
+            {% for n in counts %}
+              {% set frac = (n / maxv) if maxv else 0 %}
+              <td class="cell mono {{ 'has' if n else 'zero' }}"
+                  style="{% if n %}background: color-mix(in srgb, var({{ '--warn' if by=='drug_class' else '--accent' }}) {{ (18 + frac*62)|round }}%, transparent){% endif %}">{{ n or '·' }}</td>
+            {% endfor %}
+            <td class="mono"><b>{{ total }}</b></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

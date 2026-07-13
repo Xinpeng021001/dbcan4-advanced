@@ -25,6 +25,7 @@ include { ESMC_EMBED; ESMC_RETRIEVAL; ESMC_CONTRASTIVE } from './modules/esmc.nf
 include { ESMFOLD; FOLDSEEK_CAZYME3D; SAPROT }           from './modules/structure.nf'
 include { SIGNALP6; DEEPTMHMM; FUSION; COLLATE_MANIFEST } from './modules/features.nf'
 include { BASELINE_DBCAN }                                  from './modules/baseline.nf'
+include { INTERPROSCAN }                                     from './modules/interproscan.nf'
 include { PFAM_DOMAINS; STRUCTURE_HITS; LOCALIZATION; PHYSICOCHEM; CLEAN_EC } from './modules/features_extra.nf'
 
 def helpMessage() {
@@ -75,6 +76,9 @@ workflow {
 
     // --- Comprehensive v1.1 features (§2.5-2.9) ---
     PFAM_DOMAINS(ch_faa)
+    // InterProScan (or the offline Pfam->GO fallback) -> funcscan tree.
+    // Reuses the Pfam domains so GO + InterPro populate the web gene page.
+    INTERPROSCAN(ch_faa.join(PFAM_DOMAINS.out.feat))
     PHYSICOCHEM(ch_faa)
     CLEAN_EC(ch_faa)
     LOCALIZATION(SIGNALP6.out.feat)
