@@ -79,13 +79,17 @@ most tool comparisons skip. Full detail: [`docs/benchmark_report.md`](docs/bench
 - ~30 GB disk for model weights + databases (see [data assets](#3-data-assets)).
 
 ### Software
+
+**Simplest path: the bundled [`environment.yml`](environment.yml) installs everything below in one
+command** (`conda env create -f environment.yml`) — the table is just the reference of what it pulls.
+
 | Component | Version | Notes |
 |---|---|---|
 | Python | ≥3.10 (3.11 on the reference host) | |
 | PyTorch | ≥2.0 (CUDA build) | `torch.cuda.is_available()` must be `True` |
 | EvolutionaryScale `esm` | 3.2.1 | provides **ESM-C** (`esmc_600m` → 1152-dim). **Do NOT also install `fair-esm`** — it clashes on the `esm/` namespace |
 | `run_dbcan` | V5 (dev 5.0.7 on the reference host) | baseline HMMER/dbCAN_sub/DIAMOND |
-| Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` / stub DAG. Install: `curl -s https://get.nextflow.io \| bash` |
+| Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` / stub DAG; installed by `environment.yml` (or `curl -s https://get.nextflow.io \| bash`) |
 | foldseek, diamond, hmmscan | on `PATH` | structure/baseline tiers |
 | FastAPI/uvicorn/SQLAlchemy/Alembic | included (`src/bioforge`) | web stack — installed by `pip install -e .` |
 | InterProScan | optional (tens of GB) | GO/InterPro; if absent, GO is derived offline from Pfam via the bundled `pfam2go` map |
@@ -131,48 +135,37 @@ source /array1/xinpeng/scratch/biodb_venv/bin/activate   # or any venv with `pip
 dbcan4 info      # prints resolved pipeline / reference-index / heads paths
 ```
 
-### From scratch on a new GPU machine
+### From scratch — one command
 
-A single clone gives you both the pipeline and the web app — the web UI + ingest layer live in
-this repo (`src/bioforge`), so `pip install -e .` installs everything.
+Everything (Java, Nextflow, the bioinformatics tools, the Python engine, **and** the web UI)
+installs from the bundled [`environment.yml`](environment.yml):
 
 ```bash
-# 1. code (ONE repo — pipeline + web UI included)
 git clone https://github.com/Xinpeng021001/dbcan4-advanced.git
 cd dbcan4-advanced
-
-# 2. venv (torch + EvolutionaryScale esm 3.2.1 = ESM-C). Do NOT install fair-esm.
-python -m venv venv && source venv/bin/activate
-pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
-pip install "esm==3.2.1" faiss-cpu scikit-learn biopython h5py pandas numpy
-pip install -e .            # installs `dbcan4` AND `bioforge-ingest*` + the web app
-# (add ".[dev]" to also get pytest; ".[web-postgres]" only if you use Postgres instead of SQLite)
-
-# 3. Nextflow + Java 17+  (needed for `dbcan4 run` / the -profile stub DAG;
-#    the one-command dbcan4_workup.sh does NOT need Nextflow)
-conda install -c conda-forge 'openjdk>=17'      # or any JDK 17–21 on PATH (java -version)
-curl -s https://get.nextflow.io | bash          # -> ./nextflow
-mkdir -p ~/.local/bin && mv nextflow ~/.local/bin/   # any dir on your PATH
-nextflow -version
-
-# 4. data assets — copy from the reference host (fastest) or rebuild (see table above),
-#    then point the env vars at them (defaults assume they live under DBCAN4_ROOT):
-#    export DBCAN4_ROOT=/path/to/assets        # emb/, results/heads/, hf_cache/
-#    export DBCAN_DB=/path/to/dbcan_db  PFAM_HMM=/path/to/Pfam-A.hmm
-#    scp -r met:/array1/xinpeng/dbcan4-advanced/emb          "$DBCAN4_ROOT/emb"
-#    scp -r met:/array1/xinpeng/dbcan4-advanced/results/heads "$DBCAN4_ROOT/results/heads"
-#    run_dbcan database --db_dir "$DBCAN_DB"    # ~7.4 GB
-
-# 5. verify
-dbcan4 info
-dbcan4 run --fasta examples/real3.faa --sample smoke --outdir /tmp/smoke --profile stub --stub  # Nextflow DAG smoke test
-pytest            # optional: 47 web-layer tests (needs the ".[dev]" extra)
+conda env create -f environment.yml     # Java + Nextflow + hmmer/diamond/foldseek/run_dbcan + web UI
+conda activate dbcan4-advanced
+dbcan4 info                             # verify
 ```
 
-> **Nextflow needs Java 17+** (up to 24). If `nextflow -version` complains about Java, install a
-> JDK 17–21 and put it first on `PATH` (e.g. `export JAVA_HOME=/path/to/jdk-21 PATH=$JAVA_HOME/bin:$PATH`).
-> Nextflow is only required for `dbcan4 run` and the `-profile stub` DAG; the recommended real path
-> `dbcan4_workup.sh` invokes each tool directly and does not use Nextflow.
+That single env runs the **web UI, the stub DAG, baseline dbCAN, and every CPU feature track**.
+Two optional add-ons:
+
+```bash
+# (a) GPU engine — only for real ESM-C / ESMFold annotation (CUDA-specific):
+pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
+pip install "esm==3.2.1"                # EvolutionaryScale ESM-C. Do NOT install fair-esm.
+
+# (b) data assets — dbCAN DB, Pfam-A, ESM-C index, trained heads (see the table above),
+#     then point the env vars at them:
+export DBCAN4_ROOT=/path/to/assets  DBCAN_DB=/path/to/dbcan_db  PFAM_HMM=/path/to/Pfam-A.hmm
+run_dbcan database --db_dir "$DBCAN_DB"        # build the dbCAN DB (~7.4 GB), or copy it
+```
+
+> **No conda?** `pip install -e .` alone installs the `dbcan4` CLI + the BioForge web UI (enough to
+> ingest a manifest and serve pages). You then just need Nextflow + Java 17+ on `PATH`
+> (`curl -s https://get.nextflow.io | bash`) for `dbcan4 run` / the `-profile stub` DAG — the
+> one-command `dbcan4_workup.sh` real path does not use Nextflow at all.
 
 Point the engine at non-default asset locations with `DBCAN4_ROOT`, `DBCAN4_REF_EMB`,
 `DBCAN4_HEADS`, `DBCAN4_PROJ_REF`, `DBCAN4_ENGINE_PYTHON`, or `--assets` — see

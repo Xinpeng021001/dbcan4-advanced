@@ -1,0 +1,45 @@
+# =============================================================================
+# dbCAN4-advanced — one-file environment (pipeline + web UI + all CLI tools).
+#
+#   git clone https://github.com/Xinpeng021001/dbcan4-advanced.git
+#   cd dbcan4-advanced
+#   conda env create -f environment.yml      # -> env "dbcan4-advanced"
+#   conda activate dbcan4-advanced
+#
+# That is the whole install. It provides Java + Nextflow, the bioinformatics
+# tools (hmmer / diamond / foldseek / run_dbcan), the Python engine, and the
+# BioForge web UI (via `pip install -e .`). Enough to run: the web UI, the stub
+# DAG, baseline dbCAN, and every CPU feature track.
+#
+# Two optional add-ons:
+#   * GPU engine (only for real ESM-C / ESMFold annotation; CUDA-specific):
+#       pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
+#       pip install "esm==3.2.1"      # EvolutionaryScale ESM-C. Do NOT install fair-esm.
+#   * Data assets (dbCAN DB, Pfam-A, ESM-C index, trained heads) — a separate
+#     download; see the README "Data assets" table + the DBCAN4_* env vars.
+# =============================================================================
+name: dbcan4-advanced
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python >=3.10,<3.13
+  - pip
+  # --- pipeline orchestration ---
+  - openjdk >=17           # Nextflow needs Java 17+
+  - nextflow >=24
+  # --- bioinformatics tools the pipeline invokes ---
+  - hmmer                  # hmmscan (Pfam domains)
+  - diamond
+  - foldseek
+  - dbcan                  # run_dbcan (baseline HMMER / dbCAN_sub / DIAMOND)
+  # --- python libs for the engine + CPU feature tracks ---
+  - numpy >=1.23
+  - pandas
+  - scikit-learn
+  - biopython
+  - faiss-cpu
+  - pysam
+  - pillow                 # 267317 comprehensive-poster render
+  - pip:
+      - -e .               # installs `dbcan4` + BioForge web app (bioforge-ingest*)
