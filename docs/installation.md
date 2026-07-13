@@ -19,7 +19,7 @@
 | `run_dbcan` | V5 (dev 5.0.7 on the reference host) | baseline HMMER/dbCAN_sub/DIAMOND |
 | Nextflow | ≥24 (needs Java 17+) | only for `dbcan4 run` |
 | foldseek, diamond, hmmscan | on `PATH` | structure/baseline tiers |
-| FastAPI/uvicorn/SQLAlchemy/Alembic | via `biodb` | web stack |
+| FastAPI/uvicorn/SQLAlchemy/Alembic | vendored in-repo (`src/bioforge`) | web stack |
 
 !!! danger "Do NOT install `fair-esm`"
     `fair-esm` (legacy ESM-2) clashes with EvolutionaryScale `esm` on the `esm/` import
@@ -47,7 +47,7 @@ These are **not** in the git repo (`.gitignore` excludes all `*.npz/*.pt/*.hmm/*
 All assets live under `$REPO=/array1/xinpeng/dbcan4-advanced`. Verify with:
 
 ```bash
-source /array1/xinpeng/scratch/biodb_venv/bin/activate
+source /array1/xinpeng/scratch/biodb_venv/bin/activate   # or any venv where you ran 'pip install -e .'
 dbcan4 info      # prints resolved pipeline / reference-index / heads paths
 ```
 
@@ -60,14 +60,13 @@ Expected output resolves every path (`heads.pt … (exists)`). If it does, skip 
 # 1. code
 git clone https://github.com/Xinpeng021001/dbcan4-advanced.git
 cd dbcan4-advanced
-git clone -b feature/advanced-cazyme-integration https://github.com/Xinpeng021001/biodb.git
 
 # 2. engine venv (torch + EvolutionaryScale esm 3.2.1 = ESM-C). Do NOT install fair-esm.
 python -m venv venv && source venv/bin/activate
 pip install torch --index-url https://download.pytorch.org/whl/cu121   # match your CUDA
 pip install "esm==3.2.1" faiss-cpu scikit-learn biopython h5py pandas numpy
-pip install -e .            # installs the `dbcan4` console script
-pip install -e biodb        # installs bioforge-ingest, bioforge-ingest-advanced, web app
+pip install -e .            # installs the `dbcan4` console script + the vendored bioforge
+                            # web layer (bioforge-ingest, bioforge-ingest-advanced, web app)
 
 # 3. data assets — copy from the reference host (fastest) or rebuild
 #    scp -r met:/array1/xinpeng/dbcan4-advanced/emb ./emb

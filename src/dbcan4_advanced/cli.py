@@ -118,14 +118,22 @@ def cmd_run(args, A: Assets) -> int:
 def _serve(args, A: Assets, outdir: Path, manifest: Path) -> int:
     """Ingest the published contract into BioForge SQLite + launch the web UI."""
     db = os.path.abspath(args.db or (outdir / "dbcan4.db"))
-    env = dict(os.environ, DATABASE_URL=f"sqlite:///{db}")
+    # Structures served by the API live at <BIOFORGE_TRACKS_DIR>/../structures, and
+    # the advanced ingester must copy PDBs into that same dir. Keep both under outdir.
+    web_static = outdir / "web_static"
+    env = dict(os.environ, DATABASE_URL=f"sqlite:///{db}",
+               BIOFORGE_TRACKS_DIR=str(web_static / "tracks"))
     funcscan = outdir / "funcscan"
-    print(f"[dbcan4] ingesting into {db}")
-    if _run(["alembic", "upgrade", "head"], env=env, cwd=args.biodb) != 0:
+    # alembic.ini + db/alembic are vendored at the repo root (A.root); default there.
+    alembic_cwd = args.biodb or str(A.root)
+    print(f"[dbcan4] ingesting into {db}  (alembic cwd={alembic_cwd})")
+    if _run(["alembic", "upgrade", "head"], env=env, cwd=alembic_cwd) != 0:
         print("[dbcan4] WARN: alembic upgrade failed", file=sys.stderr)
     if funcscan.exists():
+        # discovers protein_annotation/interproscan/<sample>_interproscan_faa.tsv -> GO + InterPro
         _run(["bioforge-ingest", str(funcscan)], env=env)
-    _run(["bioforge-ingest-advanced", str(manifest)], env=env)
+    _run(["bioforge-ingest-advanced", str(manifest),
+          "--structures-dir", str(web_static / "structures")], env=env)
     print(f"[dbcan4] serving web UI on http://{args.host}:{args.port}  (Ctrl-C to stop)")
     return _run(["uvicorn", "bioforge.api.main:app", "--host", args.host,
                  "--port", str(args.port)], env=env)
@@ -177,7 +185,9 @@ def build_parser() -> argparse.ArgumentParser:
     pr.add_argument("--stub", action="store_true", help="add -stub-run (prove DAG, no tools/GPU)")
     pr.add_argument("--resume", action="store_true")
     pr.add_argument("--serve", action="store_true", help="ingest + launch web UI after the run")
-    pr.add_argument("--db", default=None); pr.add_argument("--biodb", default=None, help="biodb repo dir (for alembic)")
+    pr.add_argument("--db", default=None)
+    pr.add_argument("--biodb", default=None,
+                    help="dir with alembic.ini + db/alembic (default: vendored, the repo root)")
     pr.add_argument("--host", default="127.0.0.1"); pr.add_argument("--port", type=int, default=8000)
     pr.set_defaults(fn=cmd_run)
 

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Not found — BioForge{% endblock %}
+{% block content %}
+<div class="card empty">
+  <div class="big">🚧</div>
+  <h1>{{ message or 'Not found' }}</h1>
+  <p class="muted">The record you asked for doesn’t exist.</p>
+  <p><a class="btn ghost" href="/">← Back to overview</a></p>
+</div>
+{% endblock %}

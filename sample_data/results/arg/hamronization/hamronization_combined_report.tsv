@@ -1,0 +1,4 @@
+input_file_name	input_protein_id	gene_symbol	gene_name	reference_accession	drug_class	resistance_mechanism	sequence_identity	coverage_percentage	analysis_software_name	reference_database_name
+sampleA	PROKKA_00003	mph(A)	macrolide 2'-phosphotransferase	WP_000010001.1	macrolide	antibiotic inactivation	99.5	100.0	amrfinderplus	NCBI
+sampleA	PROKKA_00005	tet(M)	tetracycline resistance ribosomal protection protein	ARO:3000165	tetracycline	antibiotic target protection	98.2	99.5	rgi	CARD
+sampleB	PROKKA_00002	blaOXA-48	OXA-48 family carbapenem-hydrolyzing class D beta-lactamase	ARO:3001414	beta-lactam	antibiotic inactivation	100.0	100.0	rgi	CARD

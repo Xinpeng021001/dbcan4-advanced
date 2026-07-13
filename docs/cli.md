@@ -66,7 +66,7 @@ dbcan4 run --fasta proteins.faa --sample s1 --outdir out --profile stub --stub
 
 # stub + ingest + serve
 dbcan4 run --fasta proteins.faa --sample s1 --outdir out \
-    --profile stub --stub --serve --biodb /array1/xinpeng/biodb --port 8000
+    --profile stub --stub --serve --port 8000
 ```
 
 `--serve` chains `alembic upgrade → bioforge-ingest → bioforge-ingest-advanced → uvicorn`.

@@ -45,6 +45,10 @@ dbCAN CAZyme calls, CGCs, InterPro/GO, sequences; this pipeline adds an
         ec_prediction.tsv             # §2.9 (CLEAN)
         structures/
           <protein_id>.pdb            # served 3D structures
+  funcscan/                           # baseline tree (bioforge-ingest)
+    protein_annotation/
+      interproscan/
+        <sample>_interproscan_faa.tsv # §2.10 InterPro domains + GO terms
   pipeline_info/
     dbcan4_advanced_software_versions.yml
 ```
@@ -155,6 +159,22 @@ One row per predicted EC (keep the top ranks).
 > **Note on `ec_number`**: the CAZyme call's own EC (family-inherited) continues to live on
 > `CazymeAnnotation.ec_number` (§2.1). §2.9 is the *independent predictor's* EC and is stored as a
 > `ProteinFeature` so both lines of evidence coexist and can be compared in the UI.
+
+### 2.10 InterPro domains + GO terms — `funcscan/protein_annotation/interproscan/<sample>_interproscan_faa.tsv`
+
+Unlike §2.1–2.9 (which live under `cazyme_advanced/` and are read from the manifest),
+InterPro/GO ride on the **baseline funcscan tree** and are loaded by `bioforge-ingest`
+(not `bioforge-ingest-advanced`), populating the gene page's **Gene Ontology** card and
+**InterPro domains** table. The file is the standard **headerless, positional InterProScan v5
+TSV** (`bioforge.ingest.parse_interpro`): cols `1 protein  2 md5  3 length  4 analysis
+5 signature_acc  6 signature_desc  7 start  8 stop  9 score/evalue  10 status  11 date
+12 interpro_acc  13 interpro_desc  14 GO(|-sep)  15 pathways`.
+
+Produced by the `INTERPROSCAN` process (`nf/modules/interproscan.nf`) / step 4b of
+`dbcan4_workup.sh`, which uses **real InterProScan** when `params.interproscan_sh` /
+`INTERPROSCAN_SH` points at an install, otherwise derives Analysis=Pfam signatures + GO
+from the §2.5 Pfam domains via the vendored `pfam2go` map (offline). `interpro_acc`/`desc`
+are filled only when a real InterProScan run or an optional `--pfam2interpro` map supplies them.
 
 ---
 

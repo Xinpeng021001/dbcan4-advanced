@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JBrowse — {{ sample.sample_key }}</title>
+  <style>
+    body { margin:0; font-family: system-ui, sans-serif; }
+    #root { padding:.25rem; }
+    #fallback { padding:1rem; color:#66738a; font-size:.9rem; }
+    #fallback a { color:#1d9655; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <div id="fallback" hidden>
+    Could not load the JBrowse 2 component (needs internet access to the CDN).
+    The genome track files are still served here:
+    <a href="{{ config_url }}">config.json</a>.
+  </div>
+
+  <script type="module">
+    const CONFIG_URL = "{{ config_url }}";
+    const showFallback = (msg) => {
+      const f = document.getElementById("fallback");
+      f.hidden = false;
+      if (msg) console.error("JBrowse embed:", msg);
+    };
+
+    async function main() {
+      const [{ default: React }, { createRoot }, jb] = await Promise.all([
+        import("https://esm.sh/react@18"),
+        import("https://esm.sh/react-dom@18/client"),
+        import("https://esm.sh/@jbrowse/react-linear-genome-view2@3?deps=react@18,react-dom@18"),
+      ]);
+      const { createViewState, JBrowseLinearGenomeView } = jb;
+
+      const cfg = await (await fetch(CONFIG_URL)).json();
+      // Track URIs in config.json are relative to the config's directory; make
+      // them absolute so createViewState (fed objects, not a URL) resolves them.
+      const base = CONFIG_URL.replace(/config\.json$/, "");
+      const absolutize = (loc) => {
+        if (loc && loc.uri && !/^https?:|^\//.test(loc.uri)) loc.uri = base + loc.uri;
+      };
+      for (const t of cfg.tracks || []) {
+        absolutize(t.adapter?.gffGzLocation);
+        absolutize(t.adapter?.index?.location);
+      }
+
+      const assembly = cfg.assemblies[0];
+      const feats = assembly.sequence?.adapter?.features || [];
+      const first = feats[0];
+      const location = first ? `${first.refName}:1-${first.end}` : undefined;
+
+      const state = createViewState({
+        assembly,
+        tracks: cfg.tracks,
+        defaultSession: cfg.defaultSession,
+        location,
+      });
+      createRoot(document.getElementById("root")).render(
+        React.createElement(JBrowseLinearGenomeView, { viewState: state })
+      );
+    }
+
+    main().catch(showFallback);
+  </script>
+</body>
+</html>

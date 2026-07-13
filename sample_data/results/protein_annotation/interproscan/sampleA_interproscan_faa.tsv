@@ -1,0 +1,5 @@
+PROKKA_00001	d41d8cd98f00b204e9800998ecf8427e	129	Pfam	PF00128	Alpha amylase, catalytic domain	5	120	1.2E-30	T	04-07-2026	IPR006047	Glycosyl hydrolase, family 13, catalytic domain	GO:0004553|GO:0005975
+PROKKA_00001	d41d8cd98f00b204e9800998ecf8427e	129	PANTHER	PTHR10357	ALPHA-AMYLASE	3	125	2.0E-40	T	04-07-2026
+PROKKA_00002	a3cca2b2aa1e3b5b3b5aad99a8529074	266	Pfam	PF02836	Glycosyl hydrolase family 2, TIM barrel domain	40	230	5.5E-25	T	04-07-2026	IPR006103	Glycoside hydrolase, family 2, TIM barrel	GO:0004553
+PROKKA_00003	c81e728d9d4c2f636f067f89cc14862c	199	Pfam	PF00535	Glycosyl transferase family 2	10	160	3.1E-18	T	04-07-2026	IPR001173	Glycosyltransferase 2-like
+PROKKA_00005	eccbc87e4b5ce2fe28308fd9f2a7baf3	266	Pfam	PF00759	Glycosyl hydrolase family 9	30	250	7.0E-35	T	04-07-2026	IPR001701	Glycoside hydrolase, family 9	GO:0004553|GO:0030245

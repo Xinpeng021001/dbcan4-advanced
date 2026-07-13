@@ -59,3 +59,18 @@ prototypes/outputs/viz/*.html
 
 # raw single-mode structure renders (regenerable via render_structure_views.py; composite panel is committed)
 examples/267317_comprehensive/view_*.png
+
+# ---------------------------------------------------------------------------
+# Re-includes MUST come last (gitignore is last-match-wins, and the generic
+# `results/` / `*.faa` rules above would otherwise drop these committed assets).
+# ---------------------------------------------------------------------------
+# Vendored BioForge web-layer test fixtures (small; needed by `pytest`). The
+# `results/` subdir must be re-included explicitly — git won't re-include files
+# under an already-excluded parent directory.
+!sample_data/
+!sample_data/**
+!sample_data/results/
+!sample_data/results/**
+# Vendored GO/InterPro mapping for the offline Pfam->GO fallback (nf/assets/mappings/pfam2go.txt):
+!nf/assets/mappings/
+!nf/assets/mappings/**

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% from "_macros.html" import barchart, strand, cazyme_tags, ipr_tags, track_legend %}
+{% set nav = 'browse' %}
+{% block title %}{{ sample.sample_key }} — BioForge{% endblock %}
+{% block content %}
+
+<div class="breadcrumb"><a href="/">Overview</a> · <a href="/browse">Browse</a> · {{ sample.sample_key }}</div>
+<div class="page-head">
+  <div class="card-head">
+    <h1>{{ sample.sample_key }} <span class="pill tool">{{ sample.annotation_tool }}</span></h1>
+    <span style="display:flex;gap:.4rem">
+      <a class="btn ghost sm" href="/browse?sample={{ sample.sample_key }}">Browse genes →</a>
+      <a class="btn ghost sm" href="/samples/{{ sample.id }}/proteins.faa">⭳ Proteins FASTA</a>
+    </span>
+  </div>
+  <p class="sub">Release #{{ sample.release_id }} · ingested
+    {{ sample.created_at.strftime('%Y-%m-%d %H:%M') if sample.created_at else '' }}</p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat"><div class="n">{{ '{:,}'.format(sample.n_contigs) }}</div><div class="k">Contigs</div></div>
+  <div class="stat"><div class="n">{{ '{:,}'.format(sample.n_genes) }}</div><div class="k">Features</div></div>
+  <div class="stat"><div class="n">{{ '{:,}'.format(stats.n_cazyme_genes) }}</div><div class="k">CAZyme genes</div></div>
+  <div class="stat ipr"><div class="n">{{ '{:,}'.format(stats.n_domain_genes) }}</div><div class="k">Domain genes</div></div>
+  {% if stats.n_clusters %}<div class="stat warn"><div class="n">{{ '{:,}'.format(stats.n_clusters) }}</div><div class="k">CGC clusters</div></div>{% endif %}
+  {% if stats.n_args %}<div class="stat warn"><div class="n">{{ '{:,}'.format(stats.n_args) }}</div><div class="k">Resistance genes</div></div>{% endif %}
+</div>
+
+{% if args %}
+<div class="card">
+  <div class="card-head">
+    <h2>Antimicrobial resistance genes</h2>
+    <span class="pill">{{ args|length }}</span>
+  </div>
+  <p class="muted" style="margin-top:-.4rem">Resistance-gene hits harmonised across tools
+    (CARD / AMRFinderPlus / ResFinder via hAMRonization).</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Gene</th><th>Drug class</th><th>Mechanism</th><th>% id</th><th>Tool / DB</th><th>Locus</th></tr></thead>
+      <tbody>
+      {% for a in args %}
+        <tr>
+          <td><span class="tag" style="background:var(--surface-2);color:var(--warn)">{{ a.gene_symbol or '—' }}</span></td>
+          <td>{{ a.drug_class or '—' }}</td>
+          <td class="muted">{{ a.resistance_mechanism or '—' }}</td>
+          <td class="mono">{{ a.identity if a.identity is not none else '—' }}</td>
+          <td>{{ a.tool or '—' }}{% if a.reference_db %} <span class="muted">/ {{ a.reference_db }}</span>{% endif %}</td>
+          <td>{% if a.gene %}<a class="mono" href="/genes/{{ a.gene.id }}">{{ a.gene.gene_key }}</a>{% else %}<span class="muted">—</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if clusters %}
+<div class="card" id="clusters">
+  <div class="card-head">
+    <h2>CAZyme gene clusters (CGC)</h2>
+    <span class="pill">{{ clusters|length }}</span>
+  </div>
+  <p class="muted" style="margin-top:-.4rem">Runs of neighbouring CAZyme / transporter /
+    regulator genes with a predicted substrate (dbCAN-PUL style). Highlighted as bands on the tracks below.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cluster</th><th>Location</th><th>Composition</th><th>Substrate</th><th>Genes</th></tr></thead>
+      <tbody>
+      {% for c in clusters %}
+        <tr>
+          <td class="mono"><b>{{ c.cluster_key }}</b></td>
+          <td class="mono muted">{{ c.contig }}:{{ '{:,}'.format(c.start) }}–{{ '{:,}'.format(c.end) }}</td>
+          <td>{{ c.composition or '—' }}</td>
+          <td>{% if c.substrate %}<span class="tag" style="background:var(--surface-2);color:var(--warn)">{{ c.substrate }}{% if c.substrate_score %} ({{ c.substrate_score }}){% endif %}</span>{% else %}<span class="muted">—</span>{% endif %}</td>
+          <td>{% for g in c.genes %}<a class="tag plain" href="/genes/{{ g.id }}">{{ g.gene_key }}</a>{% endfor %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<div class="two-col">
+  <div class="card">
+    <h2>Feature types</h2>
+    {% if stats.feature_types %}{{ barchart(stats.feature_types, klass='ipr') }}
+    {% else %}<p class="muted">No features.</p>{% endif %}
+  </div>
+  <div class="card">
+    <h2>Top CAZyme families</h2>
+    {% if stats.top_families %}{{ barchart(stats.top_families) }}
+    {% else %}<p class="muted">No CAZyme annotations for this sample.</p>{% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h2>Genome tracks</h2>
+    <span class="pill">{{ contig_tracks|length }} contig(s)</span>
+  </div>
+  <p class="muted" style="margin-top:-.4rem">Each feature is a strand-aware arrow
+    positioned by genomic coordinate; hover for details, click to open the gene.</p>
+  {% for contig, svg in contig_tracks %}
+    <div class="track-wrap" style="margin-bottom:.6rem">{{ svg | safe }}</div>
+  {% else %}
+    <p class="muted">No features to display.</p>
+  {% endfor %}
+  {{ track_legend(clusters=clusters|length > 0) }}
+</div>
+
+{% if sample.track_path %}
+<div class="card">
+  <h2>JBrowse 2 browser</h2>
+  <iframe class="jb" src="/jbrowse/{{ sample.id }}" title="JBrowse 2 linear genome view"></iframe>
+  <p class="muted" style="font-size:.8rem;margin-bottom:0">
+    Full JBrowse 2 linear view over the sample's bgzip/tabix annotation track
+    (needs internet access for the JBrowse component at view time).</p>
+</div>
+{% endif %}
+
+<div class="card" style="padding:0">
+  <div class="card-head" style="padding:1.1rem 1.25rem .6rem">
+    <h2 style="margin:0">Annotations <span class="muted" style="font-weight:400">({{ genes|length }})</span></h2>
+    <input type="search" id="gfilter" placeholder="Filter this table…" style="max-width:220px"
+           oninput="filterGenes(this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="gtable">
+      <thead><tr>
+        <th>Gene</th><th>Type</th><th>Location</th><th>Length</th>
+        <th>Product</th><th>CAZyme</th><th>InterPro</th>
+      </tr></thead>
+      <tbody>
+      {% for g in genes %}
+        <tr id="{{ g.gene_key }}" data-search="{{ (g.gene_key ~ ' ' ~ (g.product or '')) | lower }}">
+          <td><a href="/genes/{{ g.id }}" class="mono">{{ g.gene_key }}</a></td>
+          <td><span class="tag plain">{{ g.feature_type }}</span></td>
+          <td class="mono muted">{% if g.contig == 'protein' %}protein · {{ '{:,}'.format(g.length) }} aa{% else %}{{ g.contig }}:{{ '{:,}'.format(g.start) }}–{{ '{:,}'.format(g.end) }} {{ strand(g.strand) }}{% endif %}</td>
+          <td class="mono muted">{{ '{:,}'.format(g.length) }}</td>
+          <td>{{ g.product or '—' }}</td>
+          <td>{{ cazyme_tags(g) }}</td>
+          <td>{{ ipr_tags(g) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function filterGenes(term) {
+    term = term.trim().toLowerCase();
+    for (const tr of document.querySelectorAll('#gtable tbody tr')) {
+      tr.style.display = tr.dataset.search.includes(term) ? '' : 'none';
+    }
+  }
+</script>
+{% endblock %}

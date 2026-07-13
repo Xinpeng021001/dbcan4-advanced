@@ -8,7 +8,7 @@ Three paths, fastest first. All use the shipped 3-protein example `examples/real
     The real ESM-C engine only — no features, no web. Needs the reference index + trained heads.
 
     ```bash
-    source /array1/xinpeng/scratch/biodb_venv/bin/activate      # reference host
+    source /array1/xinpeng/scratch/biodb_venv/bin/activate      # reference host — or any venv with 'pip install -e .'
     CUDA_VISIBLE_DEVICES=0 dbcan4 annotate examples/real3.faa --outdir calls_out
     ```
 
