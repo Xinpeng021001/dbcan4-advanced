@@ -9,8 +9,8 @@ figure.
 | file | page | shows |
 |---|---|---|
 | `ui_dashboard.png` | `/` | dataset overview: 3 protein-mode genes, `dbcan4-protein` tool, 12 CAZyme calls, 6 families |
-| `ui_browse.png` | `/browse` | gene table with protein coordinates (`protein:1–1,089`) and advanced-only flags |
-| `ui_hero_267317.png` | `/genes/1` | hero (GH78, 1089 aa): **rendered ESMFold 3D structure** (cartoon by pLDDT), per-residue DeepTMHMM topology/SP track, EC, localization, physicochem, honest provenance |
+| `ui_browse.png` | `/browse` | gene table with protein coordinates (`protein:1–1,088`) and advanced-only flags |
+| `ui_hero_267317.png` | `/genes/1` | hero (GH78, 1088 aa): **rendered ESMFold 3D structure** (cartoon by pLDDT), per-residue DeepTMHMM topology/SP track, EC, localization, physicochem, honest provenance |
 | `ui_gene_169208.png` | `/genes/3` | hard case (GH183, 205 aa): **rendered ESMFold structure**, all-green globular topology (no SP) |
 
 Notes:

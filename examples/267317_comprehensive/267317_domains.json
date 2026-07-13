@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Signal peptide",
+    "family": "SP (DeepTMHMM)",
+    "start": 1,
+    "end": 18,
+    "color": "#f59e0b"
+  },
+  {
+    "name": "Glyco_hydro_28",
+    "family": "GH28 (PF00295)",
+    "start": 62,
+    "end": 412,
+    "color": "#3b82f6"
+  },
+  {
+    "name": "Bac_rhamnosid6H",
+    "family": "GH78 (PF17389)",
+    "start": 667,
+    "end": 886,
+    "color": "#10b981"
+  }
+]

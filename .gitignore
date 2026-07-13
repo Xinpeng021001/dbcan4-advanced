@@ -56,3 +56,6 @@ site/
 
 # Prototype interactive HTML explorers — large (~6MB each), regenerable via prototypes/viz/build_visualizations.py
 prototypes/outputs/viz/*.html
+
+# raw single-mode structure renders (regenerable via render_structure_views.py; composite panel is committed)
+examples/267317_comprehensive/view_*.png

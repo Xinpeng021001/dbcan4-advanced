@@ -337,8 +337,8 @@ current DB); pLM/structure/fusion tiers train on 2024 only and are already clean
 
 ## Worked example — hero protein 267317
 
-A 1,089-aa multi-domain fungal α-L-rhamnosidase (truth **GH78**, with an N-terminal GH28 domain) —
-the ideal case for why comprehensive multi-tool annotation matters:
+A 1,088-residue multi-domain fungal α-L-rhamnosidase (truth **GH78**, with an N-terminal GH28
+domain) — the ideal case for why comprehensive multi-tool annotation matters:
 
 | head | call | note |
 |---|---|---|
@@ -368,6 +368,51 @@ python build_comprehensive_poster.py --html . --outdir out
 # → out/comprehensive_267317_full.png  (cards + 3D structure + sequence)
 #   out/structure_267317.png           (standalone ESMFold cartoon, pLDDT-coloured)
 ```
+
+### Structure colouring schemes
+
+`render_structure_views.py` renders the ESMFold model in **four colouring schemes** — and includes a
+reusable **colour-by-domain** mode driven by Pfam/CAZyme boundaries:
+
+| mode | what it shows |
+|---|---|
+| `plddt` | per-residue ESMFold confidence (blue = confident → red = low) |
+| `spectrum` | sequence position (N-terminus blue → C-terminus red) |
+| `sstruc` | secondary structure (helix / sheet / coil) |
+| `domain` | **Pfam / CAZyme domains** — each domain a distinct colour, linker grey |
+
+![267317 structure colouring schemes](examples/267317_comprehensive/structure_views_267317.png)
+
+The **domain** view maps the annotation onto the fold: the N-terminal **GH28** (Glyco_hydro_28,
+PF00295, res 62–412) is the right-handed β-helix; the C-terminal **GH78** (Bac_rhamnosid6H, PF17389,
+res 667–886) is the α-helical rhamnosidase domain — the two domains that make the baseline (GH28) and
+advanced ESM-C (GH78) calls disagree, now spatially distinct on one structure:
+
+![267317 coloured by Pfam/CAZyme domain](examples/267317_comprehensive/structure_domain_267317.png)
+
+```bash
+# all four modes + composite panels
+python render_structure_views.py --pdb 267317.pdb --outdir out
+# colour any structure by your own domains (JSON: [{name,family,start,end,color}, ...])
+python render_structure_views.py --pdb my.pdb --domains 267317_domains.json --modes plddt,domain
+```
+
+The reusable primitive is `domain_cartoon_style_js(domains)` — hand it Pfam hmmscan hits (each mapped
+to a CAZy family + a colour) and it emits the 3Dmol `setStyle()` calls that light up each domain on
+the cartoon, so the same function colours any protein by its CAZyme/Pfam architecture.
+
+**Interactive viewer** — the static panels above are a preview; for exploring the structure yourself,
+`build_structure_viewer.py` emits a single self-contained HTML file (3Dmol.js embedded inline, works
+offline) with a **colour-scheme drop-down**. Open it in any browser, drag to rotate, and switch
+between the four schemes live — no need to display every option at once:
+
+```bash
+python build_structure_viewer.py --pdb 267317.pdb --out structure_viewer_267317.html
+# open structure_viewer_267317.html in a browser → dropdown: domain / pLDDT / spectrum / sstruc
+```
+
+The same generator colours any structure by your own domain spec:
+`python build_structure_viewer.py --pdb my.pdb --domains my_domains.json`.
 
 ---
 
